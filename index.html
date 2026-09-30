@@ -258,13 +258,13 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #pop.place{background:none;box-shadow:none;padding:0 8px calc(var(--sab) + 8px)}
 #pop.place .grab,#pop.place #popX{display:none}
 #pop.place #popBody{padding:0}
-.pc{background:#fff;border-radius:28px;padding:16px;box-shadow:0 6px 30px rgba(0,0,0,.14)}
+.pc{background:#fff;border-radius:28px;padding:16px 16px 13px;box-shadow:0 6px 30px rgba(0,0,0,.14)}
 .pc-h{display:flex;gap:12px;align-items:flex-start}
 .pc-h h4{margin:0;font-weight:600;font-size:20px;line-height:26px;letter-spacing:-.4px}
 .pc-h .s{font-size:15px;line-height:20px;color:var(--ink-2);letter-spacing:-.3px;margin-top:2px}
-.pc-x{width:40px;height:40px;border-radius:12px;background:var(--ink-fill);display:grid;place-items:center;flex:none}
+.pc-x{width:40px;height:40px;border-radius:10px;background:rgba(126,113,67,.09);display:grid;place-items:center;flex:none}
 .pc-ph{position:relative;height:236px;border-radius:16px;margin-top:14px;background:#2a3a40 center/cover no-repeat;overflow:hidden}
-.pc-tag{position:absolute;left:8px;top:10px;height:26px;padding:0 9px;border-radius:9px;background:#BFF12B;color:#141414;font-weight:600;font-size:14px;line-height:26px;letter-spacing:-.28px}
+.pc-tag{position:absolute;left:10px;top:10px;height:26px;padding:0 8px;border-radius:8px;background:#BFF12B;color:#141414;font-weight:600;font-size:14px;line-height:26px;letter-spacing:-.28px}
 .pc-soc{position:absolute;left:10px;bottom:10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .pc-faces{display:flex}
 .pc-faces img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #BFF12B;margin-left:-10px;box-sizing:border-box}
@@ -273,10 +273,10 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .pc-rate::first-letter{color:#BFF12B}
 .pc-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-weight:600;font-size:16px;letter-spacing:-.3px}
 .pc-row span{display:inline-flex;align-items:center;gap:4px}
-.pc-cta{width:100%;height:56px;border-radius:28px;background:#BFF12B;color:#141414;font-weight:600;font-size:17px;margin-top:12px}
-.pc-acts{display:flex;gap:8px;margin-top:10px}
-.pa{height:52px;min-width:60px;border-radius:20px;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 2px 10px rgba(0,0,0,.1);display:grid;place-items:center;flex:1}
-.pa.wide{flex:2.2;display:flex;gap:8px;justify-content:center;font-weight:600;font-size:16px;letter-spacing:-.3px}
+.pc-cta{width:100%;height:56px;border-radius:20px;background:#BFF12B;color:#141414;font-weight:600;font-size:17px;margin-top:12px}
+.pc-acts{display:flex;gap:8px;margin-top:10px;padding-left:18px}
+.pa{height:56px;width:60px;flex:none;border-radius:20px;background:rgba(242,242,242,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 2px 4px rgba(0,0,0,.05),0 0 1px rgba(0,0,0,.07);display:grid;place-items:center}
+.pa.wide{width:134px;display:flex;gap:8px;justify-content:center;font-weight:600;font-size:16px;letter-spacing:-.3px}
 
 /* bottom fade + search */
 #fadeBottom{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:11;pointer-events:none;
@@ -926,19 +926,19 @@ function openPlace(id, m){
   const walk = p.walk || '7 мин', dist = (p.dist||'600 м').replace(' пешком','');
   openPop(`
     <div class="pc">
-      <div class="pc-h"><div class="grow"><h4>${p.name}</h4><div class="s">${p.kind} • ${p.addr}</div></div><button class="pc-x" aria-label="Закрыть"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2 2 12" stroke="#141414" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <div class="pc-h"><div class="grow"><h4>${p.name}</h4><div class="s">${p.kind} • ${p.addr}</div></div><button class="pc-x" aria-label="Закрыть"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19.7598 5.53027L14.1396 11.1504C13.6701 11.6203 13.6701 12.3797 14.1396 12.8496L19.7598 18.4697L18.5596 19.6699L12.9395 14.0498C12.4695 13.5803 11.7101 13.5802 11.2402 14.0498L5.62012 19.6699L4.41992 18.4697L10.04 12.8496C10.5097 12.3797 10.5097 11.6203 10.04 11.1504L4.41992 5.53027L5.62012 4.33008L11.2402 9.9502C11.7102 10.4199 12.4695 10.4198 12.9395 9.9502L18.5596 4.33008L19.7598 5.53027Z" fill="#5A5A5A"/></svg></button></div>
       <div class="pc-ph" style="background-image:url(${p.hero.includes('cafe')||p.hero.includes('map') ? 'assets/bereza.jpg' : p.hero})">
         <span class="pc-tag">Бизнес-ланч</span>
         <div class="pc-soc"><span class="pc-faces"><img src="assets/f2.jpg" alt=""><img src="assets/f1.jpg" alt=""><img src="assets/f5.jpg" alt=""></span><span class="pc-rate">★ ${rate} (${cnt})</span></div>
       </div>
-      <div class="pc-row"><span>${dist} <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><circle cx="8" cy="2.2" r="1.7" fill="#141414"/><path d="M6.5 5.5 4 7.5V10M6.5 5.5l2 1.8 2 2.2M6.5 5.5 5.8 10l-2 5M5.8 10l2.4 1.8 1 3.4" stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${walk}</span><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#141414" stroke-width="2"/><path d="M12 7v5l3 2" stroke="#141414" stroke-width="2" stroke-linecap="round"/></svg> ${p.hours && p.hours.startsWith('до') ? p.hours : 'до 21:00'}</span></div>
+      <div class="pc-row"><span>${dist} <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><circle cx="8" cy="2.2" r="1.7" fill="#141414"/><path d="M6.5 5.5 4 7.5V10M6.5 5.5l2 1.8 2 2.2M6.5 5.5 5.8 10l-2 5M5.8 10l2.4 1.8 1 3.4" stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${walk}</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0C12.4175 0 16 3.58255 16 8C16 12.4175 12.4175 16 8 16C3.58255 16 0 12.4175 0 8C1.28909e-07 3.58255 3.58255 1.28905e-07 8 0ZM8 1.23633C4.27055 1.23633 1.23633 4.27055 1.23633 8C1.23633 11.7295 4.27055 14.7637 8 14.7637C11.7295 14.7637 14.7637 11.7295 14.7637 8C14.7637 4.27055 11.7295 1.23633 8 1.23633ZM9.33301 2.90918L7.93848 8.21777H10.9092V9.4541H8.22363C7.26673 9.45388 6.57137 8.54632 6.81934 7.62207L8.05273 2.90918H9.33301Z" fill="#141414"/></svg> ${p.hours && p.hours.startsWith('до') ? p.hours : 'до 21:00'}</span></div>
       <button class="pc-cta act-t" data-t="Столик в «${p.name}» забронирован на 19:00">Забронировать</button>
     </div>
     <div class="pc-acts">
-      <button class="pa wide act-t" data-t="Маршрут до «${p.name}» построен"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="5.5" cy="18.5" r="2.5" stroke="#141414" stroke-width="2"/><circle cx="18.5" cy="5.5" r="2.5" fill="#141414"/><path d="M8 18.5h6.5a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7H16" stroke="#141414" stroke-width="2" stroke-linecap="round"/></svg>Маршрут</button>
-      <button class="pa act-t" data-t="Звоним в «${p.name}»" aria-label="Позвонить"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z" fill="#141414"/></svg></button>
-      <button class="pa act-t" data-t="${saved?'Уже в «Моих местах»':'Сохранено в «Мои места»'}" aria-label="Сохранить"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15.25 2C17.32 2 19 3.68 19 5.75V23H16.58L12 16.39 7.37 23H5V5.75C5 3.68 6.68 2 8.75 2h6.5ZM7.7 3.7a1 1 0 0 0-1 1V21l3.66-5.23a2 2 0 0 1 3.28.01L17.3 21.05V4.7a1 1 0 0 0-1-1H7.7Z" fill="#141414"/></svg></button>
-      <button class="pa act-t" data-t="Ссылка на «${p.name}» скопирована" aria-label="Поделиться"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M5 11v8.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V11" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="pa wide act-t" data-t="Маршрут до «${p.name}» построен"><svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M4 14C6.21 14 8 15.792 8 18C8 20.208 6.21 22 4 22C1.79 22 0 20.208 0 18C0 15.792 1.79 14 4 14ZM12.3135 3.69922H5.2793C4.3903 3.69922 3.94424 4.77625 4.57324 5.40625L13.0439 13.8789C14.9339 15.7689 13.5958 19 10.9238 19H9.71289V17.3008H11.6494C12.5401 17.3005 12.9872 16.2237 12.3564 15.5938L3.88379 7.12109C1.99293 5.23011 3.331 2.0001 6.00488 2H12.3135V3.69922ZM17 0C18.657 0 20 1.344 20 3C20 4.656 18.657 6 17 6C15.343 6 14 4.656 14 3C14 1.344 15.343 0 17 0Z" fill="#141414"/></svg>Маршрут</button>
+      <button class="pa act-t" data-t="Звоним в «${p.name}»" aria-label="Позвонить"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.15332 3C8.64197 3.00022 9.05931 3.3539 9.13965 3.83594L10 9L8 10.999C9.00005 13.0268 10.9787 15 12.998 16L15 14L20.1641 14.8604C20.6461 14.9407 20.9998 15.358 21 15.8467V20.0098C21 20.5565 20.5565 21 20.0098 21C10.7299 20.9999 3.00013 13.2801 3 3.99023C3 3.44347 3.44347 3 3.99023 3H8.15332Z" fill="#141414"/></svg></button>
+      <button class="pa act-t" data-t="${saved?'Уже в «Моих местах»':'Сохранено в «Мои места»'}" aria-label="Сохранить"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M16 3C17.6569 3 19 4.34315 19 6V21.6182L12 18.1182L5 21.6182V6C5 4.34315 6.34315 3 8 3H16ZM8 5C7.44772 5 7 5.44772 7 6V18.3818L12 15.8818L17 18.3818V6C17 5.44772 16.5523 5 16 5H8Z" fill="#141414"/></svg></button>
+      <button class="pa act-t" data-t="Ссылка на «${p.name}» скопирована" aria-label="Поделиться"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11H6C5.44777 11 5.00008 11.4478 5 12V18C5.00008 18.5522 5.44777 19 6 19H18C18.5522 19 18.9999 18.5522 19 18V12C18.9999 11.4478 18.5522 11 18 11H16V9H18C19.6568 9 20.9999 10.3432 21 12V18C20.9999 19.6568 19.6568 21 18 21H6C4.3432 21 3.00008 19.6568 3 18V12C3.00008 10.3432 4.3432 9 6 9H8V11ZM16.207 5.79297L14.793 7.20703L13 5.41406V15H11V5.41406L9.20703 7.20703L7.79297 5.79297L12 1.58594L16.207 5.79297Z" fill="#141414"/></svg></button>
     </div>`, false, 'place');
   popBody.querySelectorAll('.act-t').forEach(b => b.addEventListener('click', () => toast(b.dataset.t)));
   popBody.querySelector('.pc-x').addEventListener('click', closePop);
