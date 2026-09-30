@@ -322,6 +322,11 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .pm-row span{color:var(--ink-2)}
 .pm-row b{font-weight:500;text-align:right}
 
+.pc-acts.in{padding-left:0;margin-top:10px}
+.pc-acts.in .pa{background:rgba(20,20,20,.05);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.pc-acts.in .pa.wide{flex:1;width:auto}
+#pop.place.expanded > #popBody > .pc-acts{display:none}
+
 /* bottom fade + search */
 #fadeBottom{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:11;pointer-events:none;
   background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 55%,#fff)}
@@ -1053,8 +1058,6 @@ function openPlace(id, m){
       <div class="pc-row"><span>${dist} <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M5.89808 9.29792C5.98231 8.81658 6.07318 8.29852 6.15874 7.80983L8.34669 9.08095L8.91046 8.09824L8.90649 8.09557L8.91046 8.08889L6.36895 6.6115C6.46313 6.07741 6.56593 5.43717 6.56593 5.31767C6.56593 4.21145 5.67455 3.31486 4.57624 3.31486C3.84073 3.31486 3.20472 3.72211 2.85984 4.32095L0 9.2759L0.976908 9.84337L4.04765 4.45446H4.3481L3.64706 8.45274L7.13168 15.99H7.74847L7.75378 16H9L5.89808 9.29792ZM4.10538 12.1352L2.70926 16H0.876113L3.0767 9.91078L4.10538 12.1352ZM6.70324 1.26132L6.53144 1.90555C6.38884 2.4403 5.84435 2.75675 5.31311 2.61455C4.78186 2.47102 4.46682 1.92224 4.60875 1.38749L4.78055 0.742582C4.92314 0.208499 5.46828 -0.108616 5.99953 0.0342514C6.53077 0.177119 6.84583 0.726565 6.70324 1.26132Z" fill="#141414"/></svg> ${walk}</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0C12.4175 0 16 3.58255 16 8C16 12.4175 12.4175 16 8 16C3.58255 16 0 12.4175 0 8C1.28909e-07 3.58255 3.58255 1.28905e-07 8 0ZM8 1.23633C4.27055 1.23633 1.23633 4.27055 1.23633 8C1.23633 11.7295 4.27055 14.7637 8 14.7637C11.7295 14.7637 14.7637 11.7295 14.7637 8C14.7637 4.27055 11.7295 1.23633 8 1.23633ZM9.33301 2.90918L7.93848 8.21777H10.9092V9.4541H8.22363C7.26673 9.45388 6.57137 8.54632 6.81934 7.62207L8.05273 2.90918H9.33301Z" fill="#141414"/></svg> ${p.hours && p.hours.startsWith('до') ? p.hours : 'до 21:00'}</span></div>
       <button class="pc-cta act-t" data-t="Столик в «${p.name}» забронирован на 19:00">Забронировать</button>
       <div class="pc-more">
-        <div class="pm-sec"><div class="pm-h">Друзья здесь были</div>
-          <div class="pm-fr"><span class="faces"><img src="assets/f2.jpg" alt=""><img src="assets/f1.jpg" alt=""><img src="assets/f5.jpg" alt=""></span><span>Артём, Маша и Катя отмечали это место за последний месяц</span></div></div>
         <div class="pm-sec"><div class="pm-h">Популярное</div>
           <div class="hscroll pm-menu"><span class="pm-dish"><b>Бизнес-ланч</b><i>590 ₽ · до 16:00</i></span><span class="pm-dish"><b>Капучино</b><i>280 ₽</i></span><span class="pm-dish"><b>Сырники</b><i>390 ₽</i></span><span class="pm-dish"><b>Фильтр-кофе</b><i>220 ₽</i></span></div></div>
         <div class="pm-sec"><div class="pm-h">Отзыв друга</div>
@@ -1074,6 +1077,9 @@ function openPlace(id, m){
     </div>`, false, 'place');
   popBody.querySelectorAll('.act-t').forEach(b => b.addEventListener('click', () => toast(b.dataset.t)));
   popBody.querySelector('.pc-x').addEventListener('click', closePop);
+  { const more = popBody.querySelector('.pc-more'), acts = popBody.querySelector('.pc-acts');
+    const inCard = acts.cloneNode(true); inCard.classList.add('in'); more.prepend(inCard);
+    inCard.querySelectorAll('.act-t').forEach(b => b.addEventListener('click', () => toast(b.dataset.t))); }
   popBody.querySelector('.pc-grab').addEventListener('click', () => expandPlace(!pop.classList.contains('expanded')));
   if (m){ const sy = (H - pop.offsetHeight)/2 + 10; if (m.geo && live) liveFly(0,0,sy,null,m.geo); else if (!m.geo) centerOn(m.x, m.y, sy); }
 }
