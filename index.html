@@ -634,8 +634,8 @@ function initLive(){
   loadRealCafes();
 }
 const BRANDS = [
-  {k:'дринкит', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png'},
-  {k:'drinkit', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png'},
+  {k:'дринкит', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png', photo:'https://drinkit.ru/wp-content/uploads/2026/07/6979f24cf116a7eca4d2e699_DSCF4246-_1_-p-2000-1.jpg'},
+  {k:'drinkit', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png', photo:'https://drinkit.ru/wp-content/uploads/2026/07/6979f24cf116a7eca4d2e699_DSCF4246-_1_-p-2000-1.jpg'},
   {k:'правда', logo:'https://pravdacoffee.ru/wp-content/uploads/2021/05/logo_coffee-1.svg'},
   {k:'surf', logo:'https://static.tildacdn.com/tild3765-6165-4738-a136-303165663733/Frame_369.png', photo:'https://static.tildacdn.com/tild3030-3138-4561-b735-323461616266/Surf_Coffee_Worldwid.jpg'},
 ];
@@ -694,10 +694,10 @@ async function loadRealCafes(){
       const rv = it.reviews || {};
       PLACES[id] = { name: it.name.split(',')[0], kind: 'Кофейня', addr: it.address_name || 'рядом', dist: dist + ' м',
         walk: Math.max(1, Math.round(dist/80)) + ' мин', rating: rv.general_rating ? String(rv.general_rating).replace('.',',') : '—',
-        count: rv.general_review_count || rv.org_review_count || 0, hours: 'до 22:00', hero: k%2 ? 'assets/cafe.jpg' : 'assets/bereza.jpg', pos:'50% 50%', real:true };
+        count: rv.general_review_count || rv.org_review_count || 0, hours: 'до 22:00', hero: ['assets/cafe.jpg','assets/bereza.jpg'][k%2], pos:'50% 50%', real:true };
       const br = brandFor(PLACES[id].name), ph = PHOTOS[k % PHOTOS.length];
       PLACES[id].logo = br && br.logo; PLACES[id].thumb = (br && br.photo) || ph;
-      if (br && br.photo) PLACES[id].hero = br.photo;
+      if (br && br.photo) PLACES[id].hero = br.photo; else if (!br && /cafe|bereza/.test(ph)) PLACES[id].hero = ph;
       const m = mkReal({id, layer:'coffee', type:'real', geo:[lon, lat], x:0, y:0});
       placeMarker(m);
     });
@@ -801,8 +801,8 @@ mapEl.addEventListener('wheel', e => { if (live) return; e.preventDefault(); tou
 const F = { f1:'assets/f1.jpg', f2:'assets/f2.jpg', f3:'assets/f3.jpg', f4:'assets/f4.jpg', f5:'assets/f5.jpg' };
 const PLACES = {
   korobok:{name:'Коробок', kind:'Необистро', addr:'Солянка, 12', dist:'500 м', rating:'4,8', hours:'до 23:00', hero:'assets/cafe.jpg', pos:'50% 50%'},
-  milti:{name:'Милти', kind:'Кофейня', addr:'Солянка, 1/2', dist:'350 м', rating:'4,7', hours:'до 22:00', hero:'assets/milC.jpg', pos:'50% 50%', more:'+3 места рядом'},
-  dodo:{name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', dist:'7 мин пешком', rating:'4,6', hours:'круглосуточно', hero:'assets/cafe.jpg', pos:'60% 70%'},
+  milti:{name:'Милти', kind:'Кофейня', addr:'Солянка, 1/2', dist:'350 м', rating:'4,7', hours:'до 22:00', hero:'assets/cafe.jpg', pos:'50% 50%', more:'+3 места рядом'},
+  dodo:{name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', dist:'7 мин пешком', rating:'4,6', hours:'до 23:00', hero:'https://dodopizza.ru/SeoSnippetImages/ru-snippet.jpg', pos:'50% 50%'},
   gorky:{name:'Горький кофе', kind:'Кофейня', addr:'Подкопаевский пер., 9', dist:'600 м', rating:'4,9', hours:'до 21:00', hero:'assets/cafe.jpg', pos:'12% 40%'},
   zerno:{name:'Зерно', kind:'Кофейня · новая', addr:'Николоямская, 3', dist:'400 м', rating:'5,0', hours:'до 22:00', hero:'assets/cafe.jpg', pos:'95% 30%'},
   bistro:{name:'Хлеб и вино', kind:'Любимое место', addr:'Устьинский пр., 2', dist:'250 м', rating:'4,7', hours:'до 00:00', hero:'assets/cafe.jpg', pos:'30% 60%'},
@@ -982,11 +982,12 @@ function openPlace(id, m){
   const p = PLACES[id]; if (!p) return;
   const saved = id==='korobok' ? saveBtn.getAttribute('aria-pressed')==='true' : (m && m.layer==='places');
   const cnt = p.count || 1356, rate = p.rating && p.rating!=='—' ? p.rating : '4,5';
-  const walk = p.walk || '7 мин', dist = (p.dist||'600 м').replace(' пешком','');
+  const walk = p.walk || (/мин/.test(p.dist||'') ? p.dist.replace(' пешком','') : '7 мин');
+  const dist = /мин/.test(p.dist||'') ? '550 м' : (p.dist || '600 м');
   openPop(`
     <div class="pc">
       <div class="pc-h"><div class="grow"><h4>${p.name}</h4><div class="s">${p.kind} • ${p.addr}</div></div><button class="pc-x" aria-label="Закрыть"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19.7598 5.53027L14.1396 11.1504C13.6701 11.6203 13.6701 12.3797 14.1396 12.8496L19.7598 18.4697L18.5596 19.6699L12.9395 14.0498C12.4695 13.5803 11.7101 13.5802 11.2402 14.0498L5.62012 19.6699L4.41992 18.4697L10.04 12.8496C10.5097 12.3797 10.5097 11.6203 10.04 11.1504L4.41992 5.53027L5.62012 4.33008L11.2402 9.9502C11.7102 10.4199 12.4695 10.4198 12.9395 9.9502L18.5596 4.33008L19.7598 5.53027Z" fill="#5A5A5A"/></svg></button></div>
-      <div class="pc-ph" style="background-image:url(${p.hero.includes('cafe')||p.hero.includes('map') ? 'assets/bereza.jpg' : p.hero})">
+      <div class="pc-ph" style="background-image:url(${p.hero && !p.hero.includes('map') ? p.hero : 'assets/bereza.jpg'}),url(assets/bereza.jpg)">
         <span class="pc-tag">Бизнес-ланч</span>
         <div class="pc-soc"><span class="pc-faces"><img src="assets/f2.jpg" alt=""><img src="assets/f1.jpg" alt=""><img src="assets/f5.jpg" alt=""></span><span class="pc-rate">★ ${rate} (${cnt})</span></div>
       </div>
