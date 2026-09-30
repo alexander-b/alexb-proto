@@ -1079,7 +1079,7 @@ buildMarkers();
 layout();
 let rz; addEventListener('resize', () => { if (searchOpen) return; clearTimeout(rz); rz = setTimeout(layout, 80); });
 requestAnimationFrame(lizaLoop);
-const LIVE_MAP = false; // flip to true once the MapGL key is valid
+const LIVE_MAP = true;  // flip to true once the MapGL key is valid
 if (LIVE_MAP) { const sc = document.createElement('script'); sc.src = 'https://mapgl.2gis.com/api/js/v1'; sc.onload = initLive; document.head.appendChild(sc); }
 scheduleWave(650);
 })();
