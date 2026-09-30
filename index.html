@@ -567,7 +567,39 @@ function fitMap(){
   else { ms.s = ms.s * (sMin/prev); }
   clampMap(ms); renderMap();
 }
+/* live 2GIS map (MapGL); falls back to the static picture if it can't load */
+const MAPGL_KEY = '4ee8e258-c3b4-49cd-a1ef-f890b5dd706b';
+const GEO_ME = [37.6400, 55.7485], MPP = 1.9, COSL = Math.cos(GEO_ME[1]*Math.PI/180);
+let live = null;
+const toGeo = (x,y) => [GEO_ME[0] + (x-195)*MPP/(111320*COSL), GEO_ME[1] - (y-325)*MPP/111320];
+function placeMarker(m){
+  let X, Y;
+  if (live){ const p = live.project(toGeo(m.x, m.y)); X = p[0]; Y = p[1]; }
+  else { X = ms.tx + ms.s*m.x; Y = ms.ty + ms.s*m.y; }
+  m.el.style.transform = `translate3d(${X}px,${Y}px,0)`;
+}
+function liveFly(wx, wy, sy, zoom){
+  const z = zoom || Math.max(live.getZoom(), 16);
+  const mpp = 156543.03*COSL/Math.pow(2, z), g = toGeo(wx, wy);
+  const dy = ((sy ?? H/2) - H/2) * mpp;           // keep the target above the sheet
+  live.setCenter([g[0], g[1] - dy/111320], {duration:600}); live.setZoom(z, {duration:600});
+}
+function initLive(){
+  if (!window.mapgl || live) return;
+  const box = document.createElement('div'); box.id = 'mapgl'; box.style.cssText = 'position:absolute;inset:0';
+  mapEl.appendChild(box);
+  try {
+    live = new mapgl.Map(box, { key: MAPGL_KEY, center: toGeo(195, 325 + 90), zoom: 16.2, pitch: 45, rotation: -8, zoomControl: false });
+  } catch(e){ box.remove(); live = null; return; }
+  mapLayer.style.display = 'none'; mapEl.style.cursor = 'default';
+  const upd = () => renderMap();
+  live.on('move', upd); live.on('zoom', upd); live.on('rotation', upd); live.on('pitch', upd);
+  live.on('click', () => { touch(); closePop(); });
+  box.addEventListener('pointerdown', touch);
+  renderMap();
+}
 function renderMap(){
+  if (live){ for (const m of markers) placeMarker(m); return; }
   mapLayer.style.transform = `translate3d(${ms.tx}px,${ms.ty}px,0) scale(${ms.s})`;
   for (const m of markers){ const X = ms.tx + ms.s*m.x, Y = ms.ty + ms.s*m.y; m.el.style.transform = `translate3d(${X}px,${Y}px,0)`; }
 }
@@ -588,6 +620,7 @@ function zoomAt(px, py, factor, anim){
   if (anim) animateMap(t, 360); else { Object.assign(ms, clampMap(t)); renderMap(); }
 }
 function centerOn(wx, wy, sy){
+  if (live) return liveFly(wx, wy, sy);
   const s = Math.max(ms.s, sMin*1.25);
   animateMap({s, tx: W/2 - wx*s, ty: sy - wy*s}, 620);
 }
@@ -601,6 +634,7 @@ function startGesture(){
 }
 function stopInertia(){ cancelAnimationFrame(inert); inert=null; }
 mapEl.addEventListener('pointerdown', e => {
+  if (live) return;
   touch(); stopInertia(); cancelAnimationFrame(mapAnim);
   mapEl.setPointerCapture(e.pointerId); pts.set(e.pointerId, local(e));
   if (pts.size===1) g=null;
@@ -655,7 +689,7 @@ function endPointer(e){
 }
 mapEl.addEventListener('pointerup', endPointer);
 mapEl.addEventListener('pointercancel', endPointer);
-mapEl.addEventListener('wheel', e => { e.preventDefault(); touch(); const p=local(e); zoomAt(p.x,p.y, Math.exp(-e.deltaY*0.0022), false); }, {passive:false});
+mapEl.addEventListener('wheel', e => { if (live) return; e.preventDefault(); touch(); const p=local(e); zoomAt(p.x,p.y, Math.exp(-e.deltaY*0.0022), false); }, {passive:false});
 
 /* ---------------- markers ---------------- */
 const F = { f1:'assets/f1.jpg', f2:'assets/f2.jpg', f3:'assets/f3.jpg', f4:'assets/f4.jpg', f5:'assets/f5.jpg' };
@@ -731,7 +765,7 @@ function lizaLoop(t){
     const k = (Math.sin(lizaT*0.35)+1)/2; m.x = lerp(252, 276, k); m.y = lerp(262.8+51+10, 262.8+51-8, k);
     const dir = Math.cos(lizaT*0.35) >= 0 ? 1 : -1; const tr = m.el.querySelector('.trail');
     if (tr) tr.style.transform = `rotate(${dir>0?'205deg':'25deg'})`;
-    const X = ms.tx + ms.s*m.x, Y = ms.ty + ms.s*m.y; m.el.style.transform = `translate3d(${X}px,${Y}px,0)`; }
+    placeMarker(m); }
   requestAnimationFrame(lizaLoop);
 }
 
@@ -878,6 +912,7 @@ $('#weather').addEventListener('click', () => { touch(); toast('−15°, обл�
 $('#profile').addEventListener('click', () => { touch(); toast('Профиль · 12 друзей делятся геопозицией'); });
 $('#btnLocate').addEventListener('click', () => {
   touch(); const me = markers.find(m=>m.id==='me');
+  if (live) return liveFly(me.x, me.y, peekTop/2 + 20, 16.4);
   animateMap({s:sMin*1.15, tx: W/2 - me.x*sMin*1.15, ty: (peekTop)/2 + 20 - me.y*sMin*1.15}, 650);
 });
 
@@ -1044,6 +1079,7 @@ buildMarkers();
 layout();
 let rz; addEventListener('resize', () => { if (searchOpen) return; clearTimeout(rz); rz = setTimeout(layout, 80); });
 requestAnimationFrame(lizaLoop);
+{ const sc = document.createElement('script'); sc.src = 'https://mapgl.2gis.com/api/js/v1'; sc.onload = initLive; document.head.appendChild(sc); }
 scheduleWave(650);
 })();
 </script>
