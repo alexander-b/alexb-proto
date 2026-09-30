@@ -10,8 +10,13 @@
 <title>BingoBongo Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap">
+<link rel="preload" href="fonts/SBSansDisplay-Regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="fonts/SBSansDisplay-SemiBold.woff" as="font" type="font/woff" crossorigin>
 <style>
+@font-face{font-family:'SB Sans Display';src:url(fonts/SBSansDisplay-Regular.woff) format('woff');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'SB Sans Display';src:url(fonts/SBSansDisplay-Medium.woff) format('woff');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'SB Sans Display';src:url(fonts/SBSansDisplay-SemiBold.woff) format('woff');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'SB Sans Display';src:url(fonts/SBSansDisplay-Bold.woff) format('woff');font-weight:700;font-style:normal;font-display:swap}
+
 /* Layout: one phone-sized app. Full-bleed on a phone, framed 390×844 device on desktop.
    The phone UI is a single light look (as in the Figma), only the desktop backdrop follows the theme. */
 :root{
