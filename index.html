@@ -116,7 +116,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
   background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   box-shadow:0 2px 4px rgba(0,0,0,.05),0 0 1px rgba(0,0,0,.07);transition:transform .15s}
 .ctl:active{transform:scale(.94)}
-#topCtl{position:absolute;left:12px;right:12px;top:calc(var(--sat) + 16px);height:0;z-index:5}
+#topCtl{position:absolute;left:12px;right:12px;top:calc(var(--sat) + var(--topgap,16px));height:0;z-index:5}
 #profile{position:absolute;left:0;top:0;width:48px;height:48px;border-radius:24px;border:2px solid var(--lime);overflow:hidden;box-sizing:border-box;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 #profile img{width:48px;height:48px;margin:-2px;object-fit:cover}
 #btnLayers{right:0;top:0}
@@ -527,6 +527,7 @@ function measure(){
   }
   phone.style.setProperty('--sat', SAT+'px');
   phone.style.setProperty('--sab', SAB+'px');
+  phone.style.setProperty('--topgap', framed ? '16px' : '4px'); // real status bars already carry ~8px of padding under the icons
   phone.style.setProperty('--sbtn', Math.max(21, SAB-13)+'px');
   peekTop = Math.round(H - (215 + SAB));
   fullTop = Math.round(SAT + 8);
