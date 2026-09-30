@@ -5,7 +5,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="BingoBongo">
-<meta name="theme-color" content="#EDEBE4">
+<meta name="theme-color" content="#FFFFFF">
 </head><body>
 <title>BingoBongo Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -506,13 +506,17 @@ function measure(){
   phone.classList.toggle('framed', framed);
   stage.classList.toggle('has-frame', framed);
   if (framed){
-    W=390; H=844; SAT=44; SAB=34;
+    W=390; H=844; SAT=44; SAB=34; phone.style.height=''; phone.style.bottom=''; document.documentElement.style.background=''; document.body.style.background='';
     frameScale = Math.min(1, (innerHeight-56)/844, (innerWidth-48)/390);
     phone.style.transform = `scale(${frameScale})`;
     phone.style.margin = `${-(844*(1-frameScale))/2}px ${-(390*(1-frameScale))/2}px`;
   } else {
     phone.style.transform=''; phone.style.margin='';
-    frameScale = 1; W = innerWidth; H = innerHeight;
+    frameScale = 1; W = innerWidth;
+    const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+    H = Math.max(innerHeight, document.documentElement.clientHeight, standalone ? screen.height : 0);
+    phone.style.height = H + 'px'; phone.style.bottom = 'auto';
+    document.documentElement.style.background = '#fff'; document.body.style.background = '#fff';
     const cs = getComputedStyle(probe);
     SAT = parseFloat(cs.paddingTop)||0; SAB = parseFloat(cs.paddingBottom)||0;
     if (SAT < 20) SAT = 20;   // leave room at the top even without a notch
