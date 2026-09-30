@@ -982,8 +982,14 @@ function openPlace(id, m){
   const p = PLACES[id]; if (!p) return;
   const saved = id==='korobok' ? saveBtn.getAttribute('aria-pressed')==='true' : (m && m.layer==='places');
   const cnt = p.count || 1356, rate = p.rating && p.rating!=='—' ? p.rating : '4,5';
-  const walk = p.walk || (/мин/.test(p.dist||'') ? p.dist.replace(' пешком','') : '7 мин');
-  const dist = /мин/.test(p.dist||'') ? '550 м' : (p.dist || '600 м');
+  // real distance from "me" and walking time (~80 m per minute)
+  let meters = null;
+  if (m && m.geo){ const c = toGeo(195,325), R=6371000, r=Math.PI/180; meters = Math.hypot((m.geo[0]-c[0])*r*Math.cos(m.geo[1]*r)*R, (m.geo[1]-c[1])*r*R); }
+  else if (m) meters = Math.hypot(m.x-195, m.y-325) * MPP;
+  else { const v = parseInt(String(p.dist||'').replace(/\s/g,'')); meters = isNaN(v) || /мин/.test(p.dist) ? 550 : v; }
+  meters = Math.max(50, Math.round(meters/10)*10);
+  const dist = meters >= 1000 ? (meters/1000).toFixed(1).replace('.',',') + 'км' : meters + 'м';
+  const walk = Math.max(1, Math.round(meters/80)) + ' мин';
   openPop(`
     <div class="pc">
       <div class="pc-h"><div class="grow"><h4>${p.name}</h4><div class="s">${p.kind} • ${p.addr}</div></div><button class="pc-x" aria-label="Закрыть"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19.7598 5.53027L14.1396 11.1504C13.6701 11.6203 13.6701 12.3797 14.1396 12.8496L19.7598 18.4697L18.5596 19.6699L12.9395 14.0498C12.4695 13.5803 11.7101 13.5802 11.2402 14.0498L5.62012 19.6699L4.41992 18.4697L10.04 12.8496C10.5097 12.3797 10.5097 11.6203 10.04 11.1504L4.41992 5.53027L5.62012 4.33008L11.2402 9.9502C11.7102 10.4199 12.4695 10.4198 12.9395 9.9502L18.5596 4.33008L19.7598 5.53027Z" fill="#5A5A5A"/></svg></button></div>
@@ -991,7 +997,7 @@ function openPlace(id, m){
         <span class="pc-tag">Бизнес-ланч</span>
         <div class="pc-soc"><span class="pc-faces"><img src="assets/f2.jpg" alt=""><img src="assets/f1.jpg" alt=""><img src="assets/f5.jpg" alt=""></span><span class="pc-rate">★ ${rate} (${cnt})</span></div>
       </div>
-      <div class="pc-row"><span>${dist} <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><circle cx="8" cy="2.2" r="1.7" fill="#141414"/><path d="M6.5 5.5 4 7.5V10M6.5 5.5l2 1.8 2 2.2M6.5 5.5 5.8 10l-2 5M5.8 10l2.4 1.8 1 3.4" stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${walk}</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0C12.4175 0 16 3.58255 16 8C16 12.4175 12.4175 16 8 16C3.58255 16 0 12.4175 0 8C1.28909e-07 3.58255 3.58255 1.28905e-07 8 0ZM8 1.23633C4.27055 1.23633 1.23633 4.27055 1.23633 8C1.23633 11.7295 4.27055 14.7637 8 14.7637C11.7295 14.7637 14.7637 11.7295 14.7637 8C14.7637 4.27055 11.7295 1.23633 8 1.23633ZM9.33301 2.90918L7.93848 8.21777H10.9092V9.4541H8.22363C7.26673 9.45388 6.57137 8.54632 6.81934 7.62207L8.05273 2.90918H9.33301Z" fill="#141414"/></svg> ${p.hours && p.hours.startsWith('до') ? p.hours : 'до 21:00'}</span></div>
+      <div class="pc-row"><span>${dist} <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M5.89808 9.29792C5.98231 8.81658 6.07318 8.29852 6.15874 7.80983L8.34669 9.08095L8.91046 8.09824L8.90649 8.09557L8.91046 8.08889L6.36895 6.6115C6.46313 6.07741 6.56593 5.43717 6.56593 5.31767C6.56593 4.21145 5.67455 3.31486 4.57624 3.31486C3.84073 3.31486 3.20472 3.72211 2.85984 4.32095L0 9.2759L0.976908 9.84337L4.04765 4.45446H4.3481L3.64706 8.45274L7.13168 15.99H7.74847L7.75378 16H9L5.89808 9.29792ZM4.10538 12.1352L2.70926 16H0.876113L3.0767 9.91078L4.10538 12.1352ZM6.70324 1.26132L6.53144 1.90555C6.38884 2.4403 5.84435 2.75675 5.31311 2.61455C4.78186 2.47102 4.46682 1.92224 4.60875 1.38749L4.78055 0.742582C4.92314 0.208499 5.46828 -0.108616 5.99953 0.0342514C6.53077 0.177119 6.84583 0.726565 6.70324 1.26132Z" fill="#141414"/></svg> ${walk}</span><span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 0C12.4175 0 16 3.58255 16 8C16 12.4175 12.4175 16 8 16C3.58255 16 0 12.4175 0 8C1.28909e-07 3.58255 3.58255 1.28905e-07 8 0ZM8 1.23633C4.27055 1.23633 1.23633 4.27055 1.23633 8C1.23633 11.7295 4.27055 14.7637 8 14.7637C11.7295 14.7637 14.7637 11.7295 14.7637 8C14.7637 4.27055 11.7295 1.23633 8 1.23633ZM9.33301 2.90918L7.93848 8.21777H10.9092V9.4541H8.22363C7.26673 9.45388 6.57137 8.54632 6.81934 7.62207L8.05273 2.90918H9.33301Z" fill="#141414"/></svg> ${p.hours && p.hours.startsWith('до') ? p.hours : 'до 21:00'}</span></div>
       <button class="pc-cta act-t" data-t="Столик в «${p.name}» забронирован на 19:00">Забронировать</button>
     </div>
     <div class="pc-acts">
