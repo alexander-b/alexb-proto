@@ -125,7 +125,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #botCtl .fade{transition:opacity .2s}
 #weather{position:absolute;left:12px;bottom:76px;height:48px;padding:0 8px;border-radius:12px;display:flex;gap:4px;align-items:center;
   background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 2px 4px rgba(0,0,0,.05),0 0 1px rgba(0,0,0,.07);
-  font-weight:600;font-size:15px;letter-spacing:-.3px;color:#5A5A5A;font-variant-numeric:tabular-nums}
+  font-weight:600;font-size:15px;letter-spacing:-.3px;color:#5A5A5A}
 #btnLocate{right:12px;bottom:76px}
 #filters{position:absolute;left:0;right:0;bottom:12px;display:flex;gap:8px;padding:0 12px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
 #filters::-webkit-scrollbar{display:none}
@@ -278,6 +278,11 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .pa{height:56px;width:60px;flex:none;border-radius:20px;background:rgba(242,242,242,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 2px 4px rgba(0,0,0,.05),0 0 1px rgba(0,0,0,.07);display:grid;place-items:center}
 .pa.wide{width:134px;display:flex;gap:8px;justify-content:center;font-weight:600;font-size:16px;letter-spacing:-.3px}
 
+.mk.merged{display:none}
+.pin.real .pt{overflow:hidden;padding:0}
+.pin.real .pt img.ph{width:36px;height:36px;object-fit:cover;border-radius:11px;border:2px solid #fff;box-sizing:border-box}
+.pin.real .pt img.lg{width:36px;height:36px;object-fit:contain;border-radius:11px;background:#fff}
+
 /* bottom fade + search */
 #fadeBottom{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:11;pointer-events:none;
   background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 55%,#fff)}
@@ -388,7 +393,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div class="fade" id="botFade">
         <button id="weather" aria-label="Погода">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2.3347 16.4464C1.49746 15.3522 1.00003 13.9842 1.00003 12.5C1.00003 8.91015 3.91018 6 7.50003 6C10.3776 6 12.8184 7.86983 13.6737 10.4607C17.5704 8.84222 22 11.6775 22 16.0041C22 19.3156 19.302 22 15.9738 22H2.71609C-0.106985 22 -1.051 18.243 1.43995 16.9212L2.3347 16.4464Z" fill="url(#wg0)"/><path d="M21.6151 11.8189C23.0019 11.3536 24.001 10.0435 24.001 8.5C24.001 6.567 22.434 5 20.501 5C20.2006 5 19.9092 5.03783 19.631 5.10898C18.8853 3.28508 17.0932 2 15.001 2C12.7583 2 10.8604 3.47656 10.2266 5.51056C11.9871 6.19763 13.4238 7.5307 14.2463 9.21769C17.0603 8.49524 19.9598 9.62331 21.6151 11.8189Z" fill="url(#wg1)"/><defs><linearGradient id="wg0" x1="2.53" y1="6" x2="-.19" y2="21.95" gradientUnits="userSpaceOnUse"><stop stop-color="#DBEAFF"/><stop offset="1" stop-color="#8EBDFF" stop-opacity=".9"/></linearGradient><linearGradient id="wg1" x1="11.33" y1="2" x2="10.12" y2="12.89" gradientUnits="userSpaceOnUse"><stop stop-color="#B7D5FF" stop-opacity=".7"/><stop offset="1" stop-color="#61A3FF" stop-opacity=".4"/></linearGradient></defs></svg>
-          <span>−15°</span>
+          <span>15°</span>
         </button>
         <button class="ctl" id="btnLocate" aria-label="Где я">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18.2188 3.14377C19.8417 2.47184 21.5277 4.14195 20.8438 5.76193L13.8965 22.6447L11.5879 21.6916L10.1904 13.7463L2.21875 12.3615L1.26172 10.0617L18.2188 3.14377Z" fill="black"/></svg>
@@ -623,6 +628,52 @@ function initLive(){
   renderMap();
   loadRealCafes();
 }
+const BRANDS = [
+  {k:'дринкит', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png'},
+  {k:'drinkit', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png'},
+  {k:'правда', logo:'https://pravdacoffee.ru/wp-content/uploads/2021/05/logo_coffee-1.svg'},
+  {k:'surf', logo:'https://static.tildacdn.com/tild3765-6165-4738-a136-303165663733/Frame_369.png', photo:'https://static.tildacdn.com/tild3030-3138-4561-b735-323461616266/Surf_Coffee_Worldwid.jpg'},
+];
+const PHOTOS = ['assets/milC.jpg','assets/cafe.jpg','assets/milA.jpg','assets/bereza.jpg','assets/milB.jpg'];
+const brandFor = n => BRANDS.find(b => n.toLowerCase().includes(b.k));
+const FALLBACK_IMG = "this.onerror=null;this.src=ASSETS['coffee.png'];this.style.objectFit='contain';this.style.padding='3px'";
+function realPinHTML(p){
+  const img = p.logo ? `<img src="${p.logo}" alt="" class="lg" onerror="${FALLBACK_IMG}">` : `<img src="${p.thumb}" alt="" class="ph">`;
+  return fix(`<button class="mk-in pin real"><span class="pt">${img}</span><span class="lbl"><b>${esc(p.name)}</b></span></button>`);
+}
+function realClusterHTML(p, others, n){
+  const bg = q => `background-image:url(${q.logo || q.thumb})${q.logo?';background-size:contain;background-color:#fff':''}`;
+  const w = n < 5 ? 'места' : 'мест';
+  return fix(`<button class="mk-in pl"><span class="pic"><span class="side l" style="${bg(others[0])}"></span><span class="side r" style="${bg(others[1]||others[0])}"></span><span class="main" style="${bg(p)}"></span></span><span class="lbl"><b>${esc(p.name)}</b><i>+${n} ${w}</i></span></button>`);
+}
+function mkReal(d){
+  const el = document.createElement('div'); el.className = 'mk'; el.dataset.id = d.id;
+  el.innerHTML = realPinHTML(PLACES[d.id]);
+  el.addEventListener('click', ev => {
+    ev.stopPropagation(); touch();
+    if (m.clusterN && live){ live.setCenter(m.geo, {duration:500}); live.setZoom(live.getZoom() + 1.4, {duration:500}); return; }
+    openMarker(m);
+  });
+  $('#markers').appendChild(el);
+  const m = Object.assign({el, clusterKey:''}, d); markers.push(m); return m;
+}
+function clusterReal(){
+  const list = markers.filter(m => m.type==='real' && !m.el.classList.contains('off'));
+  const pts = list.map(m => ({m, p: live.project(m.geo)}));
+  const used = new Set();
+  for (const a of pts){
+    if (used.has(a.m)) continue; used.add(a.m);
+    const grp = pts.filter(b => !used.has(b.m) && Math.hypot(b.p[0]-a.p[0], b.p[1]-a.p[1]) < 52);
+    grp.forEach(b => used.add(b.m));
+    const key = grp.length ? 'c' + grp.map(b=>b.m.id).join(',') : 'p';
+    if (a.m.clusterKey !== key){
+      a.m.clusterKey = key; a.m.clusterN = grp.length;
+      a.m.el.innerHTML = grp.length ? realClusterHTML(PLACES[a.m.id], grp.map(b=>PLACES[b.m.id]), grp.length) : realPinHTML(PLACES[a.m.id]);
+    }
+    a.m.el.classList.remove('merged');
+    for (const b of grp){ b.m.el.classList.add('merged'); if (b.m.clusterKey !== 'm'){ b.m.clusterKey = 'm'; b.m.clusterN = 0; } }
+  }
+}
 async function loadRealCafes(){
   try {
     const c = toGeo(195, 325);
@@ -639,14 +690,17 @@ async function loadRealCafes(){
       PLACES[id] = { name: it.name.split(',')[0], kind: 'Кофейня', addr: it.address_name || 'рядом', dist: dist + ' м',
         walk: Math.max(1, Math.round(dist/80)) + ' мин', rating: rv.general_rating ? String(rv.general_rating).replace('.',',') : '—',
         count: rv.general_review_count || rv.org_review_count || 0, hours: 'до 22:00', hero: k%2 ? 'assets/cafe.jpg' : 'assets/bereza.jpg', pos:'50% 50%', real:true };
-      const m = mkMarker({id, layer:'coffee', type:'pin', icon:'assets/coffee.png', geo:[lon, lat], x:0, y:0}, k);
-      if (m) placeMarker(m);
+      const br = brandFor(PLACES[id].name), ph = PHOTOS[k % PHOTOS.length];
+      PLACES[id].logo = br && br.logo; PLACES[id].thumb = (br && br.photo) || ph;
+      if (br && br.photo) PLACES[id].hero = br.photo;
+      const m = mkReal({id, layer:'coffee', type:'real', geo:[lon, lat], x:0, y:0});
+      placeMarker(m);
     });
     applyLayers();
   } catch(e){ /* keep demo cafés */ }
 }
 function renderMap(){
-  if (live){ for (const m of markers) placeMarker(m); return; }
+  if (live){ for (const m of markers) placeMarker(m); if (markers.some(m=>m.type==='real')) clusterReal(); return; }
   mapLayer.style.transform = `translate3d(${ms.tx}px,${ms.ty}px,0) scale(${ms.s})`;
   for (const m of markers){ const X = ms.tx + ms.s*m.x, Y = ms.ty + ms.s*m.y; m.el.style.transform = `translate3d(${X}px,${Y}px,0)`; }
 }
