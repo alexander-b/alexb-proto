@@ -506,7 +506,7 @@ function measure(){
   phone.classList.toggle('framed', framed);
   stage.classList.toggle('has-frame', framed);
   if (framed){
-    W=390; H=844; SAT=44; SAB=34; phone.style.height=''; phone.style.bottom=''; document.documentElement.style.background=''; document.body.style.background='';
+    W=390; H=844; SAT=44; SAB=34; stage.style.position=''; phone.style.position=''; document.documentElement.style.height=''; document.body.style.height=''; phone.style.height=''; phone.style.bottom=''; document.documentElement.style.background=''; document.body.style.background='';
     frameScale = Math.min(1, (innerHeight-56)/844, (innerWidth-48)/390);
     phone.style.transform = `scale(${frameScale})`;
     phone.style.margin = `${-(844*(1-frameScale))/2}px ${-(390*(1-frameScale))/2}px`;
@@ -516,6 +516,10 @@ function measure(){
     const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
     H = Math.max(innerHeight, document.documentElement.clientHeight, standalone ? screen.height : 0);
     phone.style.height = H + 'px'; phone.style.bottom = 'auto';
+    // iOS home-screen mode reports a viewport shorter than the screen; make the document itself
+    // as tall as the screen and pin the app absolutely so the bottom edge gets painted too
+    document.documentElement.style.height = document.body.style.height = standalone ? H + 'px' : '';
+    stage.style.position = phone.style.position = standalone ? 'absolute' : '';
     document.documentElement.style.background = '#fff'; document.body.style.background = '#fff';
     const cs = getComputedStyle(probe);
     SAT = parseFloat(cs.paddingTop)||0; SAB = parseFloat(cs.paddingBottom)||0;
