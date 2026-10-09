@@ -140,7 +140,13 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .chip .ci{position:relative;width:48px;height:48px;flex:none;margin:0 -1px 0 -5px}
 .chip .ci img{position:absolute;inset:0;width:48px;height:48px;transition:filter .2s,opacity .2s,transform .3s var(--spring)}
 .chip[aria-pressed="false"]{color:rgba(20,20,20,.55)}
-.chip[aria-pressed="false"] .ci img{filter:grayscale(1);opacity:.55}
+.chip[aria-pressed="false"] .ci img{filter:grayscale(1);opacity:.55;transform:scale(.92)}
+.chip .chk{position:absolute;left:20px;top:22.4px;width:32px;height:27px;overflow:visible;transform-origin:11px 12px;transition:transform .45s var(--spring),opacity .2s}
+.chip .chk path{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset .35s var(--ease) .08s}
+.chip[aria-pressed="false"] .chk{transform:scale(.4);opacity:0;transition:transform .25s var(--ease),opacity .2s}
+.chip[aria-pressed="false"] .chk path{stroke-dashoffset:1;transition:stroke-dashoffset .15s}
+.chip.pop .ci img{animation:chipBounce .45s var(--spring)}
+@keyframes chipBounce{0%{transform:scale(.85)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
 
 /* ---------- bottom sheet: summary that unfolds into Explore ---------- */
 #sheet{position:absolute;left:0;right:0;top:0;background:#fff;border-radius:28px 28px 0 0;z-index:10;will-change:transform;
@@ -485,10 +491,11 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
     <div id="botCtl">
       <div class="fade" id="botFade">
         <button class="ctl" id="btnLocate" aria-label="Где я"><span class="ic" data-ic="locpt"></span></button>
+        <svg width="0" height="0" style="position:absolute"><defs><filter id="chkSh" x="0" y="0" width="32" height="27" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".12"/></filter></defs></svg>
         <div id="filters" role="group" aria-label="Слои на карте">
-          <button class="chip" data-layer="coffee" aria-pressed="true"><span class="ci"><img src="img/chip_cup.png" alt=""></span>Кофейни</button>
-          <button class="chip" data-layer="friends" aria-pressed="true"><span class="ci"><img src="img/chip_fr.png" alt=""></span>Друзья</button>
-          <button class="chip" data-layer="places" aria-pressed="true"><span class="ci"><img src="img/chip_heart.png" alt=""></span>Мои места</button>
+          <button class="chip" data-layer="coffee" aria-pressed="true"><span class="ci"><img src="img/chip_cup0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Кофейни</button>
+          <button class="chip" data-layer="friends" aria-pressed="true"><span class="ci"><img src="img/chip_fr0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Друзья</button>
+          <button class="chip" data-layer="places" aria-pressed="true"><span class="ci"><img src="img/chip_heart.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Мои места</button>
         </div>
       </div>
     </div>
@@ -1018,7 +1025,7 @@ mapEl.addEventListener('wheel', e => { if (live) return; e.preventDefault(); tou
 
 const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места'};
 function toggleLayer(l){ layers[l] = !layers[l]; applyLayers(); toast(`${LNAME[l]}: ${layers[l]?'показаны на карте':'скрыты'}`); }
-$$('.chip').forEach(c => c.addEventListener('click', () => { touch(); toggleLayer(c.dataset.layer); }));
+$$('.chip').forEach(c => c.addEventListener('click', () => { touch(); toggleLayer(c.dataset.layer); c.classList.remove('pop'); void c.offsetWidth; if (layers[c.dataset.layer]) c.classList.add('pop'); }));
 
 // the moving friend drifts along the street
 function lenaLoop(t){
