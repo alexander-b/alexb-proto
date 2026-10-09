@@ -134,15 +134,12 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #filters{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:8px;padding:0 12px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
 #filters::-webkit-scrollbar{display:none}
 .chip{flex:none;height:48px;border-radius:32px;background:#fff;box-sizing:border-box;box-shadow:inset 0 0 0 .5px var(--stroke),0 1px 2px rgba(0,0,0,.08);
-  display:flex;align-items:center;gap:6px;padding:0 16px 0 5px;position:relative;font-weight:600;font-size:14px;letter-spacing:-.28px;color:var(--blue);transition:color .2s,transform .15s}
+  display:flex;align-items:center;gap:5px;padding:0 16px 0 5px;position:relative;font-weight:600;font-size:15px;letter-spacing:-.28px;color:var(--blue);transition:color .2s,transform .15s}
 .chip:active{transform:scale(.96)}
-.chip .ci{position:relative;width:40px;height:40px;flex:none}
-.chip .ci>img{position:absolute;left:4px;top:6px;transition:filter .2s,opacity .2s}
-.chip .ci .up{left:4px;top:6px;width:24px;height:24px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #fff,0 1px 3px rgba(0,0,0,.18)}
-.chip .chk{position:absolute;left:22px;top:24px;width:17px;height:11px;transition:transform .3s var(--spring),opacity .2s}
+.chip .ci{position:relative;width:48px;height:48px;flex:none;margin:0 -1px 0 -5px}
+.chip .ci img{position:absolute;inset:0;width:48px;height:48px;transition:filter .2s,opacity .2s,transform .3s var(--spring)}
 .chip[aria-pressed="false"]{color:rgba(20,20,20,.55)}
-.chip[aria-pressed="false"] .ci>img,.chip[aria-pressed="false"] .ci .up{filter:grayscale(1);opacity:.55}
-.chip[aria-pressed="false"] .chk{transform:scale(0);opacity:0}
+.chip[aria-pressed="false"] .ci img{filter:grayscale(1);opacity:.55}
 
 /* ---------- bottom sheet: summary that unfolds into Explore ---------- */
 #sheet{position:absolute;left:0;right:0;top:0;background:#fff;border-radius:28px 28px 0 0;z-index:10;will-change:transform;
@@ -229,11 +226,17 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .gal img{flex:none;width:100%;height:100%;object-fit:cover;scroll-snap-align:start;scroll-snap-stop:always}
 .hscroll.drag,#filters.drag{scroll-snap-type:none!important;cursor:grabbing}
 .dots i{transition:width .25s var(--ease),background .25s}
-#searchWrap{transition:transform .35s var(--ease),opacity .25s,width .4s var(--ease),margin .4s var(--ease)}
-#searchBtn span{transition:opacity .2s;white-space:nowrap}
-#searchWrap.mini{width:70px;margin-left:-35px}
-#searchWrap.mini #searchBtn{padding-left:21.5px}
-#searchWrap.mini #searchBtn span{opacity:0}
+#searchWrap{transition:transform .35s var(--ease),opacity .25s,width .55s cubic-bezier(.3,1.25,.5,1),height .55s cubic-bezier(.3,1.25,.5,1),margin .55s cubic-bezier(.3,1.25,.5,1),bottom .45s var(--ease)}
+#searchBtn{transition:padding .5s cubic-bezier(.3,1.25,.5,1),box-shadow .3s}
+#searchBtn::after{transition:opacity .2s}
+#searchBtn span{transition:opacity .15s,transform .3s var(--ease);white-space:nowrap}
+#searchBtn img{transition:transform .5s cubic-bezier(.3,1.25,.5,1)}
+#searchWrap.mini{width:56px;height:56px;margin-left:-28px;bottom:calc(var(--sbtn,21px) + 7px)}
+#searchWrap.mini #wave{opacity:0}
+#searchWrap.mini #searchBtn{padding-left:14.5px;box-shadow:0 4px 16px rgba(0,0,0,.16),0 1px 3px rgba(0,0,0,.08)}
+#searchWrap.mini #searchBtn::after{opacity:0}
+#searchWrap.mini #searchBtn span{opacity:0;transform:translateX(-8px)}
+#searchWrap.mini #searchBtn img{transform:scale(.95)}
 #pop.place.dragging{transition:none!important}
 /* social block: friend bubbles + emoji stickers + pills (used on cards and in the place card) */
 .soc{width:203px;height:110px;pointer-events:none}
@@ -353,8 +356,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .ir + .ir{margin-top:16px}
 .ir .ic{color:#C5C5CE}
 .ir.tap:active{opacity:.6}
-.feats{margin:0 -16px;padding:4px 16px 4px 6px;gap:0;align-items:center}
-.feat + .feat{margin-left:-18px}
+.feats{margin:0 -16px;padding:4px 16px 8px 6px;gap:0;align-items:flex-start}
 .feat{flex:none;opacity:0;transform:scale(.4) rotate(-12deg);transition:transform .6s var(--spring),opacity .25s}
 .feat.in{opacity:1;transform:rotate(var(--r,0deg))}
 .feat img{display:block}
@@ -367,10 +369,11 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .lk-ph .hrt{position:absolute;right:12px;top:12px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
 .lk b{display:block;padding:0 8px;font-weight:600;font-size:17px;line-height:22px}
 .lk i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding:0 8px;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.04px;color:var(--ink-2);margin-top:4px}
-#pop.place.expanded{bottom:0;top:calc(var(--sat) + 52px);overflow-y:auto;touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
+#pop.place.expanded{bottom:0;top:calc(var(--sat) + 52px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
 #pop.place.expanded::-webkit-scrollbar{display:none}
-#pop.place.expanded .pc{margin:0;border-radius:28px 28px 0 0;min-height:100%;box-sizing:border-box;padding-bottom:calc(var(--sab) + 120px);box-shadow:0 -4px 24px rgba(0,0,0,.12)}
+#pop.place.expanded .pc{margin:0;border-radius:28px 28px 0 0;min-height:100%;box-sizing:border-box;padding-top:12px;padding-bottom:calc(var(--sab) + 120px);box-shadow:none;--x:0 -4px 24px rgba(0,0,0,.12)}
 #pop.place.expanded .pc-tabs{display:flex}
+#pop.place.expanded .pc-grab{position:sticky;top:0;left:auto;margin:-12px -16px 0;width:calc(100% + 32px);height:20px;background:linear-gradient(#fff 70%,rgba(255,255,255,0));z-index:5}
 #pop.place.expanded .pc-hero{margin:8px 0 0}
 #pop.place.expanded .pc-sh{display:none}
 #pop.place.expanded .pc-ex{display:block;animation:moreIn .4s var(--ease) both}
@@ -463,9 +466,9 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div class="fade" id="botFade">
         <button class="ctl" id="btnLocate" aria-label="Где я"><span class="ic" data-ic="locpt"></span></button>
         <div id="filters" role="group" aria-label="Слои на карте">
-          <button class="chip" data-layer="coffee" aria-pressed="true"><span class="ci"><img src="img/em_cup.png" alt="" style="width:29px;height:28px"><svg class="chk" viewBox="0 0 17 11"><path d="M3 5.5 6.6 8.5 14 2.8" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M3 5.5 6.6 8.5 14 2.8" stroke="#4FCB3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>Кофейни</button>
-          <button class="chip" data-layer="friends" aria-pressed="true"><span class="ci"><img class="up" src="img/fr_kate.jpg" alt=""><svg class="chk" viewBox="0 0 17 11"><path d="M3 5.5 6.6 8.5 14 2.8" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M3 5.5 6.6 8.5 14 2.8" stroke="#4FCB3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>Друзья</button>
-          <button class="chip" data-layer="places" aria-pressed="true"><span class="ci"><img src="img/em_heart.png" alt="" style="width:30px;height:31px;left:3px"></span>Мои места</button>
+          <button class="chip" data-layer="coffee" aria-pressed="true"><span class="ci"><img src="img/chip_cup.png" alt=""></span>Кофейни</button>
+          <button class="chip" data-layer="friends" aria-pressed="true"><span class="ci"><img src="img/chip_fr.png" alt=""></span>Друзья</button>
+          <button class="chip" data-layer="places" aria-pressed="true"><span class="ci"><img src="img/chip_heart.png" alt=""></span>Мои места</button>
         </div>
       </div>
     </div>
@@ -664,7 +667,7 @@ const FEED = {
   main:{h:'Подборка заведений', ids:['bereza','carniceria','PRIME','masa','tabi','botafogo'], news:true},
   autumn:{h:'Тёплые места на осень', ids:['masa','bereza','PRIME','botafogo','bistro']},
   food:{h:'Поесть рядом', ids:['carniceria','bereza','korobok','PRIME','tabi','bistro']},
-  fun:{h:'Интересное рядом', ids:['blackswan','tabi','botafogo'], news:true},
+  fun:{h:'Интересное рядом', ids:['blackswan','tabi','botafogo']},
 };
 const NEWS = [
   {id:'water', d:'12–15 октября', t:'Отключение горячей воды<br>в вашем районе', toast:'Горячую воду отключат 12–15 октября'},
@@ -725,6 +728,10 @@ const BRANDS = [
   {k:'drinkit', logo:'https://drinkit.ru/wp-content/uploads/2026/09/cropped-b2db6c6b-1e1c-4a07-acf6-de62c1f0f9e2-270x270.png', photo:'https://drinkit.ru/wp-content/uploads/2026/07/6979f24cf116a7eca4d2e699_DSCF4246-_1_-p-2000-1.jpg'},
   {k:'правда', logo:'https://pravdacoffee.ru/wp-content/uploads/2021/05/logo_coffee-1.svg'},
   {k:'surf', logo:'https://static.tildacdn.com/tild3765-6165-4738-a136-303165663733/Frame_369.png', photo:'https://static.tildacdn.com/tild3030-3138-4561-b735-323461616266/Surf_Coffee_Worldwid.jpg'},
+  ...[['cofix','cofix.ru'],['шоколадница','shoko.ru'],['кофемания','coffeemania.ru'],['даблби','double-b.ru'],['double b','double-b.ru'],['stars coffee','starscoffee.ru'],
+      ['one price','onepricecoffee.com'],['coffee like','coffee-like.com'],['кофе хауз','coffeehouse.ru'],['вкусно','vkusnoitochka.ru'],['теремок','teremok.ru'],
+      ['караваевых','karavaevi.ru'],['буше','bushe.ru'],['азбука вкуса','av.ru'],['кофикс','cofix.ru'],['cofefest','cofefest.ru'],['skuratov','skuratovcoffee.ru'],['скуратов','skuratovcoffee.ru']]
+    .map(([k,d]) => ({k, logo:`https://favicon.yandex.net/favicon/v2/https://${d}?size=120`, alt:`https://www.google.com/s2/favicons?domain=${d}&sz=128`})),
 ];
 const brandFor = n => BRANDS.find(b => n.toLowerCase().includes(b.k));
 const FB = src => `this.onerror=null;this.src='${src}'`;
@@ -764,8 +771,8 @@ const plural = n => n%10===1 && n%100!==11 ? 'место' : (n%10>=2 && n%10<=4 
 const DROP = '<svg class="drop" viewBox="0 0 56 62" aria-hidden="true"><path d="M52 26C52 32.88 49.11 39.08 44.47 43.45H40.76C33.66 43.9 30.24 47.94 29.4 55.45H26.6C25.76 47.94 22.34 43.9 15.24 43.45H11.53C6.89 39.08 4 32.88 4 26C4 12.75 14.75 2 28 2C41.25 2 52 12.75 52 26Z" fill="#fff"/></svg>';
 const PIN_DOM = `<button class="mk-in gp"><span class="side l">${DROP}<img class="ph" alt=""></span><span class="side r">${DROP}<img class="ph" alt=""></span><span class="main">${DROP}<img class="ph" alt=""></span><span class="lbl"><b></b><i></i></span></button>`;
 function setPinImg(img, p){
-  img.classList.toggle('logo', !!p.logo && /^https?:/.test(p.logo));   // brand logos sit inside, local square pics fill the shape
-  loadImg(img, p.logo ? [p.logo] : [p.thumb || (p.photos && p.photos[0]) || p.hero, p.alt], p.logo ? 'img/coffee.png' : (p.fb || FBS[0]));
+  img.classList.toggle('logo', !!p.logo && (p.contain || /^https?:/.test(p.logo)));   // brand logos sit inside, local square pics fill the shape
+  loadImg(img, p.logo ? [p.logo, p.logoAlt] : [p.thumb || (p.photos && p.photos[0]) || p.hero, p.alt], p.logo ? 'img/em_cup.png' : (p.fb || FBS[0]));
 }
 // paint a pin in place: no innerHTML rebuilds, so photos never re-load or blink
 function paintPin(m, others, n){
@@ -872,13 +879,15 @@ async function apiItems(q, point, radius, size){
 }
 async function loadRealCafes(){
   try {
-    const c = GEO_ME, items = (await apiItems('кофейня', c, 900, 10)).slice(0, 8);
+    // fewer, more believable cafés: one per brand, brand logos where we know them, a neutral cup otherwise
+    const c = GEO_ME, seen = new Set(), items = (await apiItems('кофейня', c, 800, 12)).filter(it => { const k = it.name.split(',')[0].toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 5);
     if (!items.length) return;
+    const PH = ['img/cafe.jpg','img/ph_teal.jpg','img/bereza.jpg','img/ph_loft.jpg','img/ph_dark.jpg'];
     items.forEach((it, k) => {
-      const id = 'real' + k, br = brandFor(it.name), rv = it.reviews || {};
+      const id = 'real' + k, br = brandFor(it.name), rv = it.reviews || {}, ph = (br && br.photo) || PH[k % PH.length];
       PLACES[id] = { name: it.name.split(',')[0], kind:'Кофейня', addr: it.address_name || 'рядом', geo:[it.point.lon, it.point.lat],
-        rating: rv.general_rating ? String(rv.general_rating) : '4.6', count: rv.general_review_count || rv.org_review_count || 120, react: 20 + k*7,
-        hero: (br && br.photo) || ['img/cafe.jpg','img/bereza.jpg','img/ph_teal.jpg'][k%3], fb:'img/cafe.jpg', logo: br && br.logo, photos:[(br && br.photo) || ['img/cafe.jpg','img/bereza.jpg','img/ph_teal.jpg'][k%3], 'img/ph_teal.jpg', 'img/cafe.jpg'],
+        rating: rv.general_rating ? String(rv.general_rating) : '4.6', count: rv.general_review_count || rv.org_review_count || 120, react: 14 + k*9,
+        hero: ph, fb: PH[k % PH.length], logo: br ? br.logo : 'img/em_cup.png', logoAlt: br && br.alt, contain: !br, photos:[ph],
         check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 000-00-00', site:'2gis.ru', desc:'Кофейня рядом с тобой — по отзывам в 2ГИС', feats:['lunch','dog'], cats:[] };
       mkMarker({id, layer:'coffee', type:'gp', geo:PLACES[id].geo}, k);
     });
@@ -1020,6 +1029,7 @@ function head(){
   explore.style.pointerEvents = p > .5 ? '' : 'none';
 }
 sScroll.addEventListener('scroll', () => {
+  touch();
   for (const el of [fastWrap, sumMore, xChipsWrap, sumEl]) el.style.transition = 'none';
   head();
   const st = sScroll.scrollTop, dy = st - lastSt; lastSt = st;
@@ -1257,6 +1267,7 @@ function expandPlace(on){
   else if (!on && pop.classList.contains('expanded')) goShort();
 }
 pop.addEventListener('scroll', () => {
+  touch();
   const pl = popBody.querySelector('.plate'); if (!pl) return;
   pl.classList.toggle('out', pop.classList.contains('expanded') && pop.scrollTop > 36);   // the plate moves down into the features
 });
@@ -1268,10 +1279,10 @@ function observeFeats(){
 }
 
 const FEATS = {
-  lunch:{img:'img/st_lunch.png', w:139, r:'-3deg', t:'Бизнес-ланч до 16:00 — 590 ₽'},
-  park:{img:'img/st_park.png', w:164, r:'0deg', t:'Парковка рядом — 200 ₽/час'},
-  dog:{img:'img/st_dog.png', w:142, r:'0deg', t:'Можно с собакой — дадут миску воды'},
-  brunch:{img:'img/st_brunch.png', w:114, r:'4deg', t:'Бранч с лососем по выходным'},
+  lunch:{img:'img/st_lunch.png', w:139, y:5, x:0, r:'0deg', t:'Бизнес-ланч до 16:00 — 590 ₽'},
+  park:{img:'img/st_park.png', w:164, y:0, x:-11, r:'0deg', t:'Парковка рядом — 200 ₽/час'},
+  dog:{img:'img/st_dog.png', w:142, y:0, x:-30, r:'0deg', t:'Можно с собакой — дадут миску воды'},
+  brunch:{img:'img/st_brunch.png', w:114, y:18, x:-14, r:'0deg', t:'Бранч с лососем по выходным'},
 };
 const clockSm = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M8.89453 5.2627V9.47322L10.9998 10.7364" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function openMarker(d){
@@ -1286,7 +1297,7 @@ function openPlace(id, m){
   const meters = m && !m.geo && m.x ? Math.max(50, Math.round(Math.hypot(m.x-195, m.y-325)*MPP/10)*10) : distM(p);
   const walk = Math.max(1, Math.round(meters/80));
   const others = Object.keys(PLACES).filter(k => k!==id && !k.startsWith('real') && PLACES[k].cats && PLACES[k].cats.length).slice(0, 5);
-  const feats = (p.feats||[]).map((f,i) => `<span class="feat" data-i="${i}" style="--r:${FEATS[f].r}" title="${FEATS[f].t}"><img src="${FEATS[f].img}" alt="${FEATS[f].t}" style="width:${FEATS[f].w}px"></span>`).join('');
+  const feats = (p.feats||[]).map((f,i) => `<span class="feat" data-i="${i}" style="--r:${FEATS[f].r};margin-top:${FEATS[f].y}px;margin-left:${i?FEATS[f].x:0}px" title="${FEATS[f].t}"><img src="${FEATS[f].img}" alt="${FEATS[f].t}" style="width:${FEATS[f].w}px"></span>`).join('');
   openPop(`
     <div class="pc">
       <button class="pc-grab" aria-label="Развернуть карточку"></button>
@@ -1384,6 +1395,7 @@ const easeOutBack = t => { const c1=1.70158, c3=c1+1; return 1 + c3*Math.pow(t-1
 let waveRAF=null, lastWave=-1e9;
 function playWave(entrance){
   cancelAnimationFrame(waveRAF);
+  if (sw.classList.contains('mini')){ sBtn.style.opacity = 1; sBtn.style.transform = ''; return; }   // never ring the small round button
   lastWave = performance.now();
   if (reduced){ sBtn.style.transform=''; sBtn.style.opacity=1; return; }
   const DUR = 2100, t0 = performance.now();
@@ -1409,15 +1421,15 @@ function playWave(entrance){
     wgrad.setAttribute('x1', (cx - Math.cos(rad)*R).toFixed(1)); wgrad.setAttribute('y1', (cy - Math.sin(rad)*R*0.5).toFixed(1));
     wgrad.setAttribute('x2', (cx + Math.cos(rad)*R).toFixed(1)); wgrad.setAttribute('y2', (cy + Math.sin(rad)*R*0.5).toFixed(1));
     if (t < 1) waveRAF = requestAnimationFrame(step);
-    else { sBtn.style.transform=''; wp.setAttribute('opacity',0); wg.setAttribute('opacity',0); }
+    else { waveRAF = null; sBtn.style.transform=''; wp.setAttribute('opacity',0); wg.setAttribute('opacity',0); }
   };
   waveRAF = requestAnimationFrame(step);
 }
 let waveTimer=null;
-function scheduleWave(ms){ clearTimeout(waveTimer); waveTimer = setTimeout(()=>playWave(true), ms); if (!reduced) sBtn.style.opacity = 0; }
+function scheduleWave(ms){ clearTimeout(waveTimer); sw.classList.remove('mini'); waveTimer = setTimeout(()=>playWave(true), ms); if (!reduced) sBtn.style.opacity = 0; }
 setInterval(() => {
   const now = performance.now();
-  if (popOpen || searchOpen || document.hidden) return;
+  if (popOpen || searchOpen || document.hidden || sheetState!=='peek' || waveRAF) return;
   if (now - lastWave > 9000 && now - lastInteract > 3500 && !sw.classList.contains('mini')) playWave(false);
 }, 1000);
 
