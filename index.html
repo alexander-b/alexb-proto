@@ -209,7 +209,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .nw-t{margin-top:4px;font-weight:600;font-size:17px;line-height:20px;letter-spacing:-.34px}
 .nw-x{position:absolute;right:16px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;background:var(--warm);display:grid;place-items:center;color:#3D3C3A}
 .nw-x .ic{opacity:.6}
-.newsSec{overflow:hidden}
+.newsSec{overflow:visible}
 
 .xcard{isolation:isolate;position:relative;height:358px;border-radius:28px;overflow:hidden;background:#3a3430;margin-bottom:8px;display:block;width:100%;color:#fff;
   transition:transform .2s var(--ease)}
@@ -1263,7 +1263,7 @@ explore.addEventListener('click', e => {
     card.animate([{transform:'scale(1)', opacity:1}, {transform:'scale(.82)', opacity:0}], {duration:240, easing:'ease-in', fill:'forwards'})
       .finished.then(() => {
         if (!newsLeft.length){                       // last one: the whole block folds away
-          const sec = card.closest('.newsSec'), h = sec.offsetHeight;
+          const sec = card.closest('.newsSec'), h = sec.offsetHeight; sec.style.overflow = 'hidden';
           sec.animate([{height:h+'px', opacity:1}, {height:'0px', opacity:0}], {duration:320, easing:E}).finished.then(() => sec.remove());
           return;
         }
