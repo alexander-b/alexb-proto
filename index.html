@@ -97,8 +97,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 /* 2GIS-style place pin: white drop with a round photo, anchored at the tip */
 .gp{left:-28px;top:-55px;width:56px;height:62px;transform-origin:28px 55px}
 .gp .drop{position:absolute;left:0;top:0;width:56px;height:62px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.22)) drop-shadow(0 0 .5px rgba(0,0,0,.25))}
-.gp .ph{position:absolute;left:8px;top:6px;width:40px;height:40px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:inset 0 0 0 .5px rgba(137,137,137,.3)}
-.gp .ph.logo{object-fit:contain;padding:2px;box-sizing:border-box}
+.gp .ph{position:absolute;left:0;top:0;width:56px;height:62px;object-fit:cover;object-position:50% 40%;background:#fff;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2056%2062%22%3E%3Cpath%20transform%3D%22translate%2828%2026%29%20scale%28.835%29%20translate%28-28%20-26%29%22%20d%3D%22M52%2026C52%2032.88%2049.11%2039.08%2044.47%2043.45H40.76C33.66%2043.9%2030.24%2047.94%2029.4%2055.45H26.6C25.76%2047.94%2022.34%2043.9%2015.24%2043.45H11.53C6.89%2039.08%204%2032.88%204%2026C4%2012.75%2014.75%202%2028%202C41.25%202%2052%2012.75%2052%2026Z%22/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2056%2062%22%3E%3Cpath%20transform%3D%22translate%2828%2026%29%20scale%28.835%29%20translate%28-28%20-26%29%22%20d%3D%22M52%2026C52%2032.88%2049.11%2039.08%2044.47%2043.45H40.76C33.66%2043.9%2030.24%2047.94%2029.4%2055.45H26.6C25.76%2047.94%2022.34%2043.9%2015.24%2043.45H11.53C6.89%2039.08%204%2032.88%204%2026C4%2012.75%2014.75%202%2028%202C41.25%202%2052%2012.75%2052%2026Z%22/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.gp .ph.logo{object-fit:contain;padding:6px 8px 14px;box-sizing:border-box}
 .gp .side{position:absolute;left:0;top:0;width:56px;height:62px;transform-origin:28px 55px;opacity:0;transform:var(--t) scale(.35);transition:transform .38s var(--spring),opacity .2s}
 .gp .side.l{--t:translate(-10px,6px) rotate(-14deg)}
 .gp .side.r{--t:translate(10px,4px) rotate(14deg)}
@@ -106,8 +106,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .gp .main{position:absolute;inset:0}
 .gp.sel{transform:scale(1.14)}
 .gp .drop path{stroke:#141414;stroke-width:0;transition:stroke-width .2s}
-.gp.sel .main .drop path{stroke-width:2.5}
-.gp.sel .main .ph{box-shadow:inset 0 0 0 .5px rgba(137,137,137,.3)}
+.gp.sel .main .drop path{stroke-width:3}
 .gp.sel:active{transform:scale(1.1)}
 .lbl.hide{opacity:0}
 .lbl i:empty{display:none}
