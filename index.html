@@ -1530,6 +1530,7 @@ const easeOutBack = t => { const c1=1.70158, c3=c1+1; return 1 + c3*Math.pow(t-1
 let waveRAF=null, lastWave=-1e9;
 function playWave(entrance){
   cancelAnimationFrame(waveRAF);
+  wp.setAttribute('opacity',0); wg.setAttribute('opacity',0);
   if (sw.classList.contains('mini')){ sBtn.style.opacity = 1; sBtn.style.transform = ''; return; }   // never ring the small round button
   lastWave = performance.now();
   if (reduced){ sBtn.style.transform=''; sBtn.style.opacity=1; return; }
@@ -1537,10 +1538,11 @@ function playWave(entrance){
   const step = now => {
     const t = clamp((now - t0)/DUR, 0, 1);
     let bs;
-    if (entrance){ const k = clamp(t/0.32,0,1); bs = lerp(0.35, 1, easeOutBack(k)); sBtn.style.opacity = clamp(t/0.1,0,1); }
+    if (entrance){ const k = clamp(t/0.32,0,1); bs = lerp(0.35, 1, easeOutBack(k)); sBtn.style.opacity = clamp(t/0.06,0,1); }
     else bs = 1 + 0.045*Math.sin(Math.PI*clamp(t/0.3,0,1));
     sBtn.style.transform = `scale(${bs})`;
-    const inP = clamp(t/0.16,0,1), outP = clamp((t-0.7)/0.3,0,1);
+    // the ring only starts once the button is fully opaque, so its fill never shows through as a blue plate
+    const t0r = entrance ? 0.09 : 0, inP = clamp((t-t0r)/0.16,0,1), outP = clamp((t-0.7)/0.3,0,1);
     const op = ease(inP) * (1 - ease(outP));
     const pad = lerp(2, 11, ease(inP)) * (1 - ease(outP)) + 1.5;
     const amp = 4.6 * ease(inP) * (1 - outP);
