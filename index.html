@@ -1371,7 +1371,9 @@ pop.addEventListener('pointermove', e => {
     if (place){ pcBar.style.transition='none'; pcBar.style.transform = d > 0 ? `translateY(${d}px)` : ''; }
     return;
   }
-  const want = pd.top0 + d, top = Math.max(fullPopTop(), want);
+  const want = pd.top0 + d;
+  let top = Math.max(fullPopTop(), want);
+  if (pd.mode === 'shrink' && shortTop && top > shortTop) top = shortTop + Math.sqrt(top - shortTop) * 4;   // resist past the short card
   pop.style.top = top + 'px';
   if (pd.mode === 'grow') pop.scrollTop = Math.max(0, fullPopTop() - want);   // past the top: keep going as a scroll
 });
@@ -1400,7 +1402,7 @@ const popUp = e => {
   if (d.mode === 'grow'){
     if (pop.scrollTop > 0 || v < -.25 || top < (fullPopTop() + shortTop)/2) goFull(); else goShort();
   } else {
-    if (top > shortTop + 90 || v > 1.4) { closePop(); return; }
+    // from the full card a swipe down always lands on the short card first; closing is a separate swipe
     if (v > .25 || top > fullPopTop() + 110) goShort(); else goFull();
   }
 };
