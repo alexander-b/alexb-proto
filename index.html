@@ -730,6 +730,7 @@ function placeMarker(m){
   if (live){ const p = live.project(geoOf(m)); X = p[0]; Y = p[1]; }
   else if (m.geo){ m.el.style.transform = 'translate3d(-999px,-999px,0)'; return; }
   else { X = ms.tx + ms.s*m.x; Y = ms.ty + ms.s*m.y; }
+  if (m.fan){ X += m.fan[0]; Y += m.fan[1]; }
   m.el.style.transform = `translate3d(${X}px,${Y}px,0)`;
 }
 function liveFly(geo, sy, zoom){
@@ -825,7 +826,7 @@ const MDEF = [
   {id:'dima', layer:'friends', type:'fr', x:165.6, y:368.4+51},
   {id:'kate', layer:'friends', type:'fr', x:160.6, y:216.3+51},
   {id:'lena', layer:'friends', type:'fr', x:264, y:262.8+51},
-  {id:'milti', layer:'coffee', type:'gp', x:60, y:311+51, fixed:[PLACES.korobok, PLACES.bistro], fixedN:2, fixedIds:['milti','korobok','bistro']},
+  {id:'milti', layer:'coffee', type:'gp', x:60, y:311+51, fixed:[PLACES.korobok, PLACES.bistro], fixedN:2},
   {id:'dodo', layer:'places', type:'gp', x:287, y:160+51, sub:'7 мин'},
   {id:'korobok', layer:'places', type:'gp', x:40, y:170+51},
   {id:'bereza', layer:'picks', type:'gp'},
@@ -850,14 +851,12 @@ function mkMarker(d, i){
   const b = el.firstElementChild; b.style.transitionDelay = (i%6)*30+'ms'; setTimeout(() => { b.style.transitionDelay = ''; }, 700);
   el.addEventListener('click', ev => {
     ev.stopPropagation(); touch();
-    if (m.fixedIds && !m.grp.length && m.el.firstElementChild.classList.contains('cl')) return openCluster(m.fixedIds);
     if (m.clusterN && live){
-      const ids = [m.id, ...m.grp], c = geoOf(m), R=6371000, r=Math.PI/180;
+      const c = geoOf(m), R=6371000, r=Math.PI/180;
       const far = Math.max(...m.grp.map(id => { const g = geoOf(markers.find(x=>x.id===id)); return Math.hypot((g[0]-c[0])*r*Math.cos(c[1]*r)*R, (g[1]-c[1])*r*R); }));
-      const mpp = 156543.03*COSL/Math.pow(2, live.getZoom()), need = 90*mpp;           // metres that must be ~90px apart
-      const z = live.getZoom() + Math.log2(need / Math.max(far, 1)) + .2;
-      if (far < 18 || z > 19.2) return openCluster(ids);                               // same building: show a list
-      live.setCenter(c, {duration:500}); live.setZoom(Math.min(19.2, z), {duration:500}); return;
+      const mpp = 156543.03*COSL/Math.pow(2, live.getZoom());
+      const z = clamp(live.getZoom() + Math.log2(90*mpp / Math.max(far, 1)) + .2, live.getZoom() + 1, FAN_Z + .3);   // zoom until the pins split
+      live.setCenter(c, {duration:500}); live.setZoom(z, {duration:500}); return;
     }
     openMarker(m);
   });
@@ -873,8 +872,10 @@ function applyLayers(){
 let selId = null, clT = null;
 const queueCluster = () => { clearTimeout(clT); clT = setTimeout(cluster, 140); };
 // screen-space clustering, run when the map settles (not every frame) with a little hysteresis
+const FAN_Z = 18.4;   // close enough: stop clustering, fan out pins that share a building
 function cluster(){
   if (!live) return;
+  for (const m of markers) if (m.fan){ m.fan = null; placeMarker(m); }
   const list = markers.filter(m => m.type==='gp' && !m.el.classList.contains('off'));
   const pts = list.map(m => ({m, p: live.project(geoOf(m))}));
   const rank = m => (m.id===selId ? 0 : m.grp.length ? 1 : m.layer==='picks' ? 2 : 3);
@@ -882,7 +883,7 @@ function cluster(){
   const used = new Set(), heads = [];
   for (const a of pts){
     if (used.has(a.m)) continue; used.add(a.m);
-    const grp = pts.filter(b => !used.has(b.m) && b.m.id!==selId &&
+    const grp = FAN_Z <= live.getZoom() ? [] : pts.filter(b => !used.has(b.m) && b.m.id!==selId &&
       Math.hypot(b.p[0]-a.p[0], (b.p[1]-a.p[1])*1.3) < (a.m.grp.includes(b.m.id) ? 92 : 70));
     grp.forEach(b => used.add(b.m));
     a.m.grp = grp.map(b => b.m.id);
@@ -892,6 +893,17 @@ function cluster(){
     a.m.el.classList.remove('merged'); a.m.el.classList.toggle('sel', isSel);
     for (const b of grp){ b.m.el.classList.add('merged'); b.m.grp = []; b.m.clusterN = 0; }
     heads.push(a);
+  }
+  if (live.getZoom() >= FAN_Z){
+    const done = new Set();
+    for (const a of heads){
+      if (done.has(a)) continue;
+      const near = heads.filter(b => !done.has(b) && Math.hypot(b.p[0]-a.p[0], b.p[1]-a.p[1]) < 46);
+      if (near.length < 2) continue;
+      const cx = near.reduce((v,b)=>v+b.p[0],0)/near.length, cy = near.reduce((v,b)=>v+b.p[1],0)/near.length, R = 30 + near.length*6;
+      near.forEach((b,i) => { done.add(b); const ang = -Math.PI/2 + i*2*Math.PI/near.length;
+        b.m.fan = [cx + R*Math.cos(ang) - b.p[0], cy + R*Math.sin(ang)*.8 - b.p[1]]; b.p = [b.p[0]+b.m.fan[0], b.p[1]+b.m.fan[1]]; placeMarker(b.m); });
+    }
   }
   // labels never overlap: higher-priority pins keep theirs
   const boxes = [];
@@ -1377,11 +1389,6 @@ function openPlace(id, m){
   const sb = $('#pbSave'); sb.classList.toggle('on', saved.has(id));
   sb.onclick = () => { const on = !saved.has(id); on ? saved.add(id) : saved.delete(id); sb.classList.toggle('on', on); toast(on ? 'Сохранено в «Мои места»' : 'Убрано из «Моих мест»'); };
   if (m){ selectPin(id); requestAnimationFrame(() => focusMarker(m, (H - pop.offsetHeight - 70)/2 + 30)); }
-}
-function openCluster(ids){
-  openPop(`<div class="pop-h"><div class="grow"><h4>${ids.length} ${plural(ids.length)} рядом</h4><div class="s">${esc(PLACES[ids[0]].addr)}</div></div></div>
-    <div style="margin:8px -16px 0">${ids.map(id => { const p = PLACES[id]; return `<button class="sr" data-cl="${id}"><span class="ico sq2"><img src="${p.logo && !p.contain ? p.logo : (p.photos||[p.hero])[0]}" alt="" referrerpolicy="no-referrer" onerror="${FB(p.fb||'img/cafe.jpg')}"></span><span class="grow"><span class="ttl">${esc(p.name)}</span><span class="sub">${esc(p.kind)} · ★ ${fmtR(p.rating)}</span></span><span class="dist">${fmtDist(distM(p)).replace(/(\d)м$/,'$1 м')}</span></button>`; }).join('')}</div>`, true);
-  popBody.querySelectorAll('[data-cl]').forEach(b => b.addEventListener('click', () => { const id = b.dataset.cl; closePop(); setTimeout(() => openPlace(id, markers.find(x=>x.id===id)), 380); }));
 }
 function openFriend(id, m){
   const f = FRIENDS[id];
