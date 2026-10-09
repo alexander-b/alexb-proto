@@ -377,13 +377,16 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .feat img{display:block}
 .pc-like{display:flex;align-items:center;margin:20px 0 16px;font-weight:600;font-size:20px;line-height:24px;color:#1E1E1E}
 .likes{margin:0 -16px;padding:0 16px;gap:12px}
-.lk{flex:none;width:167px;display:flex;flex-direction:column;gap:8px}
-.lk-ph{position:relative;height:127px;border-radius:20px;overflow:hidden;background:#e2e4e6}
-.lk-ph img{width:100%;height:100%;object-fit:cover}
-.lk-ph .pill.rt{position:absolute;left:8px;bottom:8px}
-.lk-ph .hrt{position:absolute;right:12px;top:12px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
-.lk > b{display:block;padding:0 8px;font-weight:600;font-size:17px;line-height:22px}
-.lk > i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding:0 8px;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.04px;color:var(--ink-2);margin-top:4px}
+.lk{flex:none;width:167px;display:flex;flex-direction:column;gap:8px;text-align:left;cursor:pointer}
+.lk:active .lk-ph{transform:scale(.97)}
+.lk-ph{position:relative;height:127px;border-radius:20px;overflow:hidden;background:#e2e4e6;transition:transform .15s;isolation:isolate}
+.lk-ph > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lk-ph .pill.rt{position:absolute;left:8px;bottom:8px;height:36px;box-sizing:border-box;z-index:1}
+.lk-ph .xbm{right:8px;top:8px;width:36px;height:36px;border-radius:12px;z-index:1}
+.lk-ph .xbm svg{width:20px;height:20px}
+.lk-t{display:flex;flex-direction:column;gap:4px;padding:0 8px;min-width:0}
+.lk-t b{display:block;font-weight:600;font-size:17px;line-height:22px;color:#1E1E1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk-t i{display:block;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.26px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #pop.place.expanded{bottom:0;top:calc(var(--sat) + 10px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
 #pop.place.expanded::-webkit-scrollbar{display:none}
 #pop.place.expanded .pc{margin:0;border-radius:28px 28px 0 0;min-height:100%;box-sizing:border-box;padding-top:12px;padding-bottom:calc(var(--sab) + 120px);box-shadow:none;--x:0 -4px 24px rgba(0,0,0,.12)}
@@ -1336,12 +1339,14 @@ function openPlace(id, m){
       </div>
       ${feats ? `<div class="pc-ex feats hscroll">${feats}</div>` : ''}
       <div class="pc-ex"><button class="pc-like" data-t="Ещё похожие места">Похоже, вам понравится${IC.chevMini.replace('M13 16L9 12L13 8','M10 8L14 12L10 16')}</button></div>
-      <div class="pc-ex likes hscroll">${others.map(k => { const q = PLACES[k]; return `<button class="lk" data-like="${k}"><span class="lk-ph">${q.cover?`<img src="${q.cover}" alt="">`:photo(q)}<span class="hrt">${icon('heart')}</span><span class="pill rt">${icon('star')}<b>${fmtR(q.rating)}</b>${q.count}</span></span><b>${esc(q.name)}</b><i>${esc(q.short||q.kind)} · ${fmtDist(distM(q)).replace('м',' м')}</i></button>`; }).join('')}</div>
+      <div class="pc-ex likes hscroll">${others.map(k => { const q = PLACES[k]; return `<div class="lk" role="button" tabindex="0" data-like="${k}"><div class="lk-ph">${q.cover?`<img src="${q.cover}" alt="">`:photo(q)}<button class="xbm${saved.has(k)?' on':''}" data-lsave="${k}" aria-label="Сохранить">${IC.bm}</button><span class="pill rt">${icon('star')}<b>${fmtR(q.rating)}</b>${q.count}</span></div><div class="lk-t"><b>${esc(q.name)}</b><i>${esc(q.short||q.kind)} · ${fmtDist(distM(q)).replace('км',' км').replace(/(\d)м$/,'$1 м')}</i></div></div>`; }).join('')}</div>
     </div>`, false, 'place');
   popBody.querySelector('.pc-x').addEventListener('click', closePop);
   popBody.querySelector('.pc-grab').addEventListener('click', () => expandPlace(!pop.classList.contains('expanded')));
   popBody.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => toast(b.dataset.t)));
   popBody.querySelectorAll('.pc-tab').forEach(t => t.addEventListener('click', () => { popBody.querySelectorAll('.pc-tab').forEach(x => x.classList.toggle('on', x===t)); if (t.textContent!=='Общая') toast(`${t.textContent}: скоро`); }));
+  popBody.querySelectorAll('[data-lsave]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const k = b.dataset.lsave, on = !saved.has(k); on ? saved.add(k) : saved.delete(k); b.classList.toggle('on', on);
+    b.animate([{transform:'scale(.7)'},{transform:'scale(1.15)'},{transform:'scale(1)'}], {duration:380, easing:'cubic-bezier(.34,1.56,.64,1)'}); toast(on ? `«${PLACES[k].name}» в «Моих местах»` : `«${PLACES[k].name}» убрано из «Моих мест»`); }));
   popBody.querySelectorAll('[data-like]').forEach(b => b.addEventListener('click', () => openPlace(b.dataset.like, markers.find(x=>x.id===b.dataset.like))));
   popBody.querySelectorAll('.feat').forEach(f => f.addEventListener('click', () => toast(f.title)));
   // the lunch plate lands on the photo with a little spin
