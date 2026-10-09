@@ -628,7 +628,10 @@ function measure(){
     document.documentElement.style.background = '#fff'; document.body.style.background = '#fff';
     const cs = getComputedStyle(probe);
     SAT = parseFloat(cs.paddingTop)||0; SAB = parseFloat(cs.paddingBottom)||0;
-    if (SAT < 20) SAT = 20;
+    // iOS can report the safe area late (or as 0) in home-screen mode: never go under the status bar
+    const notch = /iPhone/.test(navigator.userAgent) && Math.max(screen.height, screen.width) >= 812;
+    SAT = Math.max(SAT, standalone && notch ? 54 : 20);
+    if (standalone && notch) SAB = Math.max(SAB, 34);
   }
   phone.style.setProperty('--sat', SAT+'px');
   phone.style.setProperty('--sab', SAB+'px');
@@ -1698,6 +1701,8 @@ buildMarkers();
 renderExplore();
 layout();
 let rz; addEventListener('resize', () => { if (searchOpen) return; clearTimeout(rz); rz = setTimeout(layout, 80); });
+addEventListener('pageshow', () => setTimeout(layout, 50));
+setTimeout(layout, 400); setTimeout(layout, 1500);   // safe-area insets settle after the first paint on iOS
 requestAnimationFrame(lenaLoop);
 const LIVE_MAP = true;
 if (LIVE_MAP){ const sc = document.createElement('script'); sc.src = 'https://mapgl.2gis.com/api/js/v1'; sc.onload = initLive; document.head.appendChild(sc); }
