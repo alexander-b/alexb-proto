@@ -59,7 +59,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #mapLayer img{width:412px;height:652px}
 #markers{position:absolute;inset:0;pointer-events:none}
 .mk{position:absolute;left:0;top:0;will-change:transform}
-.mk.sel{z-index:6}
+.mk.sel{z-index:6!important}
 .mk.merged{display:none}
 .mk-in{position:absolute;pointer-events:auto;transition:transform .42s var(--spring),opacity .25s}
 .mk.off .mk-in{transform:scale(.2);opacity:0;pointer-events:none;transition:transform .3s var(--ease),opacity .2s}
@@ -103,6 +103,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .gp .side.l{--t:translate(-10px,6px) rotate(-14deg)}
 .gp .side.r{--t:translate(10px,4px) rotate(14deg)}
 .gp.cl .side{opacity:1;transform:var(--t) scale(.78)}
+.gp.cl.one .side.r{opacity:0;transform:var(--t) scale(.35)}
 .gp .main{position:absolute;inset:0}
 .gp.sel{transform:scale(1.14)}
 .gp .drop path{stroke:#141414;stroke-width:0;transition:stroke-width .2s}
@@ -163,6 +164,9 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #sumMore .s2{color:var(--amber)}
 #sumMore button:active{opacity:.6}
 #xChipsWrap{flex:none;overflow:hidden}
+#xFade{flex:none;height:0;position:relative;z-index:3}
+#xFade::after{content:"";position:absolute;left:0;right:0;top:0;height:28px;background:linear-gradient(#fff,rgba(255,255,255,0));opacity:0;transition:opacity .2s;pointer-events:none}
+#xFade.on::after{opacity:1}
 #xChips{padding:8px 16px 8px 22px;gap:4px}
 .xc{flex:none;height:44px;border-radius:25px;display:flex;align-items:center;gap:4px;padding:0 10px;position:relative;
   font-weight:500;font-size:16px;line-height:20px;color:#1E1E1E;white-space:nowrap;transition:background .25s,transform .2s var(--spring)}
@@ -200,7 +204,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .nw-x .ic{opacity:.6}
 .nw.bye{transform:scale(.9);opacity:0;width:0;padding-left:0;padding-right:0;margin-right:-8px;overflow:hidden}
 
-.xcard{position:relative;height:358px;border-radius:28px;overflow:hidden;background:#3a3430;margin-bottom:8px;display:block;width:100%;color:#fff;
+.xcard{isolation:isolate;position:relative;height:358px;border-radius:28px;overflow:hidden;background:#3a3430;margin-bottom:8px;display:block;width:100%;color:#fff;
   transition:transform .2s var(--ease)}
 .xcard:active{transform:scale(.985)}
 
@@ -210,9 +214,16 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .xbm.on{background:var(--lime2);color:#141414}
 .xbm.on svg path{fill:currentColor}
 .xcard h3,.xcard p,.xcard .tagx{pointer-events:none}
+.xcard .gal{z-index:0}
+.xcard > :not(.gal),.pc-ph > .dots{z-index:2;transform:translateZ(0)}
+.xcard > .dots{z-index:3}
+.xinfo{position:absolute;left:20px;right:20px;bottom:20px;display:flex;flex-direction:column;pointer-events:none}
+.xinfo .soc{position:relative;height:80px;flex:none}
+.xcard .xinfo h3{position:static;margin:12px 0 0}
+.xcard .xinfo p{position:static;margin:4px 0 0;padding-right:64px}
 .xcard h3{position:absolute;left:20px;right:20px;bottom:47px;margin:0;font-weight:600;font-size:27px;line-height:31px;letter-spacing:-.135px}
 .xcard p{position:absolute;left:20px;right:84px;bottom:21px;margin:0;font-size:15px;line-height:20px;letter-spacing:-.045px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.xcard .soc{position:absolute;left:20px;bottom:58px}
+
 .dots{position:absolute;right:20px;bottom:28px;display:flex;gap:4px;pointer-events:none;z-index:1}
 .dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.5)}
 .dots i.on{width:24px;background:#fff}
@@ -356,20 +367,24 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .ir + .ir{margin-top:16px}
 .ir .ic{color:#C5C5CE}
 .ir.tap:active{opacity:.6}
-.feats{margin:0 -16px;padding:4px 16px 8px 6px;gap:0;align-items:flex-start}
+.feats{margin:12px -16px 0;padding:0 16px 0 6px;gap:0;align-items:flex-start}
+.feat.dia{position:relative;width:118px;height:118px;display:grid;place-items:center}
+.feat.dia img{width:112px;height:112px;filter:drop-shadow(0 6px 10px rgba(30,90,200,.25))}
+.dish{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) rotate(-7deg);text-align:center;white-space:nowrap;
+  font-weight:600;font-size:19px;line-height:19px;letter-spacing:-.4px;color:#141414;-webkit-text-stroke:6px #fff;paint-order:stroke fill;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
 .feat{flex:none;opacity:0;transform:scale(.4) rotate(-12deg);transition:transform .6s var(--spring),opacity .25s}
 .feat.in{opacity:1;transform:rotate(var(--r,0deg))}
 .feat img{display:block}
-.pc-like{display:flex;align-items:center;margin:16px 0 16px;font-weight:600;font-size:20px;line-height:24px;color:#1E1E1E}
+.pc-like{display:flex;align-items:center;margin:20px 0 16px;font-weight:600;font-size:20px;line-height:24px;color:#1E1E1E}
 .likes{margin:0 -16px;padding:0 16px;gap:12px}
 .lk{flex:none;width:167px;display:flex;flex-direction:column;gap:8px}
 .lk-ph{position:relative;height:127px;border-radius:20px;overflow:hidden;background:#e2e4e6}
 .lk-ph img{width:100%;height:100%;object-fit:cover}
 .lk-ph .pill.rt{position:absolute;left:8px;bottom:8px}
 .lk-ph .hrt{position:absolute;right:12px;top:12px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
-.lk b{display:block;padding:0 8px;font-weight:600;font-size:17px;line-height:22px}
-.lk i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding:0 8px;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.04px;color:var(--ink-2);margin-top:4px}
-#pop.place.expanded{bottom:0;top:calc(var(--sat) + 52px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
+.lk > b{display:block;padding:0 8px;font-weight:600;font-size:17px;line-height:22px}
+.lk > i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding:0 8px;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.04px;color:var(--ink-2);margin-top:4px}
+#pop.place.expanded{bottom:0;top:calc(var(--sat) + 10px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
 #pop.place.expanded::-webkit-scrollbar{display:none}
 #pop.place.expanded .pc{margin:0;border-radius:28px 28px 0 0;min-height:100%;box-sizing:border-box;padding-top:12px;padding-bottom:calc(var(--sab) + 120px);box-shadow:none;--x:0 -4px 24px rgba(0,0,0,.12)}
 #pop.place.expanded .pc-tabs{display:flex}
@@ -493,7 +508,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
         <button class="xc" role="tab" data-cat="food" aria-selected="false"><img src="img/em_salad.png" alt="">Поесть</button>
         <button class="xc" role="tab" data-cat="fun" aria-selected="false"><img src="img/em_ufo.png" alt="">Интересное</button>
       </div></div>
-      <div id="sheetScroll"><div id="explore"></div></div>
+      <div id="xFade"></div><div id="sheetScroll"><div id="explore"></div></div>
     </section>
 
     <div id="fadeBottom"></div>
@@ -625,31 +640,31 @@ const FRIENDS = {
 const MM = 'https://storage.yandexcloud.net/moskvichmag/uploads/';
 const TJ = 'https://opis-cdn.tinkoffjournal.ru/mercury/';
 const PLACES = {
-  bereza:{name:'Чёрная берёза', kind:'Ресторан', addr:'Подкопаевский пер., 9', geo:[37.6420,55.7538], hero:'img/ph_hero.jpg', cover:'img/ph_bereza.jpg', logo:'img/logo_bereza.jpg',
+  bereza:{dish:'Бранч<br>с лососем', name:'Чёрная берёза', kind:'Ресторан', addr:'Подкопаевский пер., 9', geo:[37.6420,55.7538], hero:'img/ph_hero.jpg', cover:'img/ph_bereza.jpg', logo:'img/logo_bereza.jpg',
     rating:'4.5', count:1356, react:212, check:'~1200₽', hours:'до 21:00', today:'Сегодня 8:00–21:00', phone:'+7 (495) 145-97-44', site:'blackbirch.ru',
     desc:'Уют и неповторимая атмосфера, а ещё тут шикарные бранчи с лососем', feats:['lunch','park','dog','brunch'], cats:['main','autumn','food'], lunch:true},
-  carniceria:{name:'Carniceria Vino', q:'Carniceria Vino', kind:'Аргентинский мясной ресторан', short:'Мясной ресторан', addr:'Солянка, 1/2 с1', geo:[37.6360,55.7546], hero:MM+'2025/01/carneceria.jpg', alt:TJ+'01-best-new-rest-msk-2025.jpg', fb:'img/ph_loft.jpg',
+  carniceria:{dish:'Костный<br>мозг', name:'Carniceria Vino', q:'Carniceria Vino', kind:'Аргентинский мясной ресторан', short:'Мясной ресторан', addr:'Солянка, 1/2 с1', geo:[37.6360,55.7546], hero:MM+'2025/01/carneceria.jpg', alt:TJ+'01-best-new-rest-msk-2025.jpg', fb:'img/ph_loft.jpg',
     rating:'4.9', count:640, react:188, check:'~3500₽', hours:'до 00:00', today:'Сегодня 12:00–00:00', phone:'+7 (495) 150-41-41', site:'bureau-nakhodok.ru',
     desc:'Мясо разделывают на своём производстве, а шеф Роман Палкин готовит на асадоре. Берите гребешок с пастернаком и костным мозгом', feats:['park','brunch'], cats:['main','food'], tag:'Бронь за неделю'},
-  masa:{name:'Masa Madre', q:'Masa Madre', kind:'Пекарня', addr:'ул. Забелина, 2', geo:[37.6364,55.7550], hero:TJ+'001-masa-madre.jpg', alt:MM+'2024/05/masamadremsc.jpg', fb:'img/ph_teal.jpg',
+  masa:{dish:'Манки<br>брэд', name:'Masa Madre', q:'Masa Madre', kind:'Пекарня', addr:'ул. Забелина, 2', geo:[37.6364,55.7550], hero:TJ+'001-masa-madre.jpg', alt:MM+'2024/05/masamadremsc.jpg', fb:'img/ph_teal.jpg',
     rating:'4.8', count:1120, react:304, check:'~700₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 150-41-41', site:'bureau-nakhodok.ru',
     desc:'Хлеб на закваске прямо из печи: бутерброд с анчоусом за 750 ₽ и манки брэд с корицей за 70 ₽', feats:['dog','brunch'], cats:['main','autumn','food'], tag:'Тёплый хлеб'},
-  tabi:{name:'Tabi', q:'Tabi изакая', kind:'Изакая', addr:'Солянка, 1/2 с1', geo:[37.6358,55.7544], hero:MM+'2023/06/tabi1.jpg', fb:'img/ph_dark.jpg',
+  tabi:{dish:'Карри-пан', name:'Tabi', q:'Tabi изакая', kind:'Изакая', addr:'Солянка, 1/2 с1', geo:[37.6358,55.7544], hero:MM+'2023/06/tabi1.jpg', fb:'img/ph_dark.jpg',
     rating:'4.7', count:410, react:97, check:'~1800₽', hours:'до 02:00', today:'Сегодня 18:00–02:00', phone:'+7 (495) 150-41-41', site:'bureau-nakhodok.ru',
     desc:'Японский бар в подземельях Солянки, вход через Black Swan: карри-пан, хибачи-сеты с гриля и аффогато с маття и саке', feats:['brunch'], cats:['main','fun','food'], tag:'Вход через паб'},
-  botafogo:{name:'Botafogo', q:'Botafogo бар', kind:'Бразильский бар', addr:'ул. Забелина, 2', geo:[37.6366,55.7552], hero:MM+'2022/06/boto1.jpg', fb:'img/ph_loft.jpg',
+  botafogo:{dish:'Пастел', name:'Botafogo', q:'Botafogo бар', kind:'Бразильский бар', addr:'ул. Забелина, 2', geo:[37.6366,55.7552], hero:MM+'2022/06/boto1.jpg', fb:'img/ph_loft.jpg',
     rating:'4.7', count:520, react:121, check:'~1500₽', hours:'до 03:00', today:'Сегодня 18:00–03:00', phone:'+7 (495) 150-41-41', site:'bureau-nakhodok.ru',
     desc:'Соляные подвалы под домом Купеческого общества: пастел за 400 ₽ и ледяные коктейли на кашасе', feats:['dog'], cats:['autumn','fun'], tag:'Подвалы XIX века'},
-  blackswan:{name:'The Black Swan', q:'Black Swan паб', kind:'Ирландский паб', addr:'Солянка, 1/2 с1', geo:[37.6357,55.7542], hero:MM+'2022/08/room1.jpg', fb:'img/ph_dark.jpg',
+  blackswan:{dish:'Фиш<br>энд чипс', name:'The Black Swan', q:'Black Swan паб', kind:'Ирландский паб', addr:'Солянка, 1/2 с1', geo:[37.6357,55.7542], hero:MM+'2022/08/room1.jpg', fb:'img/ph_dark.jpg',
     rating:'4.6', count:2300, react:156, check:'~1500₽', hours:'до 02:00', today:'Сегодня 12:00–02:00', phone:'+7 (495) 150-41-41', site:'bureau-nakhodok.ru',
     desc:'Под пабом прячется «Тайная комната» с органом и витражами XVIII века из лондонской церкви', feats:['park'], cats:['fun'], tag:'Тайная комната'},
-  korobok:{name:'Коробок', kind:'Необистро', addr:'Солянка, 12', hero:'img/ph_dark.jpg', rating:'4.5', count:1356, react:74, check:'~1500₽', hours:'до 23:00', today:'Сегодня 12:00–23:00', phone:'+7 (495) 123-45-67', site:'korobok.rest',
+  korobok:{dish:'Тартар', name:'Коробок', kind:'Необистро', addr:'Солянка, 12', hero:'img/ph_dark.jpg', rating:'4.5', count:1356, react:74, check:'~1500₽', hours:'до 23:00', today:'Сегодня 12:00–23:00', phone:'+7 (495) 123-45-67', site:'korobok.rest',
     desc:'Сезонное меню и длинный стол у открытой кухни', feats:['lunch','park'], cats:['food'], lunch:true},
-  bistro:{name:'Хлеб и вино', kind:'Необистро', addr:'Устьинский пр., 2', hero:'img/ph_teal.jpg', rating:'4.5', count:980, react:65, check:'~1300₽', hours:'до 00:00', today:'Сегодня 9:00–00:00', phone:'+7 (495) 765-43-21', site:'hlebivino.ru',
+  bistro:{dish:'Брускетты', name:'Хлеб и вино', kind:'Необистро', addr:'Устьинский пр., 2', hero:'img/ph_teal.jpg', rating:'4.5', count:980, react:65, check:'~1300₽', hours:'до 00:00', today:'Сегодня 9:00–00:00', phone:'+7 (495) 765-43-21', site:'hlebivino.ru',
     desc:'Вино по бокалам и хлеб из своей пекарни', feats:['lunch','dog'], cats:['autumn','food'], lunch:true},
-  milti:{name:'Милти', kind:'Кофейня', addr:'Солянка, 1/2', hero:'img/cafe.jpg', logo:'img/logo_milti.jpg', rating:'4.7', count:860, react:58, check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 111-22-33', site:'milti.coffee',
+  milti:{dish:'Раф<br>на кешью', name:'Милти', kind:'Кофейня', addr:'Солянка, 1/2', hero:'img/cafe.jpg', logo:'img/logo_milti.jpg', rating:'4.7', count:860, react:58, check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 111-22-33', site:'milti.coffee',
     desc:'Фильтр, раф на кешью и тихий второй этаж', feats:['lunch','dog'], cats:[]},
-  dodo:{name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', hero:'https://dodopizza.ru/SeoSnippetImages/ru-snippet.jpg', fb:'img/cafe.jpg', logo:'img/logo_dodo.jpg', rating:'4.6', count:3200, react:40, check:'~800₽', hours:'до 23:00', today:'Сегодня 9:00–23:00', phone:'8 800 302-00-60', site:'dodopizza.ru',
+  dodo:{dish:'Пепперони', name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', hero:'https://dodopizza.ru/SeoSnippetImages/ru-snippet.jpg', fb:'img/cafe.jpg', logo:'img/logo_dodo.jpg', rating:'4.6', count:3200, react:40, check:'~800₽', hours:'до 23:00', today:'Сегодня 9:00–23:00', phone:'8 800 302-00-60', site:'dodopizza.ru',
     desc:'Пицца за 30 минут или следующая в подарок', feats:['lunch','park'], cats:[]},
 };
 const GALLERY = {
@@ -778,7 +793,7 @@ function setPinImg(img, p){
 function paintPin(m, others, n){
   const b = m.el.firstElementChild, p = PLACES[m.id];
   setPinImg(b.querySelector('.main img'), p);
-  b.classList.toggle('cl', n > 0);
+  b.classList.toggle('cl', n > 0); b.classList.toggle('one', n === 1);
   if (n > 0){ setPinImg(b.querySelector('.side.l img'), others[0]); setPinImg(b.querySelector('.side.r img'), others[1] || others[0]); }
   b.querySelector('.lbl b').textContent = p.name;
   b.querySelector('.lbl i').textContent = n > 0 ? `+${n} ${plural(n)}` : (m.sub || (p.geo ? walkMin(p) + ' мин' : ''));
@@ -825,7 +840,7 @@ function mkMarker(d, i){
   });
   $('#markers').appendChild(el); markers.push(m); return m;
 }
-function buildMarkers(){ MDEF.forEach((d,i) => mkMarker(d,i)); markers.find(m=>m.id==='me').el.style.zIndex = 3; applyLayers(); }
+function buildMarkers(){ MDEF.forEach((d,i) => mkMarker(d,i)); markers.find(m=>m.id==='me').el.style.zIndex = 3; markers.filter(m=>m.type==='fr').forEach(m => m.el.style.zIndex = 4); applyLayers(); }
 function applyLayers(){
   for (const m of markers){ if (!m.layer) continue; m.el.classList.toggle('off', (m.layer!=='picks' && !layers[m.layer]) || !!m.hidden); }
   $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(layers[c.dataset.layer])));
@@ -885,7 +900,7 @@ async function loadRealCafes(){
     const PH = ['img/cafe.jpg','img/ph_teal.jpg','img/bereza.jpg','img/ph_loft.jpg','img/ph_dark.jpg'];
     items.forEach((it, k) => {
       const id = 'real' + k, br = brandFor(it.name), rv = it.reviews || {}, ph = (br && br.photo) || PH[k % PH.length];
-      PLACES[id] = { name: it.name.split(',')[0], kind:'Кофейня', addr: it.address_name || 'рядом', geo:[it.point.lon, it.point.lat],
+      PLACES[id] = { dish:['Флэт<br>уайт','Раф','Круассан','Капучино','Матча'][k%5], name: it.name.split(',')[0], kind:'Кофейня', addr: it.address_name || 'рядом', geo:[it.point.lon, it.point.lat],
         rating: rv.general_rating ? String(rv.general_rating) : '4.6', count: rv.general_review_count || rv.org_review_count || 120, react: 14 + k*9,
         hero: ph, fb: PH[k % PH.length], logo: br ? br.logo : 'img/em_cup.png', logoAlt: br && br.alt, contain: !br, photos:[ph],
         check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 000-00-00', site:'2gis.ru', desc:'Кофейня рядом с тобой — по отзывам в 2ГИС', feats:['lunch','dog'], cats:[] };
@@ -1030,6 +1045,7 @@ function head(){
 }
 sScroll.addEventListener('scroll', () => {
   touch();
+  $('#xFade').classList.toggle('on', sScroll.scrollTop > 4);
   for (const el of [fastWrap, sumMore, xChipsWrap, sumEl]) el.style.transition = 'none';
   head();
   const st = sScroll.scrollTop, dy = st - lastSt; lastSt = st;
@@ -1105,7 +1121,7 @@ function cardHTML(id, k){
   const p = PLACES[id];
   return `<article class="xcard xin" style="animation-delay:${k*60}ms" data-open="${id}">${galHTML(p, p.cover)}<div class="xgrad"></div>
     ${p.tag?`<span class="tagx">${esc(p.tag)}</span>`:''}<button class="xbm${saved.has(id)?' on':''}" data-save="${id}" aria-label="Сохранить">${IC.bm.replace(/stroke="currentColor"/,'stroke="currentColor"')}</button>
-    ${socHTML(p)}<h3>${esc(p.name)}</h3><p>${esc(p.kind)} · ${esc(p.addr)}</p></article>`;
+    <div class="xinfo">${socHTML(p)}<h3>${esc(p.name)}</h3><p>${esc(p.kind)} · ${esc(p.addr)}</p></div></article>`;
 }
 function newsHTML(){
   if (!newsLeft.length) return '';
@@ -1184,7 +1200,7 @@ $('#popX').addEventListener('click', closePop); scrim.addEventListener('click', 
 /* place card behaves like a native bottom sheet: it follows the finger up to the top edge,
    and the same gesture carries on as a scroll inside it */
 const popTopNow = () => (pop.getBoundingClientRect().top - phone.getBoundingClientRect().top)/frameScale;
-const fullPopTop = () => SAT + 52;
+const fullPopTop = () => SAT + 10;
 let pd=null, shortTop = 0;
 function settleTop(target, done){
   pop.classList.remove('dragging');
@@ -1297,7 +1313,9 @@ function openPlace(id, m){
   const meters = m && !m.geo && m.x ? Math.max(50, Math.round(Math.hypot(m.x-195, m.y-325)*MPP/10)*10) : distM(p);
   const walk = Math.max(1, Math.round(meters/80));
   const others = Object.keys(PLACES).filter(k => k!==id && !k.startsWith('real') && PLACES[k].cats && PLACES[k].cats.length).slice(0, 5);
-  const feats = (p.feats||[]).map((f,i) => `<span class="feat" data-i="${i}" style="--r:${FEATS[f].r};margin-top:${FEATS[f].y}px;margin-left:${i?FEATS[f].x:0}px" title="${FEATS[f].t}"><img src="${FEATS[f].img}" alt="${FEATS[f].t}" style="width:${FEATS[f].w}px"></span>`).join('');
+  const featList = (p.feats||[]).filter(f => f!=='brunch');
+  const feats = featList.map((f,i) => `<span class="feat" data-i="${i}" style="--r:${FEATS[f].r};margin-top:${FEATS[f].y}px;margin-left:${i?FEATS[f].x:0}px" title="${FEATS[f].t}"><img src="${FEATS[f].img}" alt="${FEATS[f].t}" style="width:${FEATS[f].w}px"></span>`).join('')
+    + (p.dish ? `<span class="feat dia" data-i="${featList.length}" style="margin-left:${featList.length?-10:0}px;margin-top:10px" title="Топовое блюдо: ${p.dish.replace('<br>',' ')}"><img src="img/diamond.png" alt=""><span class="dish">${p.dish}</span></span>` : '');
   openPop(`
     <div class="pc">
       <button class="pc-grab" aria-label="Развернуть карточку"></button>
