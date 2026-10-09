@@ -259,7 +259,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #searchWrap.mini #searchBtn img{transform:scale(.95)}
 #pop.place.dragging{transition:none!important}
 .idle .soc .f,.idle .soc .e{animation-play-state:paused}
-.xcard,.pc-hero{contain:layout paint}
+.xcard{contain:layout paint}
 /* social block: friend bubbles + emoji stickers + pills (used on cards and in the place card) */
 .soc{width:203px;height:110px;pointer-events:none}
 .soc .f{position:absolute;width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--lime2),0 3px 8px rgba(0,0,0,.25);
@@ -326,7 +326,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .fbar{display:flex;gap:8px;margin-top:20px}
 .fbar .pb{background:var(--beige);box-shadow:none;color:#3D3C3A}
 .fbar .pb.go{color:#fff}
-.fbar .pb.go{flex:1;width:auto;background:#1C1C1E}
+.fbar .pb.go{flex:1;width:auto;max-width:none;background:#1C1C1E}
 .pop-h h4{margin:0;font-weight:600;font-size:22px;line-height:28px;letter-spacing:-.4px}
 .pop-h .s{font-size:15px;line-height:20px;color:var(--ink-2);letter-spacing:-.3px}
 .pop-av{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2.5px var(--lime2)}
@@ -422,14 +422,14 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 @keyframes moreIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 /* action bar: floats under the short card, becomes a plate pinned to the bottom when expanded */
-#pcBar{position:absolute;left:0;right:0;bottom:0;z-index:22;display:flex;gap:8px;padding:0 18px var(--pcbb);transform:translateY(140%);transition:transform .42s var(--ease)}
+#pcBar{position:absolute;left:0;right:0;bottom:0;z-index:22;display:flex;justify-content:center;gap:8px;padding:0 16px var(--pcbb);transform:translateY(140%);transition:transform .42s var(--ease)}
 #pcBar.on{transform:none}
 #pcBar::before{content:"";position:absolute;left:0;right:0;top:-20px;bottom:0;background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.08);opacity:0;transition:opacity .3s}
 #pcBar.docked::before{opacity:1}
 .pb{position:relative;height:56px;width:64px;flex:none;border-radius:20px;background:#fff;display:grid;place-items:center;color:#141414;
   box-shadow:0 0 0 .5px rgba(137,137,137,.25),0 2px 8px rgba(0,0,0,.1);transition:transform .15s,background .3s,box-shadow .3s}
 .pb:active{transform:scale(.95)}
-.pb.go{width:142px;display:flex;gap:8px;justify-content:center;background:#1C1C1E;color:#fff;font-weight:600;font-size:16px;letter-spacing:0}
+.pb.go{flex:1 1 142px;max-width:160px;width:auto;display:flex;gap:8px;justify-content:center;background:#1C1C1E;color:#fff;font-weight:600;font-size:16px;letter-spacing:0}
 .pb.go .ic svg{width:20px;height:22px}
 #pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}
 .pb.on{background:var(--lime2)!important}
@@ -638,7 +638,7 @@ function measure(){
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
   peekTop = Math.round(H - (234 + SAB));
-  fullTop = Math.round(SAT - 2);
+  fullTop = Math.round(SAT + 8);
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
 }
 function local(e){
@@ -749,9 +749,15 @@ function placeMarker(m){
   m.el.style.transform = `translate3d(${X}px,${Y}px,0)`;
 }
 function liveFly(geo, sy, zoom){
-  const z = zoom || Math.max(live.getZoom(), 16.4);
-  const mpp = 156543.03*COSL/Math.pow(2, z);
-  const dy = ((sy ?? H/2) - H/2) * mpp;   // keep the target above the card
+  const z0 = live.getZoom(), z = zoom || Math.max(z0, 16.4), tx = W/2, ty = sy ?? H/2;
+  if (live.unproject){
+    // put the pin exactly at (W/2, sy): works with the map's pitch and rotation
+    const p = live.project(geo), k = Math.pow(2, z0 - z);
+    const c = live.unproject([p[0] - (tx - W/2)*k, p[1] - (ty - H/2)*k]);
+    live.setCenter(c, {duration:600}); if (z !== z0) live.setZoom(z, {duration:600});
+    return;
+  }
+  const mpp = 156543.03*COSL/Math.pow(2, z), dy = (ty - H/2) * mpp;
   live.setCenter([geo[0], geo[1] + dy/111320], {duration:600}); live.setZoom(z, {duration:600});
 }
 function initLive(){
