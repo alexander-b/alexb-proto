@@ -206,9 +206,9 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .nw-d .ic{color:#C5C5CE}
 .nw-d .ic svg{width:20px;height:20px}
 .nw-t{margin-top:4px;font-weight:600;font-size:17px;line-height:20px;letter-spacing:-.34px}
-.nw-x{position:absolute;right:16px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:10px;background:var(--warm);display:grid;place-items:center;color:#3D3C3A}
+.nw-x{position:absolute;right:16px;top:50%;margin-top:-20px;width:40px;height:40px;border-radius:50%;background:var(--warm);display:grid;place-items:center;color:#3D3C3A}
 .nw-x .ic{opacity:.6}
-.nw.bye{transform:scale(.9);opacity:0;width:0;padding-left:0;padding-right:0;margin-right:-8px;overflow:hidden}
+.newsSec{overflow:hidden}
 
 .xcard{isolation:isolate;position:relative;height:358px;border-radius:28px;overflow:hidden;background:#3a3430;margin-bottom:8px;display:block;width:100%;color:#fff;
   transition:transform .2s var(--ease)}
@@ -310,11 +310,22 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #pop.place:not(.on){transform:translateY(calc(100% + 160px))}
 #popBody{padding:4px 16px 0}
 #pop > .grab{height:20px}
-.x{position:absolute;right:12px;top:14px;width:36px;height:36px;border-radius:50%;background:rgba(20,20,20,.06);display:grid;place-items:center}
+.x{position:absolute;right:16px;top:24px;width:40px;height:40px;border-radius:50%;background:var(--warm);display:grid;place-items:center;color:#3D3C3A;z-index:2}
+.x .ic{opacity:.6}
+.x:active,.nw-x:active{transform:scale(.92)}
 .pop-h{display:flex;gap:12px;align-items:center;padding-right:40px}
+.fh{display:flex;gap:16px;align-items:center;padding:12px 56px 0 2px}
+.fh h4{margin:0;font-weight:600;font-size:27px;line-height:31px;letter-spacing:-.135px}
+.fh .s{margin-top:4px;font-size:15px;line-height:20px;letter-spacing:-.045px;color:var(--ink-2)}
+.fm{display:flex;gap:8px;margin-top:16px;font-weight:600;font-size:17px;line-height:22px;letter-spacing:-.34px;white-space:nowrap}
+.fm span{display:inline-flex;align-items:center;gap:4px}
+.fm .up{font-weight:400;font-size:15px;color:var(--ink-2);letter-spacing:-.045px}
+.fbar{display:flex;gap:8px;margin-top:20px}
+.fbar .pb{background:var(--beige);box-shadow:none}
+.fbar .pb.go{flex:1;width:auto;background:#1C1C1E}
 .pop-h h4{margin:0;font-weight:600;font-size:22px;line-height:28px;letter-spacing:-.4px}
 .pop-h .s{font-size:15px;line-height:20px;color:var(--ink-2);letter-spacing:-.3px}
-.pop-av{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--lime)}
+.pop-av{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2.5px var(--lime2)}
 .facts{display:flex;gap:16px;margin-top:14px;font-size:14px;line-height:18px;color:var(--ink-2);letter-spacing:-.28px;flex-wrap:wrap}
 .facts b{color:var(--ink);font-weight:600}
 .acts{display:flex;gap:8px;margin-top:16px}
@@ -344,7 +355,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .pc-s{margin-top:6px;font-size:15px;line-height:20px;letter-spacing:-.045px;color:var(--ink-2)}
 .pc-m{display:flex;gap:8px;margin-top:8px;font-weight:600;font-size:17px;line-height:22px;letter-spacing:-.34px;white-space:nowrap}
 .pc-m span{display:inline-flex;align-items:center;gap:4px}
-.pc-x{width:40px;height:40px;border-radius:10px;background:var(--warm);display:grid;place-items:center;flex:none;color:#3D3C3A;transition:transform .15s}
+.pc-x{width:40px;height:40px;border-radius:50%;background:var(--warm);display:grid;place-items:center;flex:none;color:#3D3C3A;transition:transform .15s}
 .pc-x:active{transform:scale(.92)}
 .pc-x .ic{opacity:.6}
 .pc-tabs{display:none;margin:19px -16px 0;padding:0 16px;gap:0}
@@ -442,7 +453,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .sr .ico{width:44px;height:44px;border-radius:50%;background:var(--beige);display:grid;place-items:center;flex:none;overflow:hidden;color:#3D3C3A}
 .sr .ico img{width:100%;height:100%;object-fit:cover}
 .sr .ico.sq2{border-radius:14px}
-.sr .ico.fr{box-shadow:inset 0 0 0 2px var(--lime)}
+.sr .ico.fr{box-shadow:0 0 0 2px var(--lime2)}
 .sr .ttl{font-weight:600;font-size:16px;line-height:20px;letter-spacing:-.3px;display:block}
 .sr .sub{display:block;font-size:14px;line-height:18px;letter-spacing:-.2px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sr mark{background:rgba(197,249,43,.6);color:inherit;border-radius:3px}
@@ -451,8 +462,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .people{display:flex;gap:12px;padding:6px 16px 4px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
 .people::-webkit-scrollbar{display:none}
 .person{flex:none;display:flex;flex-direction:column;align-items:center;width:72px;text-align:center}
-.person .av{position:relative;width:64px;height:64px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--lime2);display:grid;place-items:center}
-.person img{width:56px;height:56px;border-radius:50%;object-fit:cover}
+.person .av{position:relative;width:64px;height:64px;display:grid;place-items:center}
+.person img{width:60px;height:60px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--lime2)}
 .person b{margin-top:6px;font-weight:600;font-size:14px;line-height:18px;letter-spacing:-.28px}
 .person i{font-style:normal;font-size:12px;line-height:16px;color:var(--ink-2)}
 .empty{padding:28px 16px;color:var(--ink-2);font-size:15px;text-align:center}
@@ -535,7 +546,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
     </div>
 
     <div id="scrim"></div>
-    <div id="pop" role="dialog" aria-modal="false"><div class="grab"></div><button class="x" id="popX" aria-label="Закрыть"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2 2 12" stroke="#141414" stroke-width="2" stroke-linecap="round"/></svg></button><div id="popBody"></div></div>
+    <div id="pop" role="dialog" aria-modal="false"><div class="grab"></div><button class="x" id="popX" aria-label="Закрыть"><span class="ic" data-ic="cross"></span></button><div id="popBody"></div></div>
     <div id="pcBar">
       <button class="pb go" id="pbGo"><span class="ic" data-ic="route"></span>Маршрут</button>
       <button class="pb" id="pbCall" aria-label="Позвонить"><span class="ic" data-ic="phoneBar"></span></button>
@@ -1160,8 +1171,8 @@ function cardHTML(id, k){
 }
 function newsHTML(){
   if (!newsLeft.length) return '';
-  return `<div class="xh">${newsLeft.length} ${newsLeft.length===1?'новость':'новости'} района</div><div class="news hscroll">${newsLeft.map(n =>
-    `<div class="nw${n.y?' y':''}" data-news="${n.id}"><div class="nw-d">${icon('cal')}${n.d}</div><div class="nw-t">${n.t}</div><button class="nw-x" aria-label="Скрыть">${icon('cross')}</button></div>`).join('')}</div>`;
+  return `<div class="newsSec"><div class="xh" id="newsH">${newsLeft.length} ${newsLeft.length===1?'новость':'новости'} района</div><div class="news hscroll">${newsLeft.map(n =>
+    `<div class="nw${n.y?' y':''}" data-news="${n.id}"><div class="nw-d">${icon('cal')}${n.d}</div><div class="nw-t">${n.t}</div><button class="nw-x" aria-label="Скрыть">${icon('cross')}</button></div>`).join('')}</div></div>`;
 }
 function renderExplore(keepScroll){
   const f = FEED[cat];
@@ -1195,9 +1206,21 @@ explore.addEventListener('click', e => {
   touch();
   const x = e.target.closest('.nw-x');
   if (x){ const card = x.closest('.nw'), id = card.dataset.news, n = NEWS.find(v=>v.id===id);
-    card.classList.add('bye'); toast('Скрыли: ' + n.toast.split(':')[0].toLowerCase());
-    newsLeft = newsLeft.filter(v => v.id!==id);
-    setTimeout(() => { const keep = sScroll.scrollTop; renderExplore(true); sScroll.scrollTop = keep; }, 380); return; }
+    if (card.dataset.bye) return; card.dataset.bye = 1;
+    newsLeft = newsLeft.filter(v => v.id!==id); updateSummary();
+    const E = 'cubic-bezier(.2,.9,.25,1)';
+    card.animate([{transform:'scale(1)', opacity:1}, {transform:'scale(.82)', opacity:0}], {duration:240, easing:'ease-in', fill:'forwards'})
+      .finished.then(() => {
+        if (!newsLeft.length){                       // last one: the whole block folds away
+          const sec = card.closest('.newsSec'), h = sec.offsetHeight;
+          sec.animate([{height:h+'px', opacity:1}, {height:'0px', opacity:0}], {duration:320, easing:E}).finished.then(() => sec.remove());
+          return;
+        }
+        card.style.height = card.offsetHeight + 'px'; card.style.overflow = 'hidden'; card.style.minWidth = '0'; card.style.flexShrink = '0';
+        card.animate([{marginRight:'0px', width:card.offsetWidth+'px', paddingLeft:'16px', paddingRight:'64px'}, {marginRight:'-8px', width:'0px', paddingLeft:'0px', paddingRight:'0px'}], {duration:320, easing:E, fill:'forwards'})
+          .finished.then(() => { card.remove(); const hd = explore.querySelector('#newsH'); if (hd) hd.textContent = `${newsLeft.length} ${newsLeft.length===1?'новость':'новости'} района`; });
+      });
+    return; }
   const nw = e.target.closest('.nw'); if (nw){ toast(NEWS.find(v=>v.id===nw.dataset.news).toast); return; }
   const sv = e.target.closest('[data-save]');
   if (sv){ const id = sv.dataset.save, on = !saved.has(id); on ? saved.add(id) : saved.delete(id); sv.classList.toggle('on', on);
@@ -1390,13 +1413,20 @@ function openPlace(id, m){
   sb.onclick = () => { const on = !saved.has(id); on ? saved.add(id) : saved.delete(id); sb.classList.toggle('on', on); toast(on ? 'Сохранено в «Мои места»' : 'Убрано из «Моих мест»'); };
   if (m){ selectPin(id); requestAnimationFrame(() => focusMarker(m, (H - pop.offsetHeight - 70)/2 + 30)); }
 }
+const IC_CHAT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3C17.52 3 22 6.94 22 11.8C22 16.66 17.52 20.6 12 20.6C10.94 20.6 9.92 20.46 8.97 20.19L4.6 21.8C4.06 22 3.53 21.47 3.73 20.93L4.95 17.66C3.12 16.08 2 14.04 2 11.8C2 6.94 6.48 3 12 3Z" fill="currentColor"/></svg>';
+const IC_WAVE = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2.5C14.2 2.5 16 4.3 16 6.5C16 8.7 14.2 11 12 11C9.8 11 8 8.7 8 6.5C8 4.3 9.8 2.5 12 2.5Z" fill="currentColor"/><path d="M4.2 19.6C4.6 16.1 7.2 13.5 10.5 13.1C11 13.03 11.5 13 12 13C12.6 13 13.2 13.05 13.8 13.15V15.5H12.8C12.2 15.5 11.8 15.9 11.8 16.5C11.8 17.1 12.2 17.5 12.8 17.5H13.8V18.5C13.8 19.1 14.2 19.5 14.8 19.5C15.4 19.5 15.8 19.1 15.8 18.5V17.5H16.8C17.4 17.5 17.8 17.1 17.8 16.5C17.8 15.9 17.4 15.5 16.8 15.5H15.8V13.7C18 14.7 19.5 16.9 19.8 19.6C19.85 20.3 19.3 21 18.6 21H5.4C4.7 21 4.15 20.3 4.2 19.6Z" fill="currentColor"/></svg>';
 function openFriend(id, m){
-  const f = FRIENDS[id];
+  const f = FRIENDS[id], meters = parseFloat(f.dist.replace(',','.')) * (/км/.test(f.dist) ? 1000 : 1), walk = Math.max(1, Math.round(meters/80));
   openPop(`
-    <div class="pop-h"><img class="pop-av" src="${f.img}" alt=""><div class="grow"><h4>${f.name}</h4><div class="s">${f.status}</div></div></div>
-    <div class="facts"><span><b>${f.dist}</b> от тебя</span><span>Геопозиция обновлена только что</span></div>
-    <div class="acts"><button class="act pri" data-t="Маршрут к ${f.dat} построен">Маршрут</button><button class="act" data-t="Чат с ${f.ins} откроется в мессенджере">Написать</button><button class="act" data-t="Позвали ${f.acc} на встречу">Позвать</button></div>`);
-  popBody.querySelectorAll('.act').forEach(b => b.addEventListener('click', () => toast(b.dataset.t)));
+    <div class="fh"><img class="pop-av" src="${f.img}" alt=""><div class="grow"><h4>${f.name}</h4><div class="s">${esc(f.status)}</div></div></div>
+    <div class="fm"><span>${f.dist.replace(' ','')}</span><span>${IC.walk}${walk} мин</span><span class="up">· обновлено только что</span></div>
+    <div class="fbar">
+      <button class="pb go" data-t="Маршрут к ${f.dat}: ${walk} мин пешком">${icon('route')}Маршрут</button>
+      <button class="pb" aria-label="Написать" data-t="Чат с ${f.ins} откроется в мессенджере">${IC_CHAT}</button>
+      <button class="pb" aria-label="Позвонить" data-t="Звоним ${f.dat}">${IC.phoneBar}</button>
+      <button class="pb" aria-label="Позвать" data-t="Позвали ${f.acc} на встречу">${IC_WAVE}</button>
+    </div>`);
+  popBody.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => toast(b.dataset.t)));
   if (m) focusMarker(m, (H - pop.offsetHeight)/2 + 10);
 }
 function openLayers(){
