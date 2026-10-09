@@ -882,7 +882,28 @@ function applyLayers(){
   if (live) cluster();
 }
 let selId = null, clT = null;
-const queueCluster = () => { clearTimeout(clT); clT = setTimeout(cluster, 140); };
+// recluster while zooming (throttled) and once more when the map settles
+let clLast = 0;
+const queueCluster = () => { const now = performance.now(); clearTimeout(clT);
+  if (now - clLast > 160){ clLast = now; cluster(); } clT = setTimeout(() => { clLast = performance.now(); cluster(); }, 160); };
+const SPRING = 'cubic-bezier(.34,1.45,.64,1)';
+// a pin leaving a cluster flies out of the cluster's pin; a pin joining one flies into it
+function pinOut(m, from, to){
+  const b = m.el.firstElementChild; if (!b || reduced) return;
+  if (m.anim) m.anim.cancel();
+  m.anim = b.animate([{transform:`translate(${from[0]-to[0]}px,${from[1]-to[1]}px) scale(.4)`, opacity:0},
+                      {offset:.35, opacity:1},
+                      {transform:'translate(0,0) scale(1)', opacity:1}], {duration:480, easing:SPRING});
+}
+function pinIn(m, from, to){
+  const b = m.el.firstElementChild;
+  if (!b || reduced){ m.el.classList.add('merged'); return; }
+  if (m.anim) m.anim.cancel();
+  m.anim = b.animate([{transform:'translate(0,0) scale(1)', opacity:1},
+                      {transform:`translate(${to[0]-from[0]}px,${to[1]-from[1]}px) scale(.4)`, opacity:0}], {duration:260, easing:'cubic-bezier(.5,0,.75,0)', fill:'forwards'});
+  const a = m.anim;
+  a.onfinish = () => { if (m.into){ m.el.classList.add('merged'); } a.cancel(); };
+}
 // screen-space clustering, run when the map settles (not every frame) with a little hysteresis
 const FAN_Z = 18.4;   // close enough: stop clustering, fan out pins that share a building
 function cluster(){
@@ -902,8 +923,18 @@ function cluster(){
     const isSel = a.m.id===selId;
     a.m.clusterN = isSel ? 0 : grp.length;
     paintPin(a.m, a.m.fixed && !grp.length ? a.m.fixed : grp.map(b => PLACES[b.m.id]), isSel ? 0 : (grp.length || (a.m.fixed ? a.m.fixedN : 0)));
-    a.m.el.classList.remove('merged'); a.m.el.classList.toggle('sel', isSel);
-    for (const b of grp){ b.m.el.classList.add('merged'); b.m.grp = []; b.m.clusterN = 0; }
+    a.m.el.classList.toggle('sel', isSel);
+    if (a.m.into){                                         // just left a cluster
+      const h = markers.find(x => x.id===a.m.into); a.m.into = null;
+      a.m.el.classList.remove('merged');
+      if (h) pinOut(a.m, live.project(geoOf(h)), a.p);
+    } else if (a.m.anim && a.m.el.classList.contains('merged')) { a.m.el.classList.remove('merged'); }
+    else a.m.el.classList.remove('merged');
+    for (const b of grp){
+      const was = b.m.into; b.m.into = a.m.id; b.m.grp = []; b.m.clusterN = 0;
+      if (!was && !b.m.el.classList.contains('merged') && b.m.el.firstElementChild) pinIn(b.m, b.p, a.p);   // just joined
+      else if (!b.m.anim || b.m.anim.playState !== 'running') b.m.el.classList.add('merged');
+    }
     heads.push(a);
   }
   if (live.getZoom() >= FAN_Z){
