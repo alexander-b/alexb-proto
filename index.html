@@ -676,9 +676,11 @@ const PLACES = {
     desc:'Вино по бокалам и хлеб из своей пекарни', feats:['lunch','dog'], cats:['autumn','food'], lunch:true},
   milti:{dish:'Раф<br>на кешью', name:'Милти', kind:'Кофейня', addr:'Солянка, 1/2', hero:'img/cafe.jpg', logo:'img/logo_milti.jpg', rating:'4.7', count:860, react:58, check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 111-22-33', site:'milti.coffee',
     desc:'Фильтр, раф на кешью и тихий второй этаж', feats:['lunch','dog'], cats:[]},
-  dodo:{dish:'Пепперони', name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', hero:'https://dodopizza.ru/SeoSnippetImages/ru-snippet.jpg', fb:'img/cafe.jpg', logo:'img/logo_dodo.jpg', rating:'4.6', count:3200, react:40, check:'~800₽', hours:'до 23:00', today:'Сегодня 9:00–23:00', phone:'8 800 302-00-60', site:'dodopizza.ru',
+  dodo:{dish:'Пепперони', name:'ДоДо', kind:'Пиццерия', addr:'Яузский бульвар, 4', hero:'img/cafe.jpg', fb:'img/ph_loft.jpg', logo:'img/logo_dodo.jpg', rating:'4.6', count:3200, react:40, check:'~800₽', hours:'до 23:00', today:'Сегодня 9:00–23:00', phone:'8 800 302-00-60', site:'dodopizza.ru',
     desc:'Пицца за 30 минут или следующая в подарок', feats:['lunch','park'], cats:[]},
 };
+const U = id => `https://images.unsplash.com/photo-${id}?w=900&q=70&auto=format&fit=crop`;
+const COFFEE_PH = ['1521017432531-fbd92d768814','1545418314-7ce0b9b53901','1542181961-9590d0c79dab','1565650839149-2c48a094196c','1588253137728-1e4dd0fe9a93','1572982270699-473dfa34d7e7'].map(U);
 const GALLERY = {
   bereza:['img/ph_hero.jpg','img/ph_bereza.jpg','img/bereza.jpg'],
   carniceria:[MM+'2025/01/carneceria.jpg', TJ+'01-best-new-rest-msk-2025.jpg'],
@@ -686,10 +688,10 @@ const GALLERY = {
   tabi:[MM+'2023/06/tabi1.jpg'],
   botafogo:[MM+'2022/06/boto1.jpg', MM+'2022/06/boto81.jpg', MM+'2022/06/boto82.jpg'],
   blackswan:[MM+'2022/08/room1.jpg'],
-  korobok:['img/ph_dark.jpg','img/ph_loft.jpg'], bistro:['img/ph_teal.jpg','img/cafe.jpg'],
-  milti:['img/cafe.jpg','img/ph_teal.jpg'], dodo:['https://dodopizza.ru/SeoSnippetImages/ru-snippet.jpg','img/cafe.jpg'],
+  korobok:['img/ph_dark.jpg', U('1650338031221-ba71d1178d43'), 'img/ph_loft.jpg'], bistro:[U('1779221596208-94d03c53ff85'), U('1728033647942-ce3c2185ba70'), U('1759756191826-2321f509d98e')],
+  milti:[COFFEE_PH[1], COFFEE_PH[0], COFFEE_PH[3]], dodo:[U('1632657606412-089f735aa87c'), U('1572815438941-36e4b94f4dda'), U('1638981367648-d4909c40ab16')],
 };
-for (const k in GALLERY) PLACES[k].photos = GALLERY[k];
+for (const k in GALLERY){ PLACES[k].photos = GALLERY[k]; if (/^https/.test(GALLERY[k][0]) && !/moskvichmag|tinkoff/.test(GALLERY[k][0])) PLACES[k].hero = GALLERY[k][0]; }
 const FEED = {
   main:{h:'Подборка заведений', ids:['bereza','carniceria','PRIME','masa','tabi','botafogo'], news:true},
   autumn:{h:'Тёплые места на осень', ids:['masa','bereza','PRIME','botafogo','bistro']},
@@ -823,7 +825,7 @@ const MDEF = [
   {id:'dima', layer:'friends', type:'fr', x:165.6, y:368.4+51},
   {id:'kate', layer:'friends', type:'fr', x:160.6, y:216.3+51},
   {id:'lena', layer:'friends', type:'fr', x:264, y:262.8+51},
-  {id:'milti', layer:'coffee', type:'gp', x:60, y:311+51, fixed:[{logo:'img/logo_bereza.jpg'},{logo:'img/logo_dodo.jpg'}], fixedN:3},
+  {id:'milti', layer:'coffee', type:'gp', x:60, y:311+51, fixed:[PLACES.korobok, PLACES.bistro], fixedN:2, fixedIds:['milti','korobok','bistro']},
   {id:'dodo', layer:'places', type:'gp', x:287, y:160+51, sub:'7 мин'},
   {id:'korobok', layer:'places', type:'gp', x:40, y:170+51},
   {id:'bereza', layer:'picks', type:'gp'},
@@ -848,7 +850,15 @@ function mkMarker(d, i){
   const b = el.firstElementChild; b.style.transitionDelay = (i%6)*30+'ms'; setTimeout(() => { b.style.transitionDelay = ''; }, 700);
   el.addEventListener('click', ev => {
     ev.stopPropagation(); touch();
-    if (m.clusterN && live && live.getZoom() < 18.2){ live.setCenter(geoOf(m), {duration:500}); live.setZoom(Math.min(19, live.getZoom() + 1.5), {duration:500}); return; }
+    if (m.fixedIds && !m.grp.length && m.el.firstElementChild.classList.contains('cl')) return openCluster(m.fixedIds);
+    if (m.clusterN && live){
+      const ids = [m.id, ...m.grp], c = geoOf(m), R=6371000, r=Math.PI/180;
+      const far = Math.max(...m.grp.map(id => { const g = geoOf(markers.find(x=>x.id===id)); return Math.hypot((g[0]-c[0])*r*Math.cos(c[1]*r)*R, (g[1]-c[1])*r*R); }));
+      const mpp = 156543.03*COSL/Math.pow(2, live.getZoom()), need = 90*mpp;           // metres that must be ~90px apart
+      const z = live.getZoom() + Math.log2(need / Math.max(far, 1)) + .2;
+      if (far < 18 || z > 19.2) return openCluster(ids);                               // same building: show a list
+      live.setCenter(c, {duration:500}); live.setZoom(Math.min(19.2, z), {duration:500}); return;
+    }
     openMarker(m);
   });
   $('#markers').appendChild(el); markers.push(m); return m;
@@ -910,12 +920,12 @@ async function loadRealCafes(){
     // fewer, more believable cafés: one per brand, brand logos where we know them, a neutral cup otherwise
     const c = GEO_ME, seen = new Set(), items = (await apiItems('кофейня', c, 800, 12)).filter(it => { const k = it.name.split(',')[0].toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 5);
     if (!items.length) return;
-    const PH = ['img/cafe.jpg','img/ph_teal.jpg','img/bereza.jpg','img/ph_loft.jpg','img/ph_dark.jpg'];
+    const PH = COFFEE_PH;
     items.forEach((it, k) => {
       const id = 'real' + k, br = brandFor(it.name), rv = it.reviews || {}, ph = (br && br.photo) || PH[k % PH.length];
       PLACES[id] = { dish:['Флэт<br>уайт','Раф','Круассан','Капучино','Матча'][k%5], name: it.name.split(',')[0], kind:'Кофейня', addr: it.address_name || 'рядом', geo:[it.point.lon, it.point.lat],
         rating: rv.general_rating ? String(rv.general_rating) : '4.6', count: rv.general_review_count || rv.org_review_count || 120, react: 14 + k*9,
-        hero: ph, fb: PH[k % PH.length], logo: br ? br.logo : 'img/em_cup.png', logoAlt: br && br.alt, contain: !br, photos:[ph],
+        hero: ph, fb: 'img/cafe.jpg', logo: br ? br.logo : 'img/em_cup.png', logoAlt: br && br.alt, contain: !br, photos:[ph, PH[(k+2) % PH.length], PH[(k+4) % PH.length]],
         check:'~450₽', hours:'до 22:00', today:'Сегодня 8:00–22:00', phone:'+7 (495) 000-00-00', site:'2gis.ru', desc:'Кофейня рядом с тобой — по отзывам в 2ГИС', feats:['lunch','dog'], cats:[] };
       mkMarker({id, layer:'coffee', type:'gp', geo:PLACES[id].geo}, k);
     });
@@ -1367,6 +1377,11 @@ function openPlace(id, m){
   const sb = $('#pbSave'); sb.classList.toggle('on', saved.has(id));
   sb.onclick = () => { const on = !saved.has(id); on ? saved.add(id) : saved.delete(id); sb.classList.toggle('on', on); toast(on ? 'Сохранено в «Мои места»' : 'Убрано из «Моих мест»'); };
   if (m){ selectPin(id); requestAnimationFrame(() => focusMarker(m, (H - pop.offsetHeight - 70)/2 + 30)); }
+}
+function openCluster(ids){
+  openPop(`<div class="pop-h"><div class="grow"><h4>${ids.length} ${plural(ids.length)} рядом</h4><div class="s">${esc(PLACES[ids[0]].addr)}</div></div></div>
+    <div style="margin:8px -16px 0">${ids.map(id => { const p = PLACES[id]; return `<button class="sr" data-cl="${id}"><span class="ico sq2"><img src="${p.logo && !p.contain ? p.logo : (p.photos||[p.hero])[0]}" alt="" referrerpolicy="no-referrer" onerror="${FB(p.fb||'img/cafe.jpg')}"></span><span class="grow"><span class="ttl">${esc(p.name)}</span><span class="sub">${esc(p.kind)} · ★ ${fmtR(p.rating)}</span></span><span class="dist">${fmtDist(distM(p)).replace(/(\d)м$/,'$1 м')}</span></button>`; }).join('')}</div>`, true);
+  popBody.querySelectorAll('[data-cl]').forEach(b => b.addEventListener('click', () => { const id = b.dataset.cl; closePop(); setTimeout(() => openPlace(id, markers.find(x=>x.id===id)), 380); }));
 }
 function openFriend(id, m){
   const f = FRIENDS[id];
