@@ -36,6 +36,7 @@
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --stage:#15161A; --stage-ink:#ECEDEF; --stage-ink-2:#9A9EA8; --stage-card:#1F2126; color-scheme:dark } }
 :root[data-theme="dark"]{ --stage:#15161A; --stage-ink:#ECEDEF; --stage-ink-2:#9A9EA8; --stage-card:#1F2126; color-scheme:dark }
 html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+@media (hover:none){ html,body{background:#fff} }
 body{background:var(--stage);color:var(--stage-ink);font-family:var(--font);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;text-align:inherit}
 button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -623,7 +624,7 @@ function measure(){
   stage.classList.toggle('has-frame', framed);
   if (framed){
     W=390; H=844; SAT=44; SAB=34; stage.style.position=''; phone.style.position=''; document.documentElement.style.height=''; document.body.style.height=''; phone.style.height=''; phone.style.bottom=''; document.documentElement.style.background=''; document.body.style.background='';
-    frameScale = Math.min(1, (innerHeight-56)/844, (innerWidth-48)/390);
+    frameScale = Math.max(.3, Math.min(1, (innerHeight-56)/844, (innerWidth-48)/390));
     phone.style.transform = `scale(${frameScale})`;
     phone.style.margin = `${-(844*(1-frameScale))/2}px ${-(390*(1-frameScale))/2}px`;
   } else {
@@ -631,7 +632,9 @@ function measure(){
     frameScale = 1; W = innerWidth;
     const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
     H = Math.max(innerHeight, document.documentElement.clientHeight, standalone ? screen.height : 0);
-    phone.style.height = H + 'px'; phone.style.bottom = 'auto';
+    if (!H || H < 200) H = (window.visualViewport && visualViewport.height) || screen.height || 760;   // in-app browsers can report 0 at first
+    // only pin an explicit height in home-screen mode; elsewhere the fixed full-screen box sizes itself
+    if (standalone){ phone.style.height = H + 'px'; phone.style.bottom = 'auto'; } else { phone.style.height = ''; phone.style.bottom = ''; }
     // iOS home-screen mode reports a viewport shorter than the screen: make the document as tall as the screen
     document.documentElement.style.height = document.body.style.height = standalone ? H + 'px' : '';
     stage.style.position = phone.style.position = standalone ? 'absolute' : '';
@@ -1742,6 +1745,7 @@ renderExplore();
 layout();
 let rz; addEventListener('resize', () => { if (searchOpen) return; clearTimeout(rz); rz = setTimeout(layout, 80); });
 addEventListener('pageshow', () => setTimeout(layout, 50));
+if (window.visualViewport) visualViewport.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layout, 80); });
 setTimeout(layout, 400); setTimeout(layout, 1500);   // safe-area insets settle after the first paint on iOS
 requestAnimationFrame(lenaLoop);
 const LIVE_MAP = true;
