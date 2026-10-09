@@ -200,7 +200,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .xh{font-weight:600;font-size:17px;line-height:18px;letter-spacing:-.34px;margin:24px 0 12px}
 .xh:first-child{margin-top:0}
 .news{margin:0 -16px;padding:0 16px;gap:8px;transition:height .35s var(--ease),opacity .25s,margin .35s var(--ease)}
-.nw{flex:none;width:358px;max-width:calc(100vw - 32px);min-height:104px;box-sizing:border-box;border-radius:20px;background:var(--card);padding:16px 64px 20px 16px;position:relative;
+.nw{flex:none;width:var(--cw,358px);min-height:104px;box-sizing:border-box;border-radius:20px;background:var(--card);padding:16px 64px 20px 16px;position:relative;
   transition:transform .35s var(--ease),opacity .25s,width .35s var(--ease),padding .35s var(--ease),margin .35s var(--ease)}
 .nw.y{background:#FFF4B8}
 .nw-d{display:flex;align-items:center;gap:6px;font-size:15px;line-height:20px;letter-spacing:-.045px;color:var(--ink-2)}
@@ -410,7 +410,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .lk-t{display:flex;flex-direction:column;gap:4px;padding:0 8px;min-width:0}
 .lk-t b{display:block;font-weight:600;font-size:17px;line-height:22px;color:#1E1E1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lk-t i{display:block;font-style:normal;font-size:13px;line-height:17px;letter-spacing:-.26px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#pop.place.expanded{bottom:0;top:calc(var(--sat) + 10px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
+#pop.place.expanded{bottom:0;top:calc(var(--sat) + 14px);overflow-y:auto;background:#fff;border-radius:28px 28px 0 0;clip-path:inset(0 round 28px 28px 0 0);box-shadow:0 -4px 24px rgba(0,0,0,.12);touch-action:pan-y;overscroll-behavior:contain;scrollbar-width:none}
 #pop.place.expanded::-webkit-scrollbar{display:none}
 #pop.place.expanded .pc{margin:0;border-radius:28px 28px 0 0;min-height:100%;box-sizing:border-box;padding-top:12px;padding-bottom:calc(var(--sab) + 120px);box-shadow:none;--x:0 -4px 24px rgba(0,0,0,.12)}
 #pop.place.expanded .pc-tabs{display:flex}
@@ -638,7 +638,8 @@ function measure(){
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
   peekTop = Math.round(H - (234 + SAB));
-  fullTop = Math.round(SAT + 8);
+  fullTop = Math.round(SAT + 14);
+  phone.style.setProperty('--cw', (W - 32) + 'px');
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
 }
 function local(e){
@@ -1308,7 +1309,7 @@ $('#popX').addEventListener('click', closePop); scrim.addEventListener('click', 
 /* place card behaves like a native bottom sheet: it follows the finger up to the top edge,
    and the same gesture carries on as a scroll inside it */
 const popTopNow = () => (pop.getBoundingClientRect().top - phone.getBoundingClientRect().top)/frameScale;
-const fullPopTop = () => SAT + 10;
+const fullPopTop = () => SAT + 14;
 let pd=null, shortTop = 0;
 function settleTop(target, done){
   pop.classList.remove('dragging');
