@@ -165,8 +165,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #sumMore button:active{opacity:.6}
 #xChipsWrap{flex:none;overflow:hidden}
 #xFade{flex:none;height:0;position:relative;z-index:3}
-#xFade::after{content:"";position:absolute;left:0;right:0;top:0;height:28px;background:linear-gradient(#fff,rgba(255,255,255,0));opacity:0;transition:opacity .2s;pointer-events:none}
-#xFade.on::after{opacity:1}
+#xFade{display:none}
+#sheet.faded #sheetScroll{-webkit-mask-image:linear-gradient(transparent 0,rgba(0,0,0,.35) 6px,#000 16px);mask-image:linear-gradient(transparent 0,rgba(0,0,0,.35) 6px,#000 16px)}
 #xChips{padding:8px 16px 8px 22px;gap:4px}
 .xc{flex:none;height:44px;border-radius:25px;display:flex;align-items:center;gap:4px;padding:0 10px;position:relative;
   font-weight:500;font-size:16px;line-height:20px;color:#1E1E1E;white-space:nowrap;transition:background .25s,transform .2s var(--spring)}
@@ -371,7 +371,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .feat.dia{position:relative;width:118px;height:118px;display:grid;place-items:center}
 .feat.dia img{width:112px;height:112px;filter:drop-shadow(0 6px 10px rgba(30,90,200,.25))}
 .dish{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) rotate(-7deg);text-align:center;white-space:nowrap;
-  font-weight:600;font-size:19px;line-height:19px;letter-spacing:-.4px;color:#141414;-webkit-text-stroke:6px #fff;paint-order:stroke fill;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
+  font-weight:600;font-size:19px;line-height:19px;letter-spacing:-.4px;color:#141414;text-shadow:4.0px 0.0px 0 #fff,3.9px 1.0px 0 #fff,3.5px 2.0px 0 #fff,2.8px 2.8px 0 #fff,2.0px 3.5px 0 #fff,1.0px 3.9px 0 #fff,0.0px 4.0px 0 #fff,-1.0px 3.9px 0 #fff,-2.0px 3.5px 0 #fff,-2.8px 2.8px 0 #fff,-3.5px 2.0px 0 #fff,-3.9px 1.0px 0 #fff,-4.0px 0.0px 0 #fff,-3.9px -1.0px 0 #fff,-3.5px -2.0px 0 #fff,-2.8px -2.8px 0 #fff,-2.0px -3.5px 0 #fff,-1.0px -3.9px 0 #fff,-0.0px -4.0px 0 #fff,1.0px -3.9px 0 #fff,2.0px -3.5px 0 #fff,2.8px -2.8px 0 #fff,3.5px -2.0px 0 #fff,3.9px -1.0px 0 #fff,2.5px 0.0px 0 #fff,2.4px 0.6px 0 #fff,2.2px 1.2px 0 #fff,1.8px 1.8px 0 #fff,1.3px 2.2px 0 #fff,0.6px 2.4px 0 #fff,0.0px 2.5px 0 #fff,-0.6px 2.4px 0 #fff,-1.2px 2.2px 0 #fff,-1.8px 1.8px 0 #fff,-2.2px 1.2px 0 #fff,-2.4px 0.6px 0 #fff,-2.5px 0.0px 0 #fff,-2.4px -0.6px 0 #fff,-2.2px -1.2px 0 #fff,-1.8px -1.8px 0 #fff,-1.3px -2.2px 0 #fff,-0.6px -2.4px 0 #fff,-0.0px -2.5px 0 #fff,0.6px -2.4px 0 #fff,1.3px -2.2px 0 #fff,1.8px -1.8px 0 #fff,2.2px -1.3px 0 #fff,2.4px -0.6px 0 #fff;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
 .feat{flex:none;opacity:0;transform:scale(.4) rotate(-12deg);transition:transform .6s var(--spring),opacity .25s}
 .feat.in{opacity:1;transform:rotate(var(--r,0deg))}
 .feat img{display:block}
@@ -1045,7 +1045,7 @@ function head(){
 }
 sScroll.addEventListener('scroll', () => {
   touch();
-  $('#xFade').classList.toggle('on', sScroll.scrollTop > 4);
+  sheet.classList.toggle('faded', sScroll.scrollTop > 4);
   for (const el of [fastWrap, sumMore, xChipsWrap, sumEl]) el.style.transition = 'none';
   head();
   const st = sScroll.scrollTop, dy = st - lastSt; lastSt = st;
