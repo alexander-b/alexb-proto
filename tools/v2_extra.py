@@ -212,3 +212,7 @@ rep('@media (prefers-reduced-motion: reduce){', X5 + '\n@media (prefers-reduced-
 rep("$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); chipPop(c); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });",
     "$('#xChips').addEventListener('pointerdown', e => { const c = e.target.closest('.xc'); if (c) chipPop(c); });   // respond on touch, not on release\n$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });")
 rep(".xc::before,.xc::after{z-index:3}", ".xc::before,.xc::after{z-index:3}\n.xc::before{inset:0;padding:2.5px;border-radius:25px}\n.xc::after{inset:-3px;padding:5px;border-radius:28px;filter:blur(3px)}")
+
+# own home-screen icon: black pin on lime
+rep('href="app-icon-180.png"', 'href="v2/app-icon-180.png"')
+rep('href="app-icon-192.png"', 'href="v2/app-icon-192.png"')
