@@ -221,3 +221,21 @@ rep('href="app-icon-192.png"', 'href="v2/app-icon-192.png"')
 FRIENDS_SVG = '<svg width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M4.47559 16.7236C5.72884 20.3695 8.58714 22.0319 11.5264 22.0879C14.5026 22.1445 17.5708 20.5519 19.1621 17.5967L20.6582 18.4033C18.7495 21.9477 15.0733 23.8554 11.4932 23.7871C8.16448 23.7235 4.92752 21.9498 3.26562 18.2744C2.78278 18.5802 2.31491 18.8677 1.92188 19.1035C1.60601 19.293 1.33742 19.4517 1.14746 19.5625C1.05245 19.6179 0.97667 19.6615 0.924805 19.6914L0.845703 19.7373L0 18.2617C0.00799708 18.258 0.0503823 18.2331 0.0751953 18.2188C0.124849 18.1901 0.197667 18.1476 0.290039 18.0938C0.475011 17.9858 0.738 17.8318 1.04688 17.6465C1.66635 17.2748 2.46614 16.7823 3.2002 16.293L4.11719 15.6816L4.47559 16.7236ZM12.7783 2C14.3819 2.00025 15.54 3.5352 15.0996 5.07715L12.9551 12.583C12.3773 14.6051 10.5288 15.9997 8.42578 16C6.72252 15.9997 5.5121 14.3404 6.0332 12.7188L7.34961 8.62207L10.9727 5H8.52051C9.16313 3.20684 10.8628 2.00022 12.7783 2ZM21.7783 2C23.3819 2.00025 24.54 3.5352 24.0996 5.07715L21.9551 12.583C21.3773 14.6051 19.5288 15.9997 17.4258 16C15.7225 15.9997 14.5121 14.3404 15.0332 12.7188L16.3252 8.69629L20.0225 5H17.5205C18.1631 3.20684 19.8628 2.00022 21.7783 2Z" fill="currentColor"/></svg>'
 rep('<button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span>', '<button class="bc" id="barHelp" aria-label="Друзья"><span class="ic">' + FRIENDS_SVG + '</span>')
 rep(".xc::after{inset:-3px;padding:5px;border-radius:28px;filter:blur(3px)}", ".xc::after{inset:-4px;padding:6px;border-radius:29px;filter:blur(6px)}\n.xc.pop::before{filter:blur(.8px)}")
+
+# ---------- round 6 ----------
+X6 = r'''
+/* badges line up with the title text, a little more air inside */
+.pills{left:0}
+.soc{transform:translateX(4px)}
+.soc .pills{left:-4px}
+.pc-hero .pills{left:0}
+.soc{transform:translateX(4px)}
+.soc .pills{left:-4px}
+.pill{padding:0 14px}
+.pill.rt{padding:0 11px}
+/* full place card: soft fade under the action bar (like under search), same bottom gap as search */
+#pcBar.docked{padding-bottom:calc(var(--sbtn,21px) + 4px);transition:transform .42s var(--ease),padding .3s var(--ease)}
+#pcBar.docked::before{top:-44px;border-radius:0;box-shadow:none;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 45%,#fff)}
+#pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 0 0 .5px rgba(137,137,137,.25),0 2px 8px rgba(0,0,0,.1)}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X6 + '\n@media (prefers-reduced-motion: reduce){')

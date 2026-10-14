@@ -634,6 +634,21 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .xc.pop{animation:xcPop .32s var(--spring)}
 @keyframes spark1{0%{--ang:-40deg;opacity:1}85%{opacity:1}100%{--ang:340deg;opacity:0}}
 
+
+/* badges line up with the title text, a little more air inside */
+.pills{left:0}
+.soc{transform:translateX(4px)}
+.soc .pills{left:-4px}
+.pc-hero .pills{left:0}
+.soc{transform:translateX(4px)}
+.soc .pills{left:-4px}
+.pill{padding:0 14px}
+.pill.rt{padding:0 11px}
+/* full place card: soft fade under the action bar (like under search), same bottom gap as search */
+#pcBar.docked{padding-bottom:calc(var(--sbtn,21px) + 4px);transition:transform .42s var(--ease),padding .3s var(--ease)}
+#pcBar.docked::before{top:-44px;border-radius:0;box-shadow:none;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 45%,#fff)}
+#pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 0 0 .5px rgba(137,137,137,.25),0 2px 8px rgba(0,0,0,.1)}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
