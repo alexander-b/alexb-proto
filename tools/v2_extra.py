@@ -240,3 +240,35 @@ X6 = r'''
 '''
 rep('@media (prefers-reduced-motion: reduce){', X6 + '\n@media (prefers-reduced-motion: reduce){')
 rep('@media (prefers-reduced-motion: reduce){', '.nw-x,.nw.y .nw-x{background:rgba(0,0,0,.06);color:#141414}\n.nw-x .ic{opacity:.55}\n@media (prefers-reduced-motion: reduce){')
+
+# chips: a small version of the search comet runs around the chip (same 0.7s dynamic)
+rep('@media (prefers-reduced-motion: reduce){', '''.xc.pop::before,.xc.pop::after{animation:none;opacity:0}
+.xc .ccomet{position:absolute;left:-8px;top:-8px;overflow:visible;pointer-events:none;z-index:4}
+@media (prefers-reduced-motion: reduce){''')
+rep("function chipPop(el){", r"""function chipComet(el){
+  el.querySelectorAll('.ccomet').forEach(n => n.remove());
+  const w = el.offsetWidth, h = el.offsetHeight, o = 8, r = h/2, NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'ccomet');
+  svg.setAttribute('width', w + 2*o); svg.setAttribute('height', h + 2*o); svg.setAttribute('viewBox', `0 0 ${w + 2*o} ${h + 2*o}`);
+  const fid = 'cg' + Math.random().toString(36).slice(2, 7);
+  svg.innerHTML = `<defs><filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.6"/></filter></defs><g filter="url(#${fid})"></g><g></g>`;
+  const d = `M${o},${o + r} A${r},${r} 0 0 1 ${o + r},${o} H${o + w - r} A${r},${r} 0 0 1 ${o + w},${o + r} A${r},${r} 0 0 1 ${o + w - r},${o + h} H${o + r} A${r},${r} 0 0 1 ${o},${o + r}Z`;
+  const [gGlow, gCore] = svg.querySelectorAll('g'), N = 18, core = [], glow = [];
+  for (let k = 0; k < N; k++) for (const [g, arr] of [[gGlow, glow], [gCore, core]]){ const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('fill', 'none'); p.setAttribute('stroke-linecap', 'round'); g.appendChild(p); arr.push(p); }
+  el.appendChild(svg);
+  const L = core[0].getTotalLength(), tail = L * .5, seg = tail / N, A = hex('#33D60A'), B = hex('#FFEE33'), t0 = performance.now(), DUR = 700;
+  const step = now => {
+    const t = clamp((now - t0) / DUR, 0, 1), env = Math.sin(Math.PI * clamp(t / .96, 0, 1)), head = L * (.05 + 1.05 * (1 - Math.pow(1 - t, 2.2)));
+    for (let k = 0; k < N; k++){
+      const f = k / (N - 1), col = 'rgb(' + A.map((v, i) => Math.round(lerp(v, B[i], Math.pow(f, .8)))).join(',') + ')';
+      const wc = lerp(3.4, 1, f), a = env * Math.pow(1 - f, 1.3), off = (-(((head - k*seg) % L) + L) % L).toFixed(2), dash = `${(seg*1.3).toFixed(2)} ${L}`;
+      for (const [p, wk, ak] of [[core[k], wc, a], [glow[k], wc*2.6 + 2, a*.85]]){
+        p.setAttribute('stroke', col); p.setAttribute('stroke-width', wk.toFixed(2)); p.setAttribute('stroke-dasharray', dash); p.setAttribute('stroke-dashoffset', off); p.setAttribute('opacity', ak.toFixed(3));
+      }
+    }
+    if (t < 1) requestAnimationFrame(step); else svg.remove();
+  };
+  requestAnimationFrame(step);
+}
+function chipPop(el){
+  if (el.classList.contains('xc') && !reduced) chipComet(el);""")
