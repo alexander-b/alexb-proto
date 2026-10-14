@@ -278,3 +278,4 @@ function chipPop(el){
 rep('  peekTop = Math.round(H - (306 + SAB));', '  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 20 - (16 + 20 + 30 + 60 + 84)); }')
 rep('@media (prefers-reduced-motion: reduce){', '#pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}\n@media (prefers-reduced-motion: reduce){')
 rep('@media (prefers-reduced-motion: reduce){', '#fast{height:84px;padding:20px 16px 0}\n.pb{box-shadow:0 2px 10px rgba(0,0,0,.1)}\n#pcBar.docked .pb:not(.go){box-shadow:none}\n@media (prefers-reduced-motion: reduce){')
+rep('@media (prefers-reduced-motion: reduce){', '#pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1)}\n@media (prefers-reduced-motion: reduce){')
