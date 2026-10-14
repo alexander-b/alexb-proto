@@ -69,3 +69,57 @@ X2 = r'''
 #sumMore .s2::after{content:none!important}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X2 + '\n@media (prefers-reduced-motion: reduce){')
+
+# ---------- round 3: simpler ----------
+# tab bar: plain round buttons — bookmark left, friends (icon library "person") right
+i = s.index('<button class="bf bs" id="barFav"'); j = s.index('</button>', i) + 9
+s = s[:i] + '<button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>' + s[j:]
+i = s.index('<button class="bf" id="barHelp"'); j = s.index('</button>', i) + 9
+s = s[:i] + '<button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span></button>' + s[j:]
+rep("setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 500);", "")
+
+# no grey date above the title
+rep('<div id="sumDate2">7 октября</div>', '')
+rep("  $('#sumDate2').style.opacity = clamp(1 - p*2.5, 0, 1); $('#sumDate2').style.height = (24*(1-p)) + 'px';", "")
+rep('peekTop = Math.round(H - (334 + SAB));', 'peekTop = Math.round(H - (306 + SAB));')
+
+# more single-choice filters: transport, pharmacy (emoji with a white outline)
+EMO = {'bus':('🚌','Транспорт'), 'pharm':('💊','Аптеки')}
+for k,(e,label) in EMO.items():
+    i = s.index('<button class="chip" data-layer="fuel"'); j = s.index('</button>', i) + 9
+    nxt = s[i:j].replace('data-layer="fuel"', 'data-layer="%s"' % k).replace('⛽', e).replace('АЗС</button>', label + '</button>')
+    # append after the last chip
+    last = s.index('</div>', s.index('<div id="filters"'))
+    s = s[:last] + nxt + s[last:]
+rep("const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места', fuel:'АЗС'};",
+    "const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места', fuel:'АЗС', bus:'Транспорт', pharm:'Аптеки'};")
+rep("m.layer!=='fuel'; m.el", "!['fuel','bus','pharm'].includes(m.layer); m.el")
+rep("  {id:'bereza', layer:'picks', type:'gp'},", "  {id:'bus1', layer:'bus', type:'gp', x:150, y:470},\n  {id:'bus2', layer:'bus', type:'gp', x:300, y:250},\n  {id:'bus3', layer:'bus', type:'gp', x:110, y:200},\n  {id:'ph1', layer:'pharm', type:'gp', x:230, y:420},\n  {id:'ph2', layer:'pharm', type:'gp', x:60, y:400},\n  {id:'bereza', layer:'picks', type:'gp'},")
+rep("const FUEL_ICON = (() => { try {", "const emoIcon = e => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px \"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(e, 48, 54); return c.toDataURL(); } catch(_){ return 'img/em_cup.png'; } };\nconst FUEL_ICON = (() => { try {")
+rep("const GALLERY = {", """for (const [id, name, kind, addr, e, desc] of [
+  ['bus1','Остановка «Устьинский мост»','Остановка','Устьинская наб.','🚌','Автобусы м5, 158 и трамвай А'],
+  ['bus2','Китай-город','Метро','Славянская пл.','🚇','Пересадка на 6 и 7 линии'],
+  ['bus3','Остановка «Солянка»','Остановка','ул. Солянка','🚌','Автобусы м27 и 158'],
+  ['ph1','Аптека Горздрав','Аптека','Солянка, 1/2','💊','Работает до 23:00, есть доставка'],
+  ['ph2','Ригла','Аптека','Яузский б-р, 9','💊','Заказ с самовывозом за 30 минут']])
+  PLACES[id] = {name, kind, addr, hero:'img/cafe.jpg', logo:emoIcon(e), contain:true, rating:'4.5', count:120, react:8, check:'—', hours:'до 23:00', today:'Сегодня 8:00–23:00', phone:'8 800 000-00-00', site:'2gis.ru', desc, feats:[], cats:[]};
+const GALLERY = {""")
+
+X3 = r'''
+/* white sheet */
+#sheet{background:#fff}
+.fa{background:var(--bg2);box-shadow:none}
+.fa .fi{background:#fff}
+.nw{background:var(--card)}
+.xc[aria-selected="true"]{background:rgba(5,5,5,.05);box-shadow:none}
+#fadeBottom{background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 55%,#fff)}
+#pop.place.expanded,#pop.place.expanded .pc{background:#fff}
+#pop.place.expanded .pc-box{background:var(--card)}
+#pop.place.expanded .pc-tab.on{background:var(--beige);box-shadow:none}
+#pop.place.expanded .pc-grab{background:linear-gradient(#fff 70%,rgba(255,255,255,0))}
+.bc .ic{color:#141414}
+/* emoji chips get the same white outline as the cup/heart assets */
+.chip .fuel{filter:drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff) drop-shadow(0 1px 2px rgba(0,0,0,.18))}
+#filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1) drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff);opacity:.55}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X3 + '\n@media (prefers-reduced-motion: reduce){')

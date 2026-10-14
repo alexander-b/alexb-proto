@@ -579,6 +579,23 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #filters.picked .chip[aria-pressed="false"] .ci img,#filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1);opacity:.55}
 #sumMore .s2::after{content:none!important}
 
+
+/* white sheet */
+#sheet{background:#fff}
+.fa{background:var(--bg2);box-shadow:none}
+.fa .fi{background:#fff}
+.nw{background:var(--card)}
+.xc[aria-selected="true"]{background:rgba(5,5,5,.05);box-shadow:none}
+#fadeBottom{background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.92) 55%,#fff)}
+#pop.place.expanded,#pop.place.expanded .pc{background:#fff}
+#pop.place.expanded .pc-box{background:var(--card)}
+#pop.place.expanded .pc-tab.on{background:var(--beige);box-shadow:none}
+#pop.place.expanded .pc-grab{background:linear-gradient(#fff 70%,rgba(255,255,255,0))}
+.bc .ic{color:#141414}
+/* emoji chips get the same white outline as the cup/heart assets */
+.chip .fuel{filter:drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff) drop-shadow(0 1px 2px rgba(0,0,0,.18))}
+#filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1) drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff);opacity:.55}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -608,7 +625,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
           <button class="chip" data-layer="coffee" aria-pressed="false"><span class="ci"><img src="img/chip_cup0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Кофейни</button>
           
           <button class="chip" data-layer="places" aria-pressed="false"><span class="ci"><img src="img/chip_heart.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Мои места</button><button class="chip" data-layer="fuel" aria-pressed="false"><span class="ci"><span class="fuel">⛽</span><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>АЗС</button>
-        </div>
+        <button class="chip" data-layer="bus" aria-pressed="false"><span class="ci"><span class="fuel">🚌</span><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Транспорт</button><button class="chip" data-layer="pharm" aria-pressed="false"><span class="ci"><span class="fuel">💊</span><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Аптеки</button></div>
       </div>
     </div>
 
@@ -616,7 +633,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div class="grab" id="sheetGrab"></div>
       
       <div id="sum">
-        <div id="sumDate2">7 октября</div><h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
+        <h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
         <div id="sumMore">
           <button class="s1" data-go="main" id="sumPicks">5+ подборок мест<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>,</button>
           <button class="s2" data-go="news" id="sumNews">2 новости района<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -644,10 +661,10 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
         <path id="waveGlow" fill="url(#wgrad)" filter="url(#wglow)" opacity="0"/>
         <path id="wavePath" fill="url(#wgrad)" opacity="0"/>
       </svg>
-      <button class="bf bs" id="barFav" aria-label="Мои места"><span class="bsa"><img class="s1" src="img/ph_dark.jpg" alt=""><img class="s2" src="img/ph_teal.jpg" alt=""><img class="m" src="img/ph_bereza.jpg" alt=""></span><span class="bfn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="#141414"/></svg><b id="savedN">1</b></span></button>
+      <button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>
       <div id="pillBox"><svg id="comet" aria-hidden="true"><defs><filter id="cglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter></defs><g id="cometGlow" filter="url(#cglow)"></g><g id="cometCore"></g></svg>
         <button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><span class="sl">Поиск места</span><img src="img/search.png" alt=""></button></div>
-      <button class="bf" id="barHelp" aria-label="Друзья рядом"><span class="bfa"><img class="s1" src="img/fr_kate.jpg" alt=""><img class="s2" src="img/fr_dima.jpg" alt=""><img class="m" src="img/fr_anya.jpg" alt=""></span><span class="bfn"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M16 6C16 8.2 15.2 12 12 12S8 8.2 8 6a4 4 0 0 1 8 0Z" fill="#141414"/><path d="M4.2 19.2C4 19 4 18.9 4 18.7 4.2 16.1 6.3 14 9 14h6c2.7 0 4.8 2.1 5 4.7 0 .2 0 .3-.2.5-2.4 2.7-13.2 2.7-15.6 0Z" fill="#141414"/></svg>4</span></button>
+      <button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span></button>
     </div>
 
     <div id="scrim"></div>
@@ -743,7 +760,7 @@ function measure(){
   const barB = Math.max(12, SAB - 14);
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
-  peekTop = Math.round(H - (334 + SAB));
+  peekTop = Math.round(H - (306 + SAB));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
@@ -803,9 +820,17 @@ const PLACES = {
 };
 const U = id => `https://images.unsplash.com/photo-${id}?w=720&q=62&auto=format&fit=crop`;
 const COFFEE_PH = ['1521017432531-fbd92d768814','1545418314-7ce0b9b53901','1542181961-9590d0c79dab','1565650839149-2c48a094196c','1588253137728-1e4dd0fe9a93','1572982270699-473dfa34d7e7'].map(U);
+const emoIcon = e => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(e, 48, 54); return c.toDataURL(); } catch(_){ return 'img/em_cup.png'; } };
 const FUEL_ICON = (() => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('⛽', 48, 54); return c.toDataURL(); } catch(e){ return 'img/em_cup.png'; } })();
 for (const [id, name, addr] of [['fuel1','Лукойл','Садовническая наб., 7'],['fuel2','Газпромнефть','Котельническая наб., 1'],['fuel3','Роснефть','Яузский б-р, 2']])
   PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_ICON, contain:true, rating:'4.4', count:310, react:12, check:'АИ-95 · 62 ₽', hours:'круглосуточно', today:'Открыто круглосуточно', phone:'8 800 100-09-11', site:'2gis.ru', desc:'Кофе с собой, мойка и магазин у кассы', feats:[], cats:[]};
+for (const [id, name, kind, addr, e, desc] of [
+  ['bus1','Остановка «Устьинский мост»','Остановка','Устьинская наб.','🚌','Автобусы м5, 158 и трамвай А'],
+  ['bus2','Китай-город','Метро','Славянская пл.','🚇','Пересадка на 6 и 7 линии'],
+  ['bus3','Остановка «Солянка»','Остановка','ул. Солянка','🚌','Автобусы м27 и 158'],
+  ['ph1','Аптека Горздрав','Аптека','Солянка, 1/2','💊','Работает до 23:00, есть доставка'],
+  ['ph2','Ригла','Аптека','Яузский б-р, 9','💊','Заказ с самовывозом за 30 минут']])
+  PLACES[id] = {name, kind, addr, hero:'img/cafe.jpg', logo:emoIcon(e), contain:true, rating:'4.5', count:120, react:8, check:'—', hours:'до 23:00', today:'Сегодня 8:00–23:00', phone:'8 800 000-00-00', site:'2gis.ru', desc, feats:[], cats:[]};
 const GALLERY = {
   bereza:['img/ph_hero.jpg','img/ph_bereza.jpg','img/bereza.jpg'],
   carniceria:[MM+'2025/01/carneceria-1024x538.jpg', TJ+'01-best-new-rest-msk-2025.jpg'],
@@ -967,6 +992,11 @@ const MDEF = [
   {id:'fuel1', layer:'fuel', type:'gp', x:330, y:420},
   {id:'fuel2', layer:'fuel', type:'gp', x:70, y:470},
   {id:'fuel3', layer:'fuel', type:'gp', x:250, y:150},
+  {id:'bus1', layer:'bus', type:'gp', x:150, y:470},
+  {id:'bus2', layer:'bus', type:'gp', x:300, y:250},
+  {id:'bus3', layer:'bus', type:'gp', x:110, y:200},
+  {id:'ph1', layer:'pharm', type:'gp', x:230, y:420},
+  {id:'ph2', layer:'pharm', type:'gp', x:60, y:400},
   {id:'bereza', layer:'picks', type:'gp'},
   {id:'carniceria', layer:'picks', type:'gp'},
   {id:'masa', layer:'picks', type:'gp'},
@@ -1006,7 +1036,7 @@ function mkMarker(d, i){
 }
 function buildMarkers(){ MDEF.forEach((d,i) => mkMarker(d,i)); markers.find(m=>m.id==='me').el.style.zIndex = 3; markers.filter(m=>m.type==='fr').forEach(m => m.el.style.zIndex = 4); applyLayers(); }
 function applyLayers(){
-  for (const m of markers){ if (!m.layer) continue; const vis = m.layer==='friends' ? layers.friends : only ? m.layer===only : m.layer!=='fuel'; m.el.classList.toggle('off', !vis || !!m.hidden); }
+  for (const m of markers){ if (!m.layer) continue; const vis = m.layer==='friends' ? layers.friends : only ? m.layer===only : !['fuel','bus','pharm'].includes(m.layer); m.el.classList.toggle('off', !vis || !!m.hidden); }
   $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.layer===only))); $('#filters').classList.toggle('picked', !!only);
   $$('.tile[data-layer]').forEach(t => t.classList.toggle('on', layers[t.dataset.layer]));
   cluster();
@@ -1220,7 +1250,7 @@ mapEl.addEventListener('pointerup', endPointer);
 mapEl.addEventListener('pointercancel', endPointer);
 mapEl.addEventListener('wheel', e => { if (live) return; e.preventDefault(); touch(); const p=local(e); zoomAt(p.x,p.y, Math.exp(-e.deltaY*0.0022), false); }, {passive:false});
 
-const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места', fuel:'АЗС'};
+const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места', fuel:'АЗС', bus:'Транспорт', pharm:'Аптеки'};
 function toggleLayer(l){ only = only===l ? null : l; applyLayers(); toast(only ? `Показываем: ${LNAME[l]}` : 'Показываем всё рядом'); }
 $$('.chip').forEach(c => c.addEventListener('click', () => { touch(); toggleLayer(c.dataset.layer); c.classList.remove('pop'); void c.offsetWidth; if (only===c.dataset.layer) c.classList.add('pop'); }));
 
@@ -1243,7 +1273,7 @@ function morph(y){ sheetP = clamp((peekTop - y)/(peekTop - fullTop), 0, 1); head
 function head(){
   const p = sheetP, c = sheetState==='full' && p > .98 ? clamp(sScroll.scrollTop/90, 0, 1) : 0;
   fastWrap.style.height = (72*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);
-  $('#sumDate2').style.opacity = clamp(1 - p*2.5, 0, 1); $('#sumDate2').style.height = (24*(1-p)) + 'px';
+
   sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';
   const t = $('#sumTitle');
   t.style.height = lerp(30, 18, c) + 'px'; t.style.transform = `scale(${lerp(1, .5, c)})`; t.style.color = `rgba(18,18,18,${lerp(1, .5, c)})`;
@@ -1718,7 +1748,7 @@ function playWave(entrance){
   waveRAF = requestAnimationFrame(step);
 }
 $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });
-setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 500);
+
 $('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 let waveTimer=null;
 function scheduleWave(ms){ clearTimeout(waveTimer); sw.classList.remove('mini'); waveTimer = setTimeout(()=>playWave(true), ms); if (!reduced) sBtn.style.opacity = 0; }
