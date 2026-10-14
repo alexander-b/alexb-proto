@@ -30,16 +30,16 @@ rep('<h2 id="sumTitle">Для вас на <span id="sumDate">7 октября</s
     '<div id="sumDate2">7 октября</div><h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>')
 rep('<button class="s2" data-go="news" id="sumNews">2 новости района</button>','<button class="s2" data-go="news" id="sumNews">2 новости района</button>')
 rep('<button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><img src="img/search.png" alt=""><span class="sl">Поиск места</span></button>',
-    '''<button class="bc" id="barFav" aria-label="Мои места"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20.3C11.8 20.3 11.6 20.2 11.4 20.1C9.6 19.4 7.4 18.1 5.6 16.4C3.7 14.6 2.3 12.4 2.3 9.8C2.3 6.7 4.4 4.3 7.4 4C9.3 3.8 10.9 4.7 12 6.1C13.1 4.7 14.7 3.8 16.6 4C19.6 4.3 21.7 6.7 21.7 9.8C21.7 12.4 20.3 14.6 18.4 16.4C16.6 18.1 14.4 19.4 12.6 20.1C12.4 20.2 12.2 20.3 12 20.3Z" stroke="#141414" stroke-width="2"/></svg></button>
+    '''<button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>
       <div id="pillBox"><svg id="comet" aria-hidden="true"><defs><filter id="cglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter></defs><g id="cometGlow" filter="url(#cglow)"></g><g id="cometCore"></g></svg>
         <button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><span class="sl">Поиск места</span><img src="img/search.png" alt=""></button></div>
-      <button class="bc" id="barHelp" aria-label="Помощник"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.5 11.9C21.5 17.1 17.2 21.5 12 21.5C10.9 21.5 9.96 21.3 9.29 21.1C9 21 8.81 20.96 8.64 20.89C7.27 21.48 6 21.64 5.06 21.65C4.3 21.66 3.6 21.55 3.28 21.46C2.97 21.38 2.72 21.16 2.59 20.87C2.46 20.58 2.47 20.25 2.61 19.97C2.92 19.36 3.21 18.83 3.4 18.45C3.61 18.05 3.73 17.79 3.8 17.58C3.86 17.39 3.87 17.28 3.85 17.18C3.84 17.07 3.79 16.9 3.64 16.6C2.85 15.04 2.5 13.29 2.5 11.92C2.5 6.71 6.76 2.5 12 2.5C17.24 2.5 21.5 6.71 21.5 11.92Z" stroke="#141414" stroke-width="2"/></svg></button>''')
+      <button class="bf" id="barHelp" aria-label="Друзья рядом"><span class="bfa"><img class="s1" src="img/fr_kate.jpg" alt=""><img class="s2" src="img/fr_dima.jpg" alt=""><img class="m" src="img/fr_anya.jpg" alt=""></span><span class="bfn"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M16 6C16 8.2 15.2 12 12 12S8 8.2 8 6a4 4 0 0 1 8 0Z" fill="#141414"/><path d="M4.2 19.2C4 19 4 18.9 4 18.7 4.2 16.1 6.3 14 9 14h6c2.7 0 4.8 2.1 5 4.7 0 .2 0 .3-.2.5-2.4 2.7-13.2 2.7-15.6 0Z" fill="#141414"/></svg>4</span></button>''')
 
 # ---------- styles (appended last so they win) ----------
 V2CSS = r'''
 /* ================= v2: calmer "Sber family" skin ================= */
-:root{ --bg2:#F2F3F5; --green2:#1FB24A; }
-#sheet{background:linear-gradient(180deg,#DCEAFF 0,#EAF1FB 150px,var(--bg2) 300px);box-shadow:0 -2px 18px rgba(0,0,0,.08)}
+:root{ --bg2:#F2F3F5; --green2:#30C800; }
+#sheet{background:radial-gradient(120% 220px at 50% -40px,rgba(197,249,43,.55),rgba(197,249,43,0) 75%),linear-gradient(180deg,#F1FBE4 0,var(--bg2) 260px);box-shadow:0 -2px 18px rgba(0,0,0,.08)}
 #sumDate2{font-size:14px;line-height:18px;color:rgba(20,20,20,.45);letter-spacing:-.1px;margin-bottom:6px;transition:opacity .2s}
 #sumTitle{font-size:26px;line-height:30px;letter-spacing:-.5px}
 #sumMore button{font-size:26px;line-height:30px;letter-spacing:-.5px}
@@ -87,6 +87,32 @@ V2CSS = r'''
 .pc-box{border-radius:24px}
 #pcBar.docked::before{background:#fff}
 #search{background:var(--bg2)}
+/* no layer chips above the sheet in v2 */
+#filters{display:none}
+#btnLocate{bottom:16px}
+/* friends bubble in the bar */
+.bf{flex:none;width:66px;height:58px;position:relative;transition:transform .45s var(--spring),opacity .3s;transition-delay:.14s}
+.bf:active{transform:scale(.94)}
+.bfa img{position:absolute;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #C5F92B,0 2px 6px rgba(0,0,0,.15)}
+.bfa .s1{left:0;top:4px;width:24px;height:24px}.bfa .s2{right:0;top:4px;width:24px;height:24px}
+.bfa .m{left:17px;top:0;width:32px;height:32px;box-shadow:0 0 0 1.6px #C5F92B,0 2px 8px rgba(0,0,0,.18)}
+.bfn{position:absolute;left:11px;top:28px;height:28px;padding:0 9px 0 8px;border-radius:20px;background:#fff;display:flex;align-items:center;gap:3px;
+  font-weight:600;font-size:13px;color:#141414;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#searchWrap.mini .bf{transform:scale(.6);opacity:0;pointer-events:none;transition-delay:0s}
+#searchWrap.intro .bf{transform:scale(.4);opacity:0}
+#barFav .ic{color:#141414}
+/* chip pick: a glowing spark runs once around the chip */
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.xc::before{inset:-2px;border-radius:27px;box-shadow:none;padding:2px;opacity:0;
+  background:conic-gradient(from var(--ang),rgba(54,219,1,0) 0deg,rgba(255,238,51,0) 250deg,#FFEE33 300deg,#36DB01 352deg,rgba(54,219,1,0) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.xc::after{inset:-4px;border-radius:29px;box-shadow:none;opacity:0;filter:blur(5px);
+  background:conic-gradient(from var(--ang),rgba(54,219,1,0) 0deg,rgba(255,238,51,0) 270deg,rgba(255,238,51,.7) 310deg,rgba(54,219,1,.9) 352deg,rgba(54,219,1,0) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);padding:6px}
+.xc.pop::before,.xc.pop::after{animation:spark1 1.1s cubic-bezier(.45,.05,.35,1) forwards}
+@keyframes spark1{0%{--ang:-60deg;opacity:0}12%{opacity:1}80%{opacity:1}100%{--ang:340deg;opacity:0}}
+.xc .spark{display:none}
+
 #sField{background:#fff}
 '''
 rep('@media (prefers-reduced-motion: reduce){','%s\n@media (prefers-reduced-motion: reduce){' % V2CSS)
@@ -145,7 +171,7 @@ function playWave(entrance){
   waveRAF = requestAnimationFrame(step);
 }
 $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });
-$('#barHelp').addEventListener('click', () => { touch(); toast('Помощник: скоро'); });
+$('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 '''+s[j:]
 open(dst,'w',encoding='utf-8').write(s)
 print('ok', len(s))
