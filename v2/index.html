@@ -654,6 +654,9 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .xc.pop::before,.xc.pop::after{animation:none;opacity:0}
 .xc .ccomet{position:absolute;left:-8px;top:-8px;overflow:visible;pointer-events:none;z-index:4}
 #pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}
+#fast{height:84px;padding:20px 16px 0}
+.pb{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+#pcBar.docked .pb:not(.go){box-shadow:none}
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -818,7 +821,7 @@ function measure(){
   const barB = Math.max(12, SAB - 14);
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
-  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 18 - (16 + 20 + 30 + 60 + 72)); }
+  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 20 - (16 + 20 + 30 + 60 + 84)); }
   miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 52));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
@@ -1331,7 +1334,7 @@ function morph(y){ sheetP = clamp((peekTop - y)/(peekTop - fullTop), 0, 1); head
 // p: how far the sheet is open; c: how far Explore is scrolled (the big title shrinks into a grey caption)
 function head(){
   const p = sheetP, c = sheetState==='full' && p > .98 ? clamp(sScroll.scrollTop/90, 0, 1) : 0;
-  fastWrap.style.height = (72*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);
+  fastWrap.style.height = (84*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);
 
   sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';
   const t = $('#sumTitle');
