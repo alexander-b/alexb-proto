@@ -1,5 +1,5 @@
 # second round of v2 changes, applied on top of build_v2.py
-ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none" overflow="visible"><path d="M1.3 14.7L14 2M4.6 2H14V11.4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none" overflow="visible"><path d="M1.3 14.7L14 2M7.4 2H14V8.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 # own manifest so the home-screen icon opens v2
 rep('href="manifest.webmanifest?v=3"', 'href="v2/manifest.webmanifest"')
