@@ -19,18 +19,12 @@ cut('/* collapsing search: the pill shrinks','#searchWrap.mini #searchBtn .sbg{p
 # ---------- markup: greeting first, then service tiles; new bottom bar ----------
 i=s.index('<div id="fastWrap">'); j=s.index('</div></div>',i)+len('</div></div>')
 fast=s[i:j]; s=s[:i]+s[j:]
-i=s.index('<div id="xChipsWrap">'); s=s[:i]+fast+'\n      '+s[i:]
-rep('<button class="fa" data-toast="Домой: 2 ч 45 мин, пробки 9 баллов"><span class="ic" data-ic="home"></span>2 ч 45 мин</button>',
-    '<button class="fa" data-toast="Домой: 2 ч 45 мин, пробки 9 баллов"><span class="ic" data-ic="home"></span><span class="ft"><i>Домой</i>2 ч 45 мин</span></button>')
-rep('<button class="fa" data-toast="На работу: 45 мин"><span class="ic" data-ic="brief"></span>45 мин</button>',
-    '<button class="fa" data-toast="На работу: 45 мин"><span class="ic" data-ic="brief"></span><span class="ft"><i>На работу</i>45 мин</span></button>')
-rep('<button class="fa" data-toast="Красный проспект, 8: маршрут строится"><span class="ic" data-ic="clock"></span>Красный проспект, 8</button>',
-    '<button class="fa" data-toast="Красный проспект, 8: маршрут строится"><span class="ic" data-ic="clock"></span><span class="ft"><i>Недавнее</i>Красный пр., 8</span></button>')
+i=s.index('<div id="filters"'); s=s[:i]+fast+'\n        '+s[i:]
 rep('<h2 id="sumTitle">Для вас на <span id="sumDate">7 октября</span><span class="colon">:</span></h2>',
     '<div id="sumDate2">7 октября</div><h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>')
 rep('<button class="s2" data-go="news" id="sumNews">2 новости района</button>','<button class="s2" data-go="news" id="sumNews">2 новости района</button>')
 rep('<button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><img src="img/search.png" alt=""><span class="sl">Поиск места</span></button>',
-    '''<button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>
+    '''<button class="bf bs" id="barFav" aria-label="Мои места"><span class="bsa"><img class="s1" src="img/ph_dark.jpg" alt=""><img class="s2" src="img/ph_teal.jpg" alt=""><img class="m" src="img/ph_bereza.jpg" alt=""></span><span class="bfn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="#141414"/></svg><b id="savedN">1</b></span></button>
       <div id="pillBox"><svg id="comet" aria-hidden="true"><defs><filter id="cglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter></defs><g id="cometGlow" filter="url(#cglow)"></g><g id="cometCore"></g></svg>
         <button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><span class="sl">Поиск места</span><img src="img/search.png" alt=""></button></div>
       <button class="bf" id="barHelp" aria-label="Друзья рядом"><span class="bfa"><img class="s1" src="img/fr_kate.jpg" alt=""><img class="s2" src="img/fr_dima.jpg" alt=""><img class="m" src="img/fr_anya.jpg" alt=""></span><span class="bfn"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M16 6C16 8.2 15.2 12 12 12S8 8.2 8 6a4 4 0 0 1 8 0Z" fill="#141414"/><path d="M4.2 19.2C4 19 4 18.9 4 18.7 4.2 16.1 6.3 14 9 14h6c2.7 0 4.8 2.1 5 4.7 0 .2 0 .3-.2.5-2.4 2.7-13.2 2.7-15.6 0Z" fill="#141414"/></svg>4</span></button>''')
@@ -39,20 +33,16 @@ rep('<button id="searchBtn" aria-label="Поиск места"><span class="sbg"
 V2CSS = r'''
 /* ================= v2: calmer "Sber family" skin ================= */
 :root{ --bg2:#F2F3F5; --green2:#30C800; }
-#sheet{background:radial-gradient(120% 220px at 50% -40px,rgba(197,249,43,.55),rgba(197,249,43,0) 75%),linear-gradient(180deg,#F1FBE4 0,var(--bg2) 260px);box-shadow:0 -2px 18px rgba(0,0,0,.08)}
+#sheet{background:var(--bg2);box-shadow:0 -2px 18px rgba(0,0,0,.08)}
 #sumDate2{font-size:14px;line-height:18px;color:rgba(20,20,20,.45);letter-spacing:-.1px;margin-bottom:6px;transition:opacity .2s}
 #sumTitle{font-size:26px;line-height:30px;letter-spacing:-.5px}
 #sumMore button{font-size:26px;line-height:30px;letter-spacing:-.5px}
 #sumMore .s1{color:var(--green2)}
 #sumMore .s2{color:#FF8A00}
 #sumMore .s2::after{content:" ↗";font-weight:500}
-#fastWrap{overflow:visible}
-#fast{height:84px;padding:8px 16px 4px;gap:8px;overflow:visible}
-.fa{width:calc((var(--cw,358px) - 16px)/3);height:84px;border-radius:20px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex-direction:column;align-items:flex-start;justify-content:space-between;
-  padding:12px 12px 11px;gap:0;font-size:15px;line-height:18px;letter-spacing:-.3px;background:#fff}
-.fa .ic{opacity:1;color:#141414}
-.fa .ft{display:flex;flex-direction:column;align-items:flex-start;white-space:nowrap;overflow:hidden;max-width:100%;text-overflow:ellipsis}
-.fa .ft i{font-style:normal;font-weight:400;font-size:13px;line-height:16px;color:rgba(20,20,20,.5)}
+#fastWrap{position:absolute;left:0;right:0;bottom:10px;overflow:visible}
+#fast{height:40px;padding:4px 12px 6px;overflow-y:visible}
+.fa{background:#fff}
 .xc[aria-selected="true"]{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 .nw{background:#fff}
 .nw.y{background:#FFF5D1}
@@ -89,7 +79,7 @@ V2CSS = r'''
 #search{background:var(--bg2)}
 /* no layer chips above the sheet in v2 */
 #filters{display:none}
-#btnLocate{bottom:16px}
+#btnLocate{bottom:66px}
 /* friends bubble in the bar */
 .bf{flex:none;width:66px;height:58px;position:relative;transition:transform .45s var(--spring),opacity .3s;transition-delay:.14s}
 .bf:active{transform:scale(.94)}
@@ -100,7 +90,12 @@ V2CSS = r'''
   font-weight:600;font-size:13px;color:#141414;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 #searchWrap.mini .bf{transform:scale(.6);opacity:0;pointer-events:none;transition-delay:0s}
 #searchWrap.intro .bf{transform:scale(.4);opacity:0}
-#barFav .ic{color:#141414}
+.bsa img{position:absolute;object-fit:cover;box-shadow:0 0 0 1.5px #C5F92B,0 2px 6px rgba(0,0,0,.18)}
+.bsa .s1{left:3px;top:6px;width:22px;height:22px;border-radius:7px;transform:rotate(-14deg)}
+.bsa .s2{right:3px;top:6px;width:22px;height:22px;border-radius:7px;transform:rotate(14deg)}
+.bsa .m{left:17px;top:0;width:32px;height:32px;border-radius:10px;box-shadow:0 0 0 1.6px #C5F92B,0 2px 8px rgba(0,0,0,.2)}
+.bfn b{font-weight:600}
+#barFav{transition-delay:.08s}
 /* chip pick: a glowing spark runs once around the chip */
 @property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
 .xc::before{inset:-2px;border-radius:27px;box-shadow:none;padding:2px;opacity:0;
@@ -118,9 +113,9 @@ V2CSS = r'''
 rep('@media (prefers-reduced-motion: reduce){','%s\n@media (prefers-reduced-motion: reduce){' % V2CSS)
 
 # ---------- layout numbers for the taller header ----------
-rep("  peekTop = Math.round(H - (234 + SAB));","  peekTop = Math.round(H - (366 + SAB));")
+rep("  peekTop = Math.round(H - (234 + SAB));","  peekTop = Math.round(H - (262 + SAB));")
 rep("  fastWrap.style.height = (50*(1-p)) + 'px'; fastWrap.style.marginTop = (20*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);",
-    "  fastWrap.style.height = (96*(1-p)) + 'px'; fastWrap.style.marginTop = (14*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);\n  $('#sumDate2').style.opacity = clamp(1 - p*2.5, 0, 1); $('#sumDate2').style.height = (24*(1-p)) + 'px';")
+    "  $('#sumDate2').style.opacity = clamp(1 - p*2.5, 0, 1); $('#sumDate2').style.height = (24*(1-p)) + 'px';")
 rep("  t.style.height = lerp(32, 18, c) + 'px';","  t.style.height = lerp(30, 18, c) + 'px';")
 rep("  sumMore.style.height = (64*(1 - p)) + 'px';","  sumMore.style.height = (60*(1 - p)) + 'px';")
 rep("  sumEl.style.marginTop = lerp(lerp(18, 28, p), 0, c) + 'px';","  sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';")
@@ -171,6 +166,7 @@ function playWave(entrance){
   waveRAF = requestAnimationFrame(step);
 }
 $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });
+setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 500);
 $('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 '''+s[j:]
 open(dst,'w',encoding='utf-8').write(s)

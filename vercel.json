@@ -19,7 +19,7 @@
    ]
   }
  ],
- "rewrites": [
+ "redirects": [
   {
    "source": "/",
    "has": [
@@ -28,7 +28,8 @@
      "value": "alexb-proto-v2.vercel.app"
     }
    ],
-   "destination": "/v2/index.html"
+   "destination": "/v2/",
+   "permanent": false
   }
  ]
 }
