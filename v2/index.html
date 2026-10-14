@@ -571,7 +571,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .fa .ic{opacity:1;color:#141414}
 .fa .ft{display:flex;flex-direction:column;align-items:flex-start;font-weight:400;font-size:13px;line-height:17px;color:rgba(20,20,20,.5);letter-spacing:-.2px}
 .fa .ft b{font-weight:600;font-size:16px;line-height:20px;color:#141414;letter-spacing:-.3px}
-.arr{display:inline-block;width:.6em;height:.6em;margin-left:.14em;vertical-align:.06em}
+.arr{display:inline-block;width:16px;height:16px;margin-left:4px;vertical-align:2px}
 .chip .fuel{position:absolute;left:5px;top:6px;font-size:27px;line-height:30px;transition:filter .2s,opacity .2s}
 .chip[aria-pressed="false"]{color:var(--blue)}
 .chip[aria-pressed="false"] .ci img{filter:none;opacity:1;transform:none}
@@ -697,8 +697,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div id="sum">
         <h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
         <div id="sumMore">
-          <button class="s1" data-go="main" id="sumPicks">5+ подборок мест<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>,</button>
-          <button class="s2" data-go="news" id="sumNews">2 новости района<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="s1" data-go="main" id="sumPicks">5+ подборок мест<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3.5 12.5L12 4M5 4H12V11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"/></svg>,</button>
+          <button class="s2" data-go="news" id="sumNews">2 новости района<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3.5 12.5L12 4M5 4H12V11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"/></svg></button>
         </div>
       </div>
       <div id="fastWrap"><div id="fast" class="hscroll">
@@ -919,7 +919,7 @@ let newsLeft = NEWS.slice();
 const saved = new Set(['korobok']);
 
 /* ---------------- map ---------------- */
-const ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3.5 12.5L12 4M5 4H12V11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"/></svg>';
 const MW=412, MH=652;
 const mapEl=$('#map'), mapLayer=$('#mapLayer');
 const ms = {s:1, tx:0, ty:-51};
