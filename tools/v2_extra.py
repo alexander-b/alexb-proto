@@ -279,3 +279,21 @@ rep('  peekTop = Math.round(H - (306 + SAB));', '  { const barTop = H - (Math.ma
 rep('@media (prefers-reduced-motion: reduce){', '#pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}\n@media (prefers-reduced-motion: reduce){')
 rep('@media (prefers-reduced-motion: reduce){', '#fast{height:84px;padding:20px 16px 0}\n.pb{box-shadow:0 2px 10px rgba(0,0,0,.1)}\n#pcBar.docked .pb:not(.go){box-shadow:none}\n@media (prefers-reduced-motion: reduce){')
 rep('@media (prefers-reduced-motion: reduce){', '#pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1)}\n@media (prefers-reduced-motion: reduce){')
+
+# ---------- perf: lighter for screen recording ----------
+# friends are hidden in v2, so the moving-friend loop doesn't need to run every frame
+rep("requestAnimationFrame(lenaLoop);\nconst LIVE_MAP", "const LIVE_MAP") if "requestAnimationFrame(lenaLoop);\nconst LIVE_MAP" in s else None
+i = s.rfind("requestAnimationFrame(lenaLoop);"); s = s[:i] + "/* lenaLoop off in v2 */" + s[i+len("requestAnimationFrame(lenaLoop);"):]
+# don't reposition hidden or merged pins on every map frame
+rep("function placeMarker(m){\n", "function placeMarker(m){\n  if (m.el.classList.contains('off') || m.el.classList.contains('merged')) return;\n")
+rep("  cluster();\n}\nlet selId", "  renderMap(); cluster();\n}\nlet selId") if "  cluster();\n}\nlet selId" in s else None
+# explore cards don't animate while the sheet is down (they're invisible anyway)
+rep("  explore.style.pointerEvents = p > .5 ? '' : 'none';", "  explore.style.pointerEvents = p > .5 ? '' : 'none'; explore.classList.toggle('still', p < .5);")
+X7 = r'''
+.still *,.still *::before,.still *::after{animation-play-state:paused!important}
+.me .blur{filter:none;background:radial-gradient(circle,rgba(25,156,255,.75) 0,rgba(25,156,255,0) 70%);left:5px;top:9px;width:80px;height:80px}
+#sheet.faded #sheetScroll{-webkit-mask-image:none;mask-image:none}
+.mk{contain:layout style}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X7 + '\n@media (prefers-reduced-motion: reduce){')
+rep("    else a.m.el.classList.remove('merged');\n    for (const b of grp){", "    else a.m.el.classList.remove('merged');\n    placeMarker(a.m);\n    for (const b of grp){")

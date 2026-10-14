@@ -658,6 +658,12 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .pb{box-shadow:0 2px 10px rgba(0,0,0,.1)}
 #pcBar.docked .pb:not(.go){box-shadow:none}
 #pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+
+.still *,.still *::before,.still *::after{animation-play-state:paused!important}
+.me .blur{filter:none;background:radial-gradient(circle,rgba(25,156,255,.75) 0,rgba(25,156,255,0) 70%);left:5px;top:9px;width:80px;height:80px}
+#sheet.faded #sheetScroll{-webkit-mask-image:none;mask-image:none}
+.mk{contain:layout style}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -940,6 +946,7 @@ let live = null;
 const toGeo = (x,y) => [GEO_ME[0] + (x-195)*MPP/(111320*COSL), GEO_ME[1] - (y-325)*MPP/111320];
 const geoOf = m => m.geo || toGeo(m.x, m.y);
 function placeMarker(m){
+  if (m.el.classList.contains('off') || m.el.classList.contains('merged')) return;
   let X, Y;
   if (live){ const p = live.project(geoOf(m)); X = p[0]; Y = p[1]; }
   else if (m.geo){ m.el.style.transform = 'translate3d(-999px,-999px,0)'; return; }
@@ -1102,7 +1109,7 @@ function applyLayers(){
   for (const m of markers){ if (!m.layer) continue; const vis = m.id===selId || (m.layer==='friends' ? layers.friends : only ? (m.layer===only || (only==='places' && m.layer==='picks')) : false); m.el.classList.toggle('off', !vis || !!m.hidden); }
   $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.layer===only))); $('#filters').classList.toggle('picked', !!only);
   $$('.tile[data-layer]').forEach(t => t.classList.toggle('on', layers[t.dataset.layer]));
-  cluster();
+  renderMap(); cluster();
 }
 let selId = null, clT = null;
 // recluster while zooming (throttled) and once more when the map settles
@@ -1155,6 +1162,7 @@ function cluster(){
       if (h) pinOut(a.m, scr(h), a.p);
     } else if (a.m.anim && a.m.el.classList.contains('merged')) { a.m.el.classList.remove('merged'); }
     else a.m.el.classList.remove('merged');
+    placeMarker(a.m);
     for (const b of grp){
       const was = b.m.into; b.m.into = a.m.id; b.m.grp = []; b.m.clusterN = 0;
       if (!was && !b.m.el.classList.contains('merged') && b.m.el.firstElementChild) pinIn(b.m, b.p, a.p);   // just joined
@@ -1323,7 +1331,7 @@ function lenaLoop(t){
   if (m){ const k = (Math.sin(t/1000*0.35)+1)/2; m.x = lerp(252, 276, k); m.y = lerp(262.8+51+10, 262.8+51-8, k);
     const tr = m.el.querySelector('.trail'); if (tr) tr.style.transform = `rotate(${Math.cos(t/1000*0.35)>=0?'205deg':'25deg'})`;
     placeMarker(m); }
-  requestAnimationFrame(lenaLoop);
+  /* lenaLoop off in v2 */
 }
 
 /* ---------------- sheet: summary ⇄ explore ---------------- */
@@ -1345,7 +1353,7 @@ function head(){
   xChipsWrap.style.height = ((69 - 9*c)*p) + 'px'; xChipsWrap.style.opacity = clamp(p*1.6 - .4, 0, 1);
   xChipsWrap.style.paddingTop = (lerp(9, 0, c)*p) + 'px';
   explore.style.opacity = clamp(p*1.8 - .5, 0, 1);
-  explore.style.pointerEvents = p > .5 ? '' : 'none';
+  explore.style.pointerEvents = p > .5 ? '' : 'none'; explore.classList.toggle('still', p < .5);
 }
 sScroll.addEventListener('scroll', () => {
   touch();
@@ -1993,7 +2001,6 @@ let rz; addEventListener('resize', () => { if (searchOpen) return; clearTimeout(
 addEventListener('pageshow', () => setTimeout(layout, 50));
 if (window.visualViewport) visualViewport.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layout, 80); });
 setTimeout(layout, 400); setTimeout(layout, 1500);   // safe-area insets settle after the first paint on iOS
-requestAnimationFrame(lenaLoop);
 const LIVE_MAP = true;
 if (LIVE_MAP){ const sc = document.createElement('script'); sc.src = 'https://mapgl.2gis.com/api/js/v1'; sc.onload = initLive; document.head.appendChild(sc); }
 scheduleWave(650);
