@@ -1,5 +1,5 @@
 # second round of v2 changes, applied on top of build_v2.py
-ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3.5 12.5L12 4M5 4H12V11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"/></svg>'
+ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none" overflow="visible"><path d="M1.3 14.7L14 2M4.6 2H14V11.4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 # own manifest so the home-screen icon opens v2
 rep('href="manifest.webmanifest?v=3"', 'href="v2/manifest.webmanifest"')
@@ -60,7 +60,7 @@ X2 = r'''
 .fa .ic{opacity:1;color:#141414}
 .fa .ft{display:flex;flex-direction:column;align-items:flex-start;font-weight:400;font-size:13px;line-height:17px;color:rgba(20,20,20,.5);letter-spacing:-.2px}
 .fa .ft b{font-weight:600;font-size:16px;line-height:20px;color:#141414;letter-spacing:-.3px}
-.arr{display:inline-block;width:16px;height:16px;margin-left:4px;vertical-align:2px}
+.arr{display:inline-block;width:.66em;height:.66em;margin-left:.16em;vertical-align:baseline;overflow:visible}
 .chip .fuel{position:absolute;left:5px;top:6px;font-size:27px;line-height:30px;transition:filter .2s,opacity .2s}
 .chip[aria-pressed="false"]{color:var(--blue)}
 .chip[aria-pressed="false"] .ci img{filter:none;opacity:1;transform:none}
