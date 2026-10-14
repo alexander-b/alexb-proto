@@ -239,3 +239,4 @@ X6 = r'''
 #pcBar.docked .pb:not(.go){background:#fff;box-shadow:0 0 0 .5px rgba(137,137,137,.25),0 2px 8px rgba(0,0,0,.1)}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X6 + '\n@media (prefers-reduced-motion: reduce){')
+rep('@media (prefers-reduced-motion: reduce){', '.nw-x,.nw.y .nw-x{background:rgba(0,0,0,.06);color:#141414}\n.nw-x .ic{opacity:.55}\n@media (prefers-reduced-motion: reduce){')
