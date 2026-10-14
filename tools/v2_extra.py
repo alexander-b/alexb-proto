@@ -123,3 +123,68 @@ X3 = r'''
 #filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1) drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff);opacity:.55}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X3 + '\n@media (prefers-reduced-motion: reduce){')
+
+# ---------- round 4 ----------
+BM_FILL = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>'
+rep('<button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>',
+    '<button class="bc" id="barFav" aria-label="Мои места"><span class="ic">' + BM_FILL + '</span><span class="bcn" id="savedN">1</span></button>')
+rep('<button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span></button>',
+    '<button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span><span class="bcn">4</span></button>')
+rep("$('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });",
+    "$('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });\nsetInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 400);")
+
+# only me on the map; everything else comes from the filters; friends hidden for now
+rep("const layers = {friends:true, coffee:true, places:true, fuel:false};", "const layers = {friends:false, coffee:true, places:true, fuel:false};")
+rep("const vis = m.layer==='friends' ? layers.friends : only ? m.layer===only : !['fuel','bus','pharm'].includes(m.layer);",
+    "const vis = m.id===selId || (m.layer==='friends' ? layers.friends : only ? (m.layer===only || (only==='places' && m.layer==='picks')) : false);")
+rep("function selectPin(id){\n  selId = id;", "function selectPin(id){\n  selId = id; applyLayers();")
+
+# three sheet heights: mini (just the grabber above the tab bar) → peek → full
+rep("let sheetState = 'peek';", "let sheetState = 'peek', miniTop = 700;")
+rep("  peekTop = Math.round(H - (306 + SAB));", "  peekTop = Math.round(H - (306 + SAB));\n  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 34));")
+rep("  setSheet(state==='full' ? fullTop : peekTop, true);", "  setSheet(state==='full' ? fullTop : state==='mini' ? miniTop : peekTop, true);\n  if (!live) fitMap();")
+rep("  if (y > peekTop) y = peekTop + Math.min(30, (y-peekTop)*0.3);", "  if (y > miniTop) y = miniTop + Math.min(30, (y-miniTop)*0.3);")
+rep("  snapSheet(v < -0.35 ? 'full' : v > 0.35 ? 'peek' : (sheetTop < (fullTop+peekTop)/2 ? 'full' : 'peek'));",
+    """  // always pass through the middle height: full ⇄ peek ⇄ mini
+  const from = d.top0 <= fullTop + 30 ? 'full' : d.top0 >= miniTop - 30 ? 'mini' : 'peek';
+  let to;
+  if (Math.abs(v) > .35){
+    if (v < 0) to = from==='mini' ? 'peek' : 'full';
+    else to = from==='full' ? 'peek' : 'mini';
+  } else {
+    const opts = [['full', fullTop], ['peek', peekTop], ['mini', miniTop]];
+    to = opts.reduce((a, b) => Math.abs(b[1]-sheetTop) < Math.abs(a[1]-sheetTop) ? b : a)[0];
+    if (from==='full' && to==='mini') to = 'peek';
+    if (from==='mini' && to==='full') to = 'peek';
+  }
+  snapSheet(to);""")
+rep("  morph(y);\n}", "  morph(y);\n  const q = clamp((y - peekTop)/Math.max(1, miniTop - peekTop), 0, 1);   // fade the summary away toward mini\n  sumEl.style.opacity = 1 - q; fastWrap.style.opacity = sheetP > 0 ? fastWrap.style.opacity : String(1 - q);\n}")
+rep("$('#sheetGrab').addEventListener('click', () => snapSheet(sheetState==='full'?'peek':'full'));",
+    "$('#sheetGrab').addEventListener('click', () => snapSheet(sheetState==='full' ? 'peek' : sheetState==='mini' ? 'peek' : 'full'));")
+rep("function coverBottom(){ return peekTop + 40; }", "function coverBottom(){ return (sheetState==='mini' ? miniTop : peekTop) + 40; }")
+
+X4 = r'''
+/* chips: black labels, lighter icons, more air on the left */
+.chip{color:#141414;padding-left:9px;gap:4px}
+.chip[aria-pressed="false"]{color:#141414}
+#filters.picked .chip[aria-pressed="false"]{color:rgba(20,20,20,.45)}
+.chip .ci{width:42px;height:42px;margin:0 1px 0 -3px}
+.chip .ci img{width:42px;height:42px}
+.chip .fuel{left:7px;top:8px;font-size:22px;line-height:26px}
+.chip .chk{left:18px;top:20px;transform:scale(.85)}
+.chip[aria-pressed="false"] .chk{transform:scale(.3)}
+/* tab bar counters */
+.bc{position:absolute;top:0}
+.bcn{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);min-width:18px;height:18px;padding:0 6px;box-sizing:border-box;border-radius:9px;background:#fff;
+  font-weight:600;font-size:11px;line-height:18px;color:#141414;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+/* smoother collapse into the small search */
+#searchWrap{display:block}
+#barFav{left:0}#barHelp{right:0}
+#pillBox{position:absolute;top:0;bottom:0;left:64px;right:64px;width:auto;flex:none;margin:0;transition:left .55s cubic-bezier(.32,.72,0,1),right .55s cubic-bezier(.32,.72,0,1)}
+#searchBtn .sl{transition:opacity .3s,transform .5s cubic-bezier(.32,.72,0,1)}
+.bc{transition:transform .5s cubic-bezier(.32,.72,0,1),opacity .35s}
+#searchWrap.mini #pillBox{left:calc(50% - 96px);right:calc(50% - 96px);width:auto;flex:none;margin:0}
+#searchWrap.mini #barFav{transform:translateX(24px) scale(.5);opacity:0;pointer-events:none}
+#searchWrap.mini #barHelp{transform:translateX(-24px) scale(.5);opacity:0;pointer-events:none}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X4 + '\n@media (prefers-reduced-motion: reduce){')

@@ -596,6 +596,30 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .chip .fuel{filter:drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff) drop-shadow(0 1px 2px rgba(0,0,0,.18))}
 #filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1) drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff);opacity:.55}
 
+
+/* chips: black labels, lighter icons, more air on the left */
+.chip{color:#141414;padding-left:9px;gap:4px}
+.chip[aria-pressed="false"]{color:#141414}
+#filters.picked .chip[aria-pressed="false"]{color:rgba(20,20,20,.45)}
+.chip .ci{width:42px;height:42px;margin:0 1px 0 -3px}
+.chip .ci img{width:42px;height:42px}
+.chip .fuel{left:7px;top:8px;font-size:22px;line-height:26px}
+.chip .chk{left:18px;top:20px;transform:scale(.85)}
+.chip[aria-pressed="false"] .chk{transform:scale(.3)}
+/* tab bar counters */
+.bc{position:absolute;top:0}
+.bcn{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);min-width:18px;height:18px;padding:0 6px;box-sizing:border-box;border-radius:9px;background:#fff;
+  font-weight:600;font-size:11px;line-height:18px;color:#141414;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+/* smoother collapse into the small search */
+#searchWrap{display:block}
+#barFav{left:0}#barHelp{right:0}
+#pillBox{position:absolute;top:0;bottom:0;left:64px;right:64px;width:auto;flex:none;margin:0;transition:left .55s cubic-bezier(.32,.72,0,1),right .55s cubic-bezier(.32,.72,0,1)}
+#searchBtn .sl{transition:opacity .3s,transform .5s cubic-bezier(.32,.72,0,1)}
+.bc{transition:transform .5s cubic-bezier(.32,.72,0,1),opacity .35s}
+#searchWrap.mini #pillBox{left:calc(50% - 96px);right:calc(50% - 96px);width:auto;flex:none;margin:0}
+#searchWrap.mini #barFav{transform:translateX(24px) scale(.5);opacity:0;pointer-events:none}
+#searchWrap.mini #barHelp{transform:translateX(-24px) scale(.5);opacity:0;pointer-events:none}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -661,10 +685,10 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
         <path id="waveGlow" fill="url(#wgrad)" filter="url(#wglow)" opacity="0"/>
         <path id="wavePath" fill="url(#wgrad)" opacity="0"/>
       </svg>
-      <button class="bc" id="barFav" aria-label="Мои места"><span class="ic" data-ic="bm"></span></button>
+      <button class="bc" id="barFav" aria-label="Мои места"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="bcn" id="savedN">1</span></button>
       <div id="pillBox"><svg id="comet" aria-hidden="true"><defs><filter id="cglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter></defs><g id="cometGlow" filter="url(#cglow)"></g><g id="cometCore"></g></svg>
         <button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><span class="sl">Поиск места</span><img src="img/search.png" alt=""></button></div>
-      <button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span></button>
+      <button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span><span class="bcn">4</span></button>
     </div>
 
     <div id="scrim"></div>
@@ -761,6 +785,7 @@ function measure(){
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
   peekTop = Math.round(H - (306 + SAB));
+  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 34));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
@@ -861,7 +886,7 @@ const MW=412, MH=652;
 const mapEl=$('#map'), mapLayer=$('#mapLayer');
 const ms = {s:1, tx:0, ty:-51};
 let sMin=1, sMax=3, mapReady=false, sheetTop=576;
-function coverBottom(){ return peekTop + 40; }
+function coverBottom(){ return (sheetState==='mini' ? miniTop : peekTop) + 40; }
 function bounds(s){ return {minX: W - MW*s, maxX: 0, minY: coverBottom() - MH*s, maxY: 0}; }
 function clampMap(st){ st.s = clamp(st.s, sMin, sMax); const b = bounds(st.s); st.tx = clamp(st.tx, b.minX, b.maxX); st.ty = clamp(st.ty, b.minY, b.maxY); return st; }
 function fitMap(){
@@ -976,7 +1001,7 @@ function paintPin(m, others, n){
 }
 
 const markers = [];
-const layers = {friends:true, coffee:true, places:true, fuel:false};
+const layers = {friends:false, coffee:true, places:true, fuel:false};
 let only = null;   // v2: one category at a time
 // world coords = design frame coords + 51 (the static map image starts 51px above the frame)
 const MDEF = [
@@ -1036,7 +1061,7 @@ function mkMarker(d, i){
 }
 function buildMarkers(){ MDEF.forEach((d,i) => mkMarker(d,i)); markers.find(m=>m.id==='me').el.style.zIndex = 3; markers.filter(m=>m.type==='fr').forEach(m => m.el.style.zIndex = 4); applyLayers(); }
 function applyLayers(){
-  for (const m of markers){ if (!m.layer) continue; const vis = m.layer==='friends' ? layers.friends : only ? m.layer===only : !['fuel','bus','pharm'].includes(m.layer); m.el.classList.toggle('off', !vis || !!m.hidden); }
+  for (const m of markers){ if (!m.layer) continue; const vis = m.id===selId || (m.layer==='friends' ? layers.friends : only ? (m.layer===only || (only==='places' && m.layer==='picks')) : false); m.el.classList.toggle('off', !vis || !!m.hidden); }
   $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.layer===only))); $('#filters').classList.toggle('picked', !!only);
   $$('.tile[data-layer]').forEach(t => t.classList.toggle('on', layers[t.dataset.layer]));
   cluster();
@@ -1123,7 +1148,7 @@ function cluster(){
   }
 }
 function selectPin(id){
-  selId = id;
+  selId = id; applyLayers();
   $('#markers').classList.toggle('focus', !!id);
   cluster();
 }
@@ -1266,7 +1291,7 @@ function lenaLoop(t){
 /* ---------------- sheet: summary ⇄ explore ---------------- */
 const sheet = $('#sheet'), botCtl = $('#botCtl'), botFade = $('#botFade'), sScroll = $('#sheetScroll');
 const fastWrap = $('#fastWrap'), sumMore = $('#sumMore'), xChipsWrap = $('#xChipsWrap'), explore = $('#explore'), sumEl = $('#sum');
-let sheetState = 'peek';
+let sheetState = 'peek', miniTop = 700;
 let sheetP = 0, lastSt = 0;
 function morph(y){ sheetP = clamp((peekTop - y)/(peekTop - fullTop), 0, 1); head(); }
 // p: how far the sheet is open; c: how far Explore is scrolled (the big title shrinks into a grey caption)
@@ -1305,11 +1330,14 @@ function setSheet(y, anim){
   $('#topCtl').style.opacity = clamp((y - fullTop - 40)/140, 0, 1);
   $('#topCtl').style.pointerEvents = y < fullTop + 80 ? 'none' : '';
   morph(y);
+  const q = clamp((y - peekTop)/Math.max(1, miniTop - peekTop), 0, 1);   // fade the summary away toward mini
+  sumEl.style.opacity = 1 - q; fastWrap.style.opacity = sheetP > 0 ? fastWrap.style.opacity : String(1 - q);
 }
 function snapSheet(state){
   sheetState = state; sheet.classList.toggle('full', state==='full');
   if (state!=='full'){ sScroll.scrollTop = 0; lastSt = 0; sw.classList.remove('mini'); }
-  setSheet(state==='full' ? fullTop : peekTop, true);
+  setSheet(state==='full' ? fullTop : state==='mini' ? miniTop : peekTop, true);
+  if (!live) fitMap();
 }
 let sd=null, suppressClick=false;
 sheet.addEventListener('pointerdown', e => {
@@ -1328,7 +1356,7 @@ sheet.addEventListener('pointermove', e => {
   }
   let y = sd.top0 + dy;
   if (y < fullTop) y = fullTop - (fullTop-y)*0.25;
-  if (y > peekTop) y = peekTop + Math.min(30, (y-peekTop)*0.3);
+  if (y > miniTop) y = miniTop + Math.min(30, (y-miniTop)*0.3);
   sd.hist.push({y:p.y,t:performance.now()}); if (sd.hist.length>5) sd.hist.shift();
   setSheet(y, false);
 });
@@ -1338,11 +1366,23 @@ function sheetUp(e){
   if (!d.drag) return;
   suppressClick = true; setTimeout(()=>suppressClick=false, 60);
   const a=d.hist[0], b=d.hist[d.hist.length-1], v=(b.y-a.y)/Math.max(16,b.t-a.t);
-  snapSheet(v < -0.35 ? 'full' : v > 0.35 ? 'peek' : (sheetTop < (fullTop+peekTop)/2 ? 'full' : 'peek'));
+  // always pass through the middle height: full ⇄ peek ⇄ mini
+  const from = d.top0 <= fullTop + 30 ? 'full' : d.top0 >= miniTop - 30 ? 'mini' : 'peek';
+  let to;
+  if (Math.abs(v) > .35){
+    if (v < 0) to = from==='mini' ? 'peek' : 'full';
+    else to = from==='full' ? 'peek' : 'mini';
+  } else {
+    const opts = [['full', fullTop], ['peek', peekTop], ['mini', miniTop]];
+    to = opts.reduce((a, b) => Math.abs(b[1]-sheetTop) < Math.abs(a[1]-sheetTop) ? b : a)[0];
+    if (from==='full' && to==='mini') to = 'peek';
+    if (from==='mini' && to==='full') to = 'peek';
+  }
+  snapSheet(to);
 }
 sheet.addEventListener('pointerup', sheetUp); sheet.addEventListener('pointercancel', sheetUp);
 sheet.addEventListener('click', e => { if (suppressClick){ e.stopPropagation(); e.preventDefault(); } }, true);
-$('#sheetGrab').addEventListener('click', () => snapSheet(sheetState==='full'?'peek':'full'));
+$('#sheetGrab').addEventListener('click', () => snapSheet(sheetState==='full' ? 'peek' : sheetState==='mini' ? 'peek' : 'full'));
 $('#sumTitle').addEventListener('click', () => { if (sheetState!=='full') snapSheet('full'); });
 $$('#sumMore button').forEach(b => b.addEventListener('click', () => {
   touch(); setCat('main', false); snapSheet('full');
@@ -1748,6 +1788,7 @@ function playWave(entrance){
   waveRAF = requestAnimationFrame(step);
 }
 $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });
+setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 400);
 
 $('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 let waveTimer=null;
