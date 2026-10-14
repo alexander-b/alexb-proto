@@ -169,5 +169,6 @@ $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места
 setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 500);
 $('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 '''+s[j:]
+exec(open('/home/claude/alexb-proto/tools/v2_extra.py',encoding='utf-8').read())
 open(dst,'w',encoding='utf-8').write(s)
 print('ok', len(s))

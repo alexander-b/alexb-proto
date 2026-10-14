@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#FFFFFF">
 <link rel="apple-touch-icon" href="app-icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png">
-<link rel="manifest" href="manifest.webmanifest?v=3">
+<link rel="manifest" href="v2/manifest.webmanifest">
 <link rel="preconnect" href="https://mapgl.2gis.com" crossorigin><link rel="preconnect" href="https://catalog.api.2gis.com" crossorigin>
 <link rel="preconnect" href="https://storage.yandexcloud.net"><link rel="preconnect" href="https://opis-cdn.tinkoffjournal.ru"><link rel="preconnect" href="https://images.unsplash.com">
 <link rel="preload" href="https://mapgl.2gis.com/api/js/v1" as="script">
@@ -561,6 +561,24 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 
 #sField{background:#fff}
 
+
+#filters{display:flex}
+#btnLocate{bottom:72px}
+#fastWrap{position:static;overflow:visible;flex:none}
+#fast{height:72px;padding:14px 16px 4px;gap:8px;overflow-y:visible}
+.fa{height:64px;border-radius:20px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04);padding:0 16px 0 12px;gap:10px;flex:none;width:auto;flex-direction:row;align-items:center;justify-content:flex-start}
+.fa .fi{width:40px;height:40px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;flex:none}
+.fa .ic{opacity:1;color:#141414}
+.fa .ft{display:flex;flex-direction:column;align-items:flex-start;font-weight:400;font-size:13px;line-height:17px;color:rgba(20,20,20,.5);letter-spacing:-.2px}
+.fa .ft b{font-weight:600;font-size:16px;line-height:20px;color:#141414;letter-spacing:-.3px}
+.arr{display:inline-block;width:.6em;height:.6em;margin-left:.14em;vertical-align:.06em}
+.chip .fuel{position:absolute;left:5px;top:6px;font-size:27px;line-height:30px;transition:filter .2s,opacity .2s}
+.chip[aria-pressed="false"]{color:var(--blue)}
+.chip[aria-pressed="false"] .ci img{filter:none;opacity:1;transform:none}
+#filters.picked .chip[aria-pressed="false"]{color:rgba(20,20,20,.55)}
+#filters.picked .chip[aria-pressed="false"] .ci img,#filters.picked .chip[aria-pressed="false"] .fuel{filter:grayscale(1);opacity:.55}
+#sumMore .s2::after{content:none!important}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -585,15 +603,11 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div class="fade" id="botFade">
         <button class="ctl" id="btnLocate" aria-label="Где я"><span class="ic" data-ic="locpt"></span></button>
         <svg width="0" height="0" style="position:absolute"><defs><filter id="chkSh" x="0" y="0" width="32" height="27" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".12"/></filter></defs></svg>
-        <div id="fastWrap"><div id="fast" class="hscroll">
-        <button class="fa" data-toast="Домой: 2 ч 45 мин, пробки 9 баллов"><span class="ic" data-ic="home"></span>2 ч 45 мин</button>
-        <button class="fa" data-toast="На работу: 45 мин"><span class="ic" data-ic="brief"></span>45 мин</button>
-        <button class="fa" data-toast="Красный проспект, 8: маршрут строится"><span class="ic" data-ic="clock"></span>Красный проспект, 8</button>
-      </div></div>
+        
         <div id="filters" role="group" aria-label="Слои на карте">
-          <button class="chip" data-layer="coffee" aria-pressed="true"><span class="ci"><img src="img/chip_cup0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Кофейни</button>
-          <button class="chip" data-layer="friends" aria-pressed="true"><span class="ci"><img src="img/chip_fr0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Друзья</button>
-          <button class="chip" data-layer="places" aria-pressed="true"><span class="ci"><img src="img/chip_heart.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Мои места</button>
+          <button class="chip" data-layer="coffee" aria-pressed="false"><span class="ci"><img src="img/chip_cup0.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Кофейни</button>
+          
+          <button class="chip" data-layer="places" aria-pressed="false"><span class="ci"><img src="img/chip_heart.png" alt=""><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>Мои места</button><button class="chip" data-layer="fuel" aria-pressed="false"><span class="ci"><span class="fuel">⛽</span><svg class="chk" width="32" height="27" viewBox="0 0 32 27" fill="none"><g filter="url(#chkSh)"><path d="M8 11L14 16.2L23.5 7" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/><path d="M8 11L14 16.2L23.5 7" stroke="#63D638" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></g></svg></span>АЗС</button>
         </div>
       </div>
     </div>
@@ -604,10 +618,15 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div id="sum">
         <div id="sumDate2">7 октября</div><h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
         <div id="sumMore">
-          <button class="s1" data-go="main" id="sumPicks">5+ подборок мест,</button>
-          <button class="s2" data-go="news" id="sumNews">2 новости района</button>
+          <button class="s1" data-go="main" id="sumPicks">5+ подборок мест<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>,</button>
+          <button class="s2" data-go="news" id="sumNews">2 новости района<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
+      <div id="fastWrap"><div id="fast" class="hscroll">
+        <button class="fa" data-toast="Домой: 2 ч 45 мин, пробки 9 баллов"><span class="fi"><span class="ic" data-ic="home"></span></span><span class="ft"><b>2 ч 45 мин</b>Домой</span></button>
+        <button class="fa" data-toast="На работу: 45 мин"><span class="fi"><span class="ic" data-ic="brief"></span></span><span class="ft"><b>45 мин</b>На работу</span></button>
+        <button class="fa" data-toast="Красный проспект, 8: маршрут строится"><span class="fi"><span class="ic" data-ic="clock"></span></span><span class="ft"><b>Красный пр., 8</b>Недавнее</span></button>
+      </div></div>
       <div id="xChipsWrap"><div id="xChips" class="hscroll" role="tablist" aria-label="Подборки">
         <button class="xc text" role="tab" data-cat="main" aria-selected="true">Главная</button>
         <button class="xc" role="tab" data-cat="autumn" aria-selected="false"><img src="img/em_pumpkin.png" alt="">Осень</button>
@@ -724,7 +743,7 @@ function measure(){
   const barB = Math.max(12, SAB - 14);
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
-  peekTop = Math.round(H - (262 + SAB));
+  peekTop = Math.round(H - (334 + SAB));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
@@ -784,6 +803,9 @@ const PLACES = {
 };
 const U = id => `https://images.unsplash.com/photo-${id}?w=720&q=62&auto=format&fit=crop`;
 const COFFEE_PH = ['1521017432531-fbd92d768814','1545418314-7ce0b9b53901','1542181961-9590d0c79dab','1565650839149-2c48a094196c','1588253137728-1e4dd0fe9a93','1572982270699-473dfa34d7e7'].map(U);
+const FUEL_ICON = (() => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('⛽', 48, 54); return c.toDataURL(); } catch(e){ return 'img/em_cup.png'; } })();
+for (const [id, name, addr] of [['fuel1','Лукойл','Садовническая наб., 7'],['fuel2','Газпромнефть','Котельническая наб., 1'],['fuel3','Роснефть','Яузский б-р, 2']])
+  PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_ICON, contain:true, rating:'4.4', count:310, react:12, check:'АИ-95 · 62 ₽', hours:'круглосуточно', today:'Открыто круглосуточно', phone:'8 800 100-09-11', site:'2gis.ru', desc:'Кофе с собой, мойка и магазин у кассы', feats:[], cats:[]};
 const GALLERY = {
   bereza:['img/ph_hero.jpg','img/ph_bereza.jpg','img/bereza.jpg'],
   carniceria:[MM+'2025/01/carneceria-1024x538.jpg', TJ+'01-best-new-rest-msk-2025.jpg'],
@@ -809,6 +831,7 @@ let newsLeft = NEWS.slice();
 const saved = new Set(['korobok']);
 
 /* ---------------- map ---------------- */
+const ARR = '<svg class="arr" viewBox="0 0 16 16" fill="none"><path d="M3 14L13 4M13 12V4H4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const MW=412, MH=652;
 const mapEl=$('#map'), mapLayer=$('#mapLayer');
 const ms = {s:1, tx:0, ty:-51};
@@ -928,7 +951,8 @@ function paintPin(m, others, n){
 }
 
 const markers = [];
-const layers = {friends:true, coffee:true, places:true};
+const layers = {friends:true, coffee:true, places:true, fuel:false};
+let only = null;   // v2: one category at a time
 // world coords = design frame coords + 51 (the static map image starts 51px above the frame)
 const MDEF = [
   {id:'me', type:'me', x:195, y:274+51},
@@ -940,6 +964,9 @@ const MDEF = [
   {id:'bistro', layer:'places', type:'gp', x:96, y:330+51},
   {id:'dodo', layer:'places', type:'gp', x:287, y:160+51, sub:'7 мин'},
   {id:'korobok', layer:'places', type:'gp', x:36, y:282+51},
+  {id:'fuel1', layer:'fuel', type:'gp', x:330, y:420},
+  {id:'fuel2', layer:'fuel', type:'gp', x:70, y:470},
+  {id:'fuel3', layer:'fuel', type:'gp', x:250, y:150},
   {id:'bereza', layer:'picks', type:'gp'},
   {id:'carniceria', layer:'picks', type:'gp'},
   {id:'masa', layer:'picks', type:'gp'},
@@ -979,8 +1006,8 @@ function mkMarker(d, i){
 }
 function buildMarkers(){ MDEF.forEach((d,i) => mkMarker(d,i)); markers.find(m=>m.id==='me').el.style.zIndex = 3; markers.filter(m=>m.type==='fr').forEach(m => m.el.style.zIndex = 4); applyLayers(); }
 function applyLayers(){
-  for (const m of markers){ if (!m.layer) continue; m.el.classList.toggle('off', (m.layer!=='picks' && !layers[m.layer]) || !!m.hidden); }
-  $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(layers[c.dataset.layer])));
+  for (const m of markers){ if (!m.layer) continue; const vis = m.layer==='friends' ? layers.friends : only ? m.layer===only : m.layer!=='fuel'; m.el.classList.toggle('off', !vis || !!m.hidden); }
+  $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.layer===only))); $('#filters').classList.toggle('picked', !!only);
   $$('.tile[data-layer]').forEach(t => t.classList.toggle('on', layers[t.dataset.layer]));
   cluster();
 }
@@ -1193,9 +1220,9 @@ mapEl.addEventListener('pointerup', endPointer);
 mapEl.addEventListener('pointercancel', endPointer);
 mapEl.addEventListener('wheel', e => { if (live) return; e.preventDefault(); touch(); const p=local(e); zoomAt(p.x,p.y, Math.exp(-e.deltaY*0.0022), false); }, {passive:false});
 
-const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места'};
-function toggleLayer(l){ layers[l] = !layers[l]; applyLayers(); toast(`${LNAME[l]}: ${layers[l]?'показаны на карте':'скрыты'}`); }
-$$('.chip').forEach(c => c.addEventListener('click', () => { touch(); toggleLayer(c.dataset.layer); c.classList.remove('pop'); void c.offsetWidth; if (layers[c.dataset.layer]) c.classList.add('pop'); }));
+const LNAME = {friends:'Друзья', coffee:'Кофейни', places:'Мои места', fuel:'АЗС'};
+function toggleLayer(l){ only = only===l ? null : l; applyLayers(); toast(only ? `Показываем: ${LNAME[l]}` : 'Показываем всё рядом'); }
+$$('.chip').forEach(c => c.addEventListener('click', () => { touch(); toggleLayer(c.dataset.layer); c.classList.remove('pop'); void c.offsetWidth; if (only===c.dataset.layer) c.classList.add('pop'); }));
 
 // the moving friend drifts along the street
 function lenaLoop(t){
@@ -1215,6 +1242,7 @@ function morph(y){ sheetP = clamp((peekTop - y)/(peekTop - fullTop), 0, 1); head
 // p: how far the sheet is open; c: how far Explore is scrolled (the big title shrinks into a grey caption)
 function head(){
   const p = sheetP, c = sheetState==='full' && p > .98 ? clamp(sScroll.scrollTop/90, 0, 1) : 0;
+  fastWrap.style.height = (72*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);
   $('#sumDate2').style.opacity = clamp(1 - p*2.5, 0, 1); $('#sumDate2').style.height = (24*(1-p)) + 'px';
   sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';
   const t = $('#sumTitle');
@@ -1327,8 +1355,8 @@ function watchIdle(){
 }
 function updateSummary(){
   const n = newsLeft.length;
-  $('#sumNews').textContent = n ? `${n} ${n===1?'новость':'новости'} района` : 'новостей нет';
-  $('#sumPicks').textContent = n ? '5+ подборок мест,' : '5+ подборок мест';
+  $('#sumNews').innerHTML = (n ? `${n} ${n===1?'новость':'новости'} района` : 'новостей нет') + ARR;
+  $('#sumPicks').innerHTML = '5+ подборок мест' + ARR + (n ? ',' : '');
 }
 function setCat(c, animate){
   if (c===cat && !animate) { renderExplore(); return; }
