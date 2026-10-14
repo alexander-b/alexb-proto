@@ -653,6 +653,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .nw-x .ic{opacity:.55}
 .xc.pop::before,.xc.pop::after{animation:none;opacity:0}
 .xc .ccomet{position:absolute;left:-8px;top:-8px;overflow:visible;pointer-events:none;z-index:4}
+#pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -817,7 +818,7 @@ function measure(){
   const barB = Math.max(12, SAB - 14);
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
-  peekTop = Math.round(H - (306 + SAB));
+  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 18 - (16 + 20 + 30 + 60 + 72)); }
   miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 52));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');

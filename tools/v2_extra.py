@@ -272,3 +272,8 @@ rep("function chipPop(el){", r"""function chipComet(el){
 }
 function chipPop(el){
   if (el.classList.contains('xc') && !reduced) chipComet(el);""")
+
+# ---------- round 7 ----------
+# peek height from the content itself, so the gap above the search bar is the same in Safari and on the home screen
+rep('  peekTop = Math.round(H - (306 + SAB));', '  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 18 - (16 + 20 + 30 + 60 + 72)); }')
+rep('@media (prefers-reduced-motion: reduce){', '#pcBar.docked .pb:not(.go){background:var(--beige);box-shadow:none}\n@media (prefers-reduced-motion: reduce){')
