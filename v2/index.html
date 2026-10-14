@@ -620,6 +620,19 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 #searchWrap.mini #barFav{transform:translateX(24px) scale(.5);opacity:0;pointer-events:none}
 #searchWrap.mini #barHelp{transform:translateX(-24px) scale(.5);opacity:0;pointer-events:none}
 
+
+#miniCap{position:absolute;left:0;right:0;top:18px;text-align:center;font-weight:600;font-size:14px;line-height:18px;letter-spacing:-.2px;color:rgba(20,20,20,.45);opacity:0;pointer-events:none}
+#search{background:#fff}
+#sField{background:#fff}
+/* chip spark sits above the chip, quicker */
+.xc{isolation:isolate}
+.xc::before,.xc::after{z-index:3}
+.xc::before{inset:0;padding:2.5px;border-radius:25px}
+.xc::after{inset:-3px;padding:5px;border-radius:28px;filter:blur(3px)}
+.xc.pop::before,.xc.pop::after{animation:spark1 .7s cubic-bezier(.3,.1,.3,1) forwards}
+.xc.pop{animation:xcPop .32s var(--spring)}
+@keyframes spark1{0%{--ang:-40deg;opacity:1}85%{opacity:1}100%{--ang:340deg;opacity:0}}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -654,7 +667,7 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
     </div>
 
     <section id="sheet" aria-label="Для вас">
-      <div class="grab" id="sheetGrab"></div>
+      <div class="grab" id="sheetGrab"></div><div id="miniCap">Для вас сегодня</div>
       
       <div id="sum">
         <h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
@@ -685,10 +698,10 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
         <path id="waveGlow" fill="url(#wgrad)" filter="url(#wglow)" opacity="0"/>
         <path id="wavePath" fill="url(#wgrad)" opacity="0"/>
       </svg>
-      <button class="bc" id="barFav" aria-label="Мои места"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="bcn" id="savedN">1</span></button>
+      <button class="bc" id="barFav" aria-label="Мои места"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 5.16V18.24C19 19.47 19 20.08 18.78 20.44C17.18 22.94 13.01 17.24 12 16.31C10.98 17.24 6.82 22.94 5.22 20.44C5 20.08 5 19.47 5 18.24V5.16C5 4.4 5 4.02 5.13 3.73C5.24 3.48 5.42 3.27 5.64 3.14C5.89 3 6.22 3 6.87 3H17.13C17.78 3 18.11 3 18.36 3.14C18.58 3.27 18.76 3.48 18.87 3.73C19 4.02 19 4.4 19 5.16Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span></button>
       <div id="pillBox"><svg id="comet" aria-hidden="true"><defs><filter id="cglow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4.5"/></filter></defs><g id="cometGlow" filter="url(#cglow)"></g><g id="cometCore"></g></svg>
         <button id="searchBtn" aria-label="Поиск места"><span class="sbg"></span><span class="sl">Поиск места</span><img src="img/search.png" alt=""></button></div>
-      <button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span><span class="bcn">4</span></button>
+      <button class="bc" id="barHelp" aria-label="Друзья"><span class="ic" data-ic="person"></span></button>
     </div>
 
     <div id="scrim"></div>
@@ -785,7 +798,7 @@ function measure(){
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
   peekTop = Math.round(H - (306 + SAB));
-  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 34));
+  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 52));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
   $('#sheet').style.height = (H - fullTop + 40) + 'px';
@@ -1331,7 +1344,7 @@ function setSheet(y, anim){
   $('#topCtl').style.pointerEvents = y < fullTop + 80 ? 'none' : '';
   morph(y);
   const q = clamp((y - peekTop)/Math.max(1, miniTop - peekTop), 0, 1);   // fade the summary away toward mini
-  sumEl.style.opacity = 1 - q; fastWrap.style.opacity = sheetP > 0 ? fastWrap.style.opacity : String(1 - q);
+  sumEl.style.opacity = 1 - q; $('#miniCap').style.opacity = clamp(q*1.6 - .6, 0, 1); fastWrap.style.opacity = sheetP > 0 ? fastWrap.style.opacity : String(1 - q);
 }
 function snapSheet(state){
   sheetState = state; sheet.classList.toggle('full', state==='full');
@@ -1444,7 +1457,8 @@ function chipPop(el){
   setTimeout(() => el.querySelectorAll('.spark').forEach(s => s.remove()), 900);
   if (navigator.vibrate) try { navigator.vibrate(8); } catch(e){}
 }
-$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); chipPop(c); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });
+$('#xChips').addEventListener('pointerdown', e => { const c = e.target.closest('.xc'); if (c) chipPop(c); });   // respond on touch, not on release
+$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });
 explore.addEventListener('click', e => {
   touch();
   const x = e.target.closest('.nw-x');
@@ -1788,7 +1802,7 @@ function playWave(entrance){
   waveRAF = requestAnimationFrame(step);
 }
 $('#barFav').addEventListener('click', () => { touch(); toast(`Мои места: ${saved.size} сохранено`); });
-setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 400);
+
 
 $('#barHelp').addEventListener('click', () => { touch(); toast('4 друга рядом: Аня, Дима, Лена, Катя'); });
 let waveTimer=null;

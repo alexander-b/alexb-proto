@@ -188,3 +188,27 @@ X4 = r'''
 #searchWrap.mini #barHelp{transform:translateX(-24px) scale(.5);opacity:0;pointer-events:none}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X4 + '\n@media (prefers-reduced-motion: reduce){')
+
+# ---------- round 5 ----------
+rep('<span class="bcn" id="savedN">1</span>', '')
+rep('<span class="bcn">4</span>', '')
+rep("setInterval(() => { const n = $('#savedN'); if (n && n.textContent != saved.size) n.textContent = saved.size; }, 400);", "")
+# collapsed sheet keeps a grey hint of what's inside
+rep('<div class="grab" id="sheetGrab"></div>', '<div class="grab" id="sheetGrab"></div><div id="miniCap">Для вас сегодня</div>')
+rep("  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 34));", "  miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 52));")
+rep("  sumEl.style.opacity = 1 - q;", "  sumEl.style.opacity = 1 - q; $('#miniCap').style.opacity = clamp(q*1.6 - .6, 0, 1);")
+X5 = r'''
+#miniCap{position:absolute;left:0;right:0;top:18px;text-align:center;font-weight:600;font-size:14px;line-height:18px;letter-spacing:-.2px;color:rgba(20,20,20,.45);opacity:0;pointer-events:none}
+#search{background:#fff}
+#sField{background:#fff}
+/* chip spark sits above the chip, quicker */
+.xc{isolation:isolate}
+.xc::before,.xc::after{z-index:3}
+.xc.pop::before,.xc.pop::after{animation:spark1 .7s cubic-bezier(.3,.1,.3,1) forwards}
+.xc.pop{animation:xcPop .32s var(--spring)}
+@keyframes spark1{0%{--ang:-40deg;opacity:1}85%{opacity:1}100%{--ang:340deg;opacity:0}}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X5 + '\n@media (prefers-reduced-motion: reduce){')
+rep("$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); chipPop(c); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });",
+    "$('#xChips').addEventListener('pointerdown', e => { const c = e.target.closest('.xc'); if (c) chipPop(c); });   // respond on touch, not on release\n$('#xChips').addEventListener('click', e => { const c = e.target.closest('.xc'); if (!c) return; touch(); if (c.dataset.cat!==cat) setCat(c.dataset.cat, true); });")
+rep(".xc::before,.xc::after{z-index:3}", ".xc::before,.xc::after{z-index:3}\n.xc::before{inset:0;padding:2.5px;border-radius:25px}\n.xc::after{inset:-3px;padding:5px;border-radius:28px;filter:blur(3px)}")
