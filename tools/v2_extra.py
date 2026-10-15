@@ -297,3 +297,62 @@ X7 = r'''
 '''
 rep('@media (prefers-reduced-motion: reduce){', X7 + '\n@media (prefers-reduced-motion: reduce){')
 rep("    else a.m.el.classList.remove('merged');\n    for (const b of grp){", "    else a.m.el.classList.remove('merged');\n    placeMarker(a.m);\n    for (const b of grp){")
+
+# ---------- round 8 ----------
+# fuel stations: invented brands with their own logos (full-bleed tiles, used on pins, cards and in search)
+rep("for (const [id, name, addr] of [['fuel1','Лукойл','Садовническая наб., 7'],['fuel2','Газпромнефть','Котельническая наб., 1'],['fuel3','Роснефть','Яузский б-р, 2']])",
+    """const svgURI = x => 'data:image/svg+xml;utf8,' + encodeURIComponent(x);
+const FUEL_LOGO = {
+  fuel1: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#E5262E"/><path d="M48 17C48 17 25 44 25 59a23 23 0 0 0 46 0C71 44 48 17 48 17Z" fill="#fff"/><path d="M51 44 40 61h8l-3 13 12-18h-8l2-12Z" fill="#E5262E"/></svg>'),
+  fuel2: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#1463F3"/><path d="M48 17C48 17 25 44 25 59a23 23 0 0 0 46 0C71 44 48 17 48 17Z" fill="#fff"/><path d="M33 57q7.5-6 15 0t15 0M35 67q6.5-5 13 0t13 0" fill="none" stroke="#1463F3" stroke-width="4.5" stroke-linecap="round"/></svg>'),
+  fuel3: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#0B7A55"/><path d="M48 16 56 40 80 48 56 56 48 80 40 56 16 48 40 40Z" fill="#FFD21F"/><circle cx="48" cy="48" r="6" fill="#0B7A55"/></svg>'),
+};
+for (const [id, name, addr] of [['fuel1','Искра','Садовническая наб., 7'],['fuel2','Волна','Котельническая наб., 1'],['fuel3','Север','Яузский б-р, 2']])""")
+rep("PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_ICON, contain:true,", "PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_LOGO[id], contain:false,")
+
+# search chips: the tail ones get emoji like the first ones instead of grey line icons
+rep("{k:'health', n:'Аптеки', ic:'health', q:'аптека'}", "{k:'health', n:'Аптеки', emo:'💊', q:'аптека'}")
+rep("{k:'cart', n:'Продукты', ic:'cart', q:'продукты'}", "{k:'cart', n:'Продукты', emo:'🛒', q:'продукты'}")
+rep("{k:'ticket', n:'Афиша', ic:'ticket', q:'афиша'}", "{k:'ticket', n:'Афиша', emo:'🎟️', q:'афиша'}")
+rep("${c.img||c.ic?'':' text'}", "${c.img||c.ic||c.emo?'':' text'}")
+rep("${c.img?`<img src=\"${c.img}\" alt=\"\">`:c.ic?icon(c.ic):''}", "${c.img?`<img src=\"${c.img}\" alt=\"\">`:c.emo?`<span class=\"emo\">${c.emo}</span>`:c.ic?icon(c.ic):''}")
+
+# place card: collapse morphs into the short card while it slides, instead of snapping at the end
+rep("""function goShort(){
+  pop.scrollTop = 0;
+  settleTop(shortTop, () => { pop.classList.remove('expanded'); pop.style.top = ''; const pl = popBody.querySelector('.plate'); if (pl) pl.classList.remove('out'); });""",
+"""function goShort(){
+  pop.scrollTop = 0;
+  const pc = popBody.querySelector('.pc');
+  const clipB = Math.max(0, (pop.offsetTop + pop.offsetHeight) - (shortTop + (pop._shortH || 0)));
+  if (pc){ pc.style.transition = 'none'; pc.style.paddingTop = '20px'; }
+  pop.style.setProperty('--clipB', clipB + 'px');
+  pop.classList.add('collapsing'); void pop.offsetWidth;
+  if (pc){ pc.style.transition = 'margin .42s var(--ease), border-radius .42s var(--ease), padding-top .42s var(--ease), box-shadow .42s var(--ease)'; pc.style.paddingTop = '32px'; }
+  pop.classList.add('collapsing2');
+  settleTop(shortTop, () => {
+    pop.classList.remove('expanded','collapsing','collapsing2'); pop.style.top = '';
+    if (pc){ pc.style.transition = ''; pc.style.paddingTop = ''; }
+    pop.classList.add('justShort'); setTimeout(() => pop.classList.remove('justShort'), 400);
+    const pl = popBody.querySelector('.plate'); if (pl) pl.classList.remove('out');
+  });""")
+rep("""function startExpand(){
+  shortTop = popTopNow();""", """function startExpand(){
+  shortTop = popTopNow(); pop._shortH = pop.offsetHeight;""")
+rep("pop.classList.remove('expanded','dragging'); pop.style.top = ''; pop.style.transition = '';", "pop.classList.remove('expanded','dragging','collapsing','collapsing2'); pop.style.top = ''; pop.style.transition = '';")
+X8 = r'''
+.xc .emo{width:26px;height:26px;font-size:21px;line-height:26px;text-align:center;flex:none;filter:drop-shadow(1.2px 0 0 #fff) drop-shadow(-1.2px 0 0 #fff) drop-shadow(0 1.2px 0 #fff) drop-shadow(0 -1.2px 0 #fff) drop-shadow(0 1px 1.5px rgba(0,0,0,.15))}
+#pop.place.expanded .pc-tabs{max-height:80px;overflow:hidden;transition:max-height .42s var(--ease),margin .42s var(--ease),opacity .2s}
+#pop.place.expanded .pc-hero{transition:margin .42s var(--ease)}
+#pop.place.expanded.collapsing{transition:clip-path .42s var(--ease),background .25s,box-shadow .25s}
+#pop.place.expanded.collapsing .pc-grab{position:absolute;top:0;left:50%;margin:0 0 0 -48px;width:96px;height:24px;background:none}
+#pop.place.expanded.collapsing .pc-ex{animation:pcOut .16s ease forwards}
+#pop.place.expanded.collapsing2{background:transparent;box-shadow:none;clip-path:inset(0 10px var(--clipB) 10px round 32px)}
+#pop.place.expanded.collapsing2 .pc{margin:0 10px;border-radius:32px;background:#fff;box-shadow:0 0 0 .5px rgba(137,137,137,.3),0 6px 30px rgba(0,0,0,.13)}
+#pop.place.expanded.collapsing2 .pc-tabs{max-height:0;margin-top:0;opacity:0}
+#pop.place.expanded.collapsing2 .pc-hero{margin:16px -7px 0}
+#pop.place.justShort .pc-sh{animation:pcIn .28s ease both}
+@keyframes pcOut{to{opacity:0}}
+@keyframes pcIn{from{opacity:0}to{opacity:1}}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X8 + '\n@media (prefers-reduced-motion: reduce){')

@@ -453,7 +453,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .sr{display:flex;gap:12px;align-items:center;padding:8px 16px;width:100%;text-align:left}
 .sr:active{background:var(--card)}
 .sr .ico{width:44px;height:44px;border-radius:50%;background:var(--beige);display:grid;place-items:center;flex:none;overflow:hidden;color:#3D3C3A}
-.sr .ico img{width:100%;height:100%;object-fit:cover}
+.sr .ico{position:relative}
+.sr .ico img{position:static;left:auto;top:auto;width:100%;height:100%;object-fit:cover}
 .sr .ico.sq2{border-radius:14px}
 .sr .ico.fr{box-shadow:0 0 0 2px var(--lime2)}
 .sr .ttl{font-weight:600;font-size:16px;line-height:20px;letter-spacing:-.3px;display:block}
@@ -663,6 +664,21 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 .me .blur{filter:none;background:radial-gradient(circle,rgba(25,156,255,.75) 0,rgba(25,156,255,0) 70%);left:5px;top:9px;width:80px;height:80px}
 #sheet.faded #sheetScroll{-webkit-mask-image:none;mask-image:none}
 .mk{contain:layout style}
+
+
+.xc .emo{width:26px;height:26px;font-size:21px;line-height:26px;text-align:center;flex:none;filter:drop-shadow(1.2px 0 0 #fff) drop-shadow(-1.2px 0 0 #fff) drop-shadow(0 1.2px 0 #fff) drop-shadow(0 -1.2px 0 #fff) drop-shadow(0 1px 1.5px rgba(0,0,0,.15))}
+#pop.place.expanded .pc-tabs{max-height:80px;overflow:hidden;transition:max-height .42s var(--ease),margin .42s var(--ease),opacity .2s}
+#pop.place.expanded .pc-hero{transition:margin .42s var(--ease)}
+#pop.place.expanded.collapsing{transition:clip-path .42s var(--ease),background .25s,box-shadow .25s}
+#pop.place.expanded.collapsing .pc-grab{position:absolute;top:0;left:50%;margin:0 0 0 -48px;width:96px;height:24px;background:none}
+#pop.place.expanded.collapsing .pc-ex{animation:pcOut .16s ease forwards}
+#pop.place.expanded.collapsing2{background:transparent;box-shadow:none;clip-path:inset(0 10px var(--clipB) 10px round 32px)}
+#pop.place.expanded.collapsing2 .pc{margin:0 10px;border-radius:32px;background:#fff;box-shadow:0 0 0 .5px rgba(137,137,137,.3),0 6px 30px rgba(0,0,0,.13)}
+#pop.place.expanded.collapsing2 .pc-tabs{max-height:0;margin-top:0;opacity:0}
+#pop.place.expanded.collapsing2 .pc-hero{margin:16px -7px 0}
+#pop.place.justShort .pc-sh{animation:pcIn .28s ease both}
+@keyframes pcOut{to{opacity:0}}
+@keyframes pcIn{from{opacity:0}to{opacity:1}}
 
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
@@ -891,8 +907,14 @@ const U = id => `https://images.unsplash.com/photo-${id}?w=720&q=62&auto=format&
 const COFFEE_PH = ['1521017432531-fbd92d768814','1545418314-7ce0b9b53901','1542181961-9590d0c79dab','1565650839149-2c48a094196c','1588253137728-1e4dd0fe9a93','1572982270699-473dfa34d7e7'].map(U);
 const emoIcon = e => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(e, 48, 54); return c.toDataURL(); } catch(_){ return 'img/em_cup.png'; } };
 const FUEL_ICON = (() => { try { const c = document.createElement('canvas'); c.width = c.height = 96; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,96,96); x.font = '60px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('⛽', 48, 54); return c.toDataURL(); } catch(e){ return 'img/em_cup.png'; } })();
-for (const [id, name, addr] of [['fuel1','Лукойл','Садовническая наб., 7'],['fuel2','Газпромнефть','Котельническая наб., 1'],['fuel3','Роснефть','Яузский б-р, 2']])
-  PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_ICON, contain:true, rating:'4.4', count:310, react:12, check:'АИ-95 · 62 ₽', hours:'круглосуточно', today:'Открыто круглосуточно', phone:'8 800 100-09-11', site:'2gis.ru', desc:'Кофе с собой, мойка и магазин у кассы', feats:[], cats:[]};
+const svgURI = x => 'data:image/svg+xml;utf8,' + encodeURIComponent(x);
+const FUEL_LOGO = {
+  fuel1: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#E5262E"/><path d="M48 17C48 17 25 44 25 59a23 23 0 0 0 46 0C71 44 48 17 48 17Z" fill="#fff"/><path d="M51 44 40 61h8l-3 13 12-18h-8l2-12Z" fill="#E5262E"/></svg>'),
+  fuel2: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#1463F3"/><path d="M48 17C48 17 25 44 25 59a23 23 0 0 0 46 0C71 44 48 17 48 17Z" fill="#fff"/><path d="M33 57q7.5-6 15 0t15 0M35 67q6.5-5 13 0t13 0" fill="none" stroke="#1463F3" stroke-width="4.5" stroke-linecap="round"/></svg>'),
+  fuel3: svgURI('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#0B7A55"/><path d="M48 16 56 40 80 48 56 56 48 80 40 56 16 48 40 40Z" fill="#FFD21F"/><circle cx="48" cy="48" r="6" fill="#0B7A55"/></svg>'),
+};
+for (const [id, name, addr] of [['fuel1','Искра','Садовническая наб., 7'],['fuel2','Волна','Котельническая наб., 1'],['fuel3','Север','Яузский б-р, 2']])
+  PLACES[id] = {name, kind:'АЗС', addr, hero:'img/cafe.jpg', logo:FUEL_LOGO[id], contain:false, rating:'4.4', count:310, react:12, check:'АИ-95 · 62 ₽', hours:'круглосуточно', today:'Открыто круглосуточно', phone:'8 800 100-09-11', site:'2gis.ru', desc:'Кофе с собой, мойка и магазин у кассы', feats:[], cats:[]};
 for (const [id, name, kind, addr, e, desc] of [
   ['bus1','Остановка «Устьинский мост»','Остановка','Устьинская наб.','🚌','Автобусы м5, 158 и трамвай А'],
   ['bus2','Китай-город','Метро','Славянская пл.','🚇','Пересадка на 6 и 7 линии'],
@@ -1564,7 +1586,7 @@ function openPop(html, withScrim, mode){
 function closePop(){
   if (!popOpen) return; popOpen = false;
   pop.classList.remove('on'); scrim.classList.remove('on'); pcBar.classList.remove('on','docked'); $('#topCtl').classList.remove('hid');
-  setTimeout(() => { if (!popOpen){ pop.classList.remove('expanded','dragging'); pop.style.top = ''; pop.style.transition = ''; } }, 420);
+  setTimeout(() => { if (!popOpen){ pop.classList.remove('expanded','dragging','collapsing','collapsing2'); pop.style.top = ''; pop.style.transition = ''; } }, 420);
   $('#searchWrap').classList.remove('away');
   selectPin(null); curPlace = null;
   snapSheet('peek'); scheduleWave(700);
@@ -1586,11 +1608,23 @@ function goFull(){
 }
 function goShort(){
   pop.scrollTop = 0;
-  settleTop(shortTop, () => { pop.classList.remove('expanded'); pop.style.top = ''; const pl = popBody.querySelector('.plate'); if (pl) pl.classList.remove('out'); });
+  const pc = popBody.querySelector('.pc');
+  const clipB = Math.max(0, (pop.offsetTop + pop.offsetHeight) - (shortTop + (pop._shortH || 0)));
+  if (pc){ pc.style.transition = 'none'; pc.style.paddingTop = '20px'; }
+  pop.style.setProperty('--clipB', clipB + 'px');
+  pop.classList.add('collapsing'); void pop.offsetWidth;
+  if (pc){ pc.style.transition = 'margin .42s var(--ease), border-radius .42s var(--ease), padding-top .42s var(--ease), box-shadow .42s var(--ease)'; pc.style.paddingTop = '32px'; }
+  pop.classList.add('collapsing2');
+  settleTop(shortTop, () => {
+    pop.classList.remove('expanded','collapsing','collapsing2'); pop.style.top = '';
+    if (pc){ pc.style.transition = ''; pc.style.paddingTop = ''; }
+    pop.classList.add('justShort'); setTimeout(() => pop.classList.remove('justShort'), 400);
+    const pl = popBody.querySelector('.plate'); if (pl) pl.classList.remove('out');
+  });
   pcBar.classList.remove('docked'); $('#topCtl').classList.remove('hid');
 }
 function startExpand(){
-  shortTop = popTopNow();
+  shortTop = popTopNow(); pop._shortH = pop.offsetHeight;
   pop.classList.add('expanded','dragging'); pop.style.top = shortTop + 'px';
   pcBar.classList.add('docked');
 }
@@ -1880,9 +1914,9 @@ const SCATS = [
   {k:'food', n:'Поесть', img:'img/em_salad.png', q:'ресторан'},
   {k:'autumn', n:'Осень', img:'img/em_pumpkin.png', q:'пекарня'},
   {k:'fun', n:'Интересное', img:'img/em_ufo.png', q:'бар'},
-  {k:'health', n:'Аптеки', ic:'health', q:'аптека'},
-  {k:'cart', n:'Продукты', ic:'cart', q:'продукты'},
-  {k:'ticket', n:'Афиша', ic:'ticket', q:'афиша'},
+  {k:'health', n:'Аптеки', emo:'💊', q:'аптека'},
+  {k:'cart', n:'Продукты', emo:'🛒', q:'продукты'},
+  {k:'ticket', n:'Афиша', emo:'🎟️', q:'афиша'},
 ];
 const INDEX = () => [
   ...Object.entries(PLACES).map(([id,p]) => ({id, kind:'place', name:p.name, sub:`${p.kind} · ${p.addr}`, dist:fmtDist(distM(p)).replace('м',' м').replace('к м',' км'), img:p.logo || p.cover || p.hero, fb:p.fb, tags:(p.kind+' '+(p.cats||[]).join(' ')).toLowerCase()})),
@@ -1898,7 +1932,7 @@ function row(it, qv){
   return `<button class="sr" data-id="${it.id}" data-kind="${it.kind}">${ico}<span class="grow"><span class="ttl">${name}</span><span class="sub">${esc(it.sub)}</span></span><span class="dist">${it.dist||''}</span></button>`;
 }
 function chipsHTML(){
-  return `<div class="hscroll cats">${SCATS.map(c => `<button class="xc ${c.ic?'ic2':''}${c.img||c.ic?'':' text'}" data-scat="${c.k}" aria-selected="${sCat===c.k}">${c.img?`<img src="${c.img}" alt="">`:c.ic?icon(c.ic):''}${c.n}</button>`).join('')}</div>`;
+  return `<div class="hscroll cats">${SCATS.map(c => `<button class="xc ${c.ic?'ic2':''}${c.img||c.ic||c.emo?'':' text'}" data-scat="${c.k}" aria-selected="${sCat===c.k}">${c.img?`<img src="${c.img}" alt="">`:c.emo?`<span class="emo">${c.emo}</span>`:c.ic?icon(c.ic):''}${c.n}</button>`).join('')}</div>`;
 }
 function renderSearch(){
   const qv = q.value.trim().toLowerCase();
