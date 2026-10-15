@@ -356,3 +356,5 @@ X8 = r'''
 @keyframes pcIn{from{opacity:0}to{opacity:1}}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X8 + '\n@media (prefers-reduced-motion: reduce){')
+# expose the comet for capture/debug
+rep("window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat};", "window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat, playWave};")

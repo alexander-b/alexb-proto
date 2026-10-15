@@ -2047,7 +2047,7 @@ setTimeout(() => {
   const next = () => { if (i >= list.length) return; const im = new Image(); im.referrerPolicy = 'no-referrer'; im.decoding = 'async'; im.onload = im.onerror = next; im.src = list[i++]; };
   for (let k = 0; k < 4; k++) next();
 }, 1200);
-window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat};
+window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat, playWave};
 })();
 </script>
 </body></html>
