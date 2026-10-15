@@ -358,3 +358,32 @@ X8 = r'''
 rep('@media (prefers-reduced-motion: reduce){', X8 + '\n@media (prefers-reduced-motion: reduce){')
 # expose the comet for capture/debug
 rep("window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat};", "window.__proto = {openPlace:(id)=>openPlace(id, markers.find(m=>m.id===id)), expandPlace, snapSheet, setCat, playWave};")
+
+# ---------- round 9: new summary header (grey caption + two lines with pills) ----------
+i = s.index('<div id="sumMore">'); j = s.index('</div>', i) + 6
+s = s[:i] + '''<div id="sumMore">
+          <div class="sl"><span>Подборка из</span><button class="pill s1" data-go="main" id="sumPicks">5+ мест</button></div>
+          <div class="sl"><button class="pill s2" data-go="news" id="sumNews">2 новости</button><span>района</span></div>
+        </div>''' + s[j:]
+rep("$('#sumNews').innerHTML = (n ? `${n} ${n===1?'новость':'новости'} района` : 'новостей нет') + ARR;",
+    "$('#sumNews').textContent = n ? `${n} ${n===1?'новость':'новости'}` : 'нет новостей';")
+rep("$('#sumPicks').innerHTML = '5+ подборок мест' + ARR + (n ? ',' : '');", "$('#sumPicks').textContent = '5+ мест';")
+rep("  sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';", "  sumEl.style.marginTop = lerp(lerp(14, 26, p), 0, c) + 'px';")
+rep("  t.style.height = lerp(30, 18, c) + 'px'; t.style.transform = `scale(${lerp(1, .5, c)})`; t.style.color = `rgba(18,18,18,${lerp(1, .5, c)})`;",
+    "  { const s0 = 14/26; t.style.height = lerp(lerp(18, 30, p), 18, c) + 'px'; t.style.transform = `scale(${lerp(lerp(s0, 1, p), .5, c)})`; t.style.color = `rgba(20,20,20,${lerp(lerp(.45, 1, p), .5, c)})`; }")
+rep("  sumMore.style.height = (60*(1 - p)) + 'px';", "  sumMore.style.height = (84*(1 - p)) + 'px';")
+rep("peekTop = Math.round(barTop - 20 - (16 + 20 + 30 + 60 + 84));", "peekTop = Math.round(barTop - 20 - (16 + 14 + 18 + 84 + 84));")
+# chip tap: stay white while the comet runs, settle into grey at the end
+rep("function chipPop(el){\n  if (el.classList.contains('xc') && !reduced) chipComet(el);",
+    "function chipPop(el){\n  if (el.classList.contains('xc')){ clearTimeout(el._wash); el.classList.add('washing'); el._wash = setTimeout(() => el.classList.remove('washing'), 680); }\n  if (el.classList.contains('xc') && !reduced) chipComet(el);")
+X9 = r'''
+#sumMore{box-sizing:border-box;padding-top:7px}
+#sumMore .sl{display:flex;justify-content:center;align-items:center;gap:5px;height:37px;font-weight:600;font-size:27px;line-height:27px;letter-spacing:-.45px;color:#141414;white-space:nowrap}
+#sumMore .sl + .sl{margin-top:3px}
+#sumMore .pill{display:inline-flex;align-items:center;margin:0;height:37px;box-sizing:border-box;padding:0 10px;border-radius:12px;font:inherit;letter-spacing:inherit}
+#sumMore .s1{color:#3588FD;background:rgba(53,136,253,.1)}
+#sumMore .s2{color:#30C800;background:rgba(48,200,0,.1)}
+.xc{transition:background-color .38s ease,box-shadow .38s ease}
+.xc.washing,.xc.washing[aria-selected="true"]{background:#fff!important;box-shadow:none!important;transition:none}
+'''
+rep('@media (prefers-reduced-motion: reduce){', X9 + '\n@media (prefers-reduced-motion: reduce){')

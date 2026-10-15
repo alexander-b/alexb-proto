@@ -680,6 +680,16 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
 @keyframes pcOut{to{opacity:0}}
 @keyframes pcIn{from{opacity:0}to{opacity:1}}
 
+
+#sumMore{box-sizing:border-box;padding-top:7px}
+#sumMore .sl{display:flex;justify-content:center;align-items:center;gap:5px;height:37px;font-weight:600;font-size:27px;line-height:27px;letter-spacing:-.45px;color:#141414;white-space:nowrap}
+#sumMore .sl + .sl{margin-top:3px}
+#sumMore .pill{display:inline-flex;align-items:center;margin:0;height:37px;box-sizing:border-box;padding:0 10px;border-radius:12px;font:inherit;letter-spacing:inherit}
+#sumMore .s1{color:#3588FD;background:rgba(53,136,253,.1)}
+#sumMore .s2{color:#30C800;background:rgba(48,200,0,.1)}
+.xc{transition:background-color .38s ease,box-shadow .38s ease}
+.xc.washing,.xc.washing[aria-selected="true"]{background:#fff!important;box-shadow:none!important;transition:none}
+
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
 </style>
 </head><body>
@@ -719,8 +729,8 @@ img{max-width:none;display:block;-webkit-user-drag:none;user-select:none}
       <div id="sum">
         <h2 id="sumTitle">Для вас сегодня<span class="colon">:</span></h2>
         <div id="sumMore">
-          <button class="s1" data-go="main" id="sumPicks">5+ подборок мест<svg class="arr" viewBox="0 0 16 16" fill="none" overflow="visible"><path d="M1.3 14.7L14.2 1.8M6.6 1.8H14.2V9.4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>,</button>
-          <button class="s2" data-go="news" id="sumNews">2 новости района<svg class="arr" viewBox="0 0 16 16" fill="none" overflow="visible"><path d="M1.3 14.7L14.2 1.8M6.6 1.8H14.2V9.4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="sl"><span>Подборка из</span><button class="pill s1" data-go="main" id="sumPicks">5+ мест</button></div>
+          <div class="sl"><button class="pill s2" data-go="news" id="sumNews">2 новости</button><span>района</span></div>
         </div>
       </div>
       <div id="fastWrap"><div id="fast" class="hscroll">
@@ -844,7 +854,7 @@ function measure(){
   const barB = Math.max(12, SAB - 14);
   phone.style.setProperty('--pcbb', barB + 'px');            // action bar bottom inset
   phone.style.setProperty('--pcb', (barB + 56 + 8) + 'px');  // short card sits right above the bar
-  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 20 - (16 + 20 + 30 + 60 + 84)); }
+  { const barTop = H - (Math.max(21, SAB-13) + 4 + 56); peekTop = Math.round(barTop - 20 - (16 + 14 + 18 + 84 + 84)); }
   miniTop = Math.round(H - (Math.max(21, SAB-13) + 4 + 56 + 52));
   fullTop = Math.round(SAT + 14);
   phone.style.setProperty('--cw', (W - 32) + 'px');
@@ -1367,10 +1377,10 @@ function head(){
   const p = sheetP, c = sheetState==='full' && p > .98 ? clamp(sScroll.scrollTop/90, 0, 1) : 0;
   fastWrap.style.height = (84*(1-p)) + 'px'; fastWrap.style.opacity = clamp(1 - p*2, 0, 1);
 
-  sumEl.style.marginTop = lerp(lerp(20, 26, p), 0, c) + 'px';
+  sumEl.style.marginTop = lerp(lerp(14, 26, p), 0, c) + 'px';
   const t = $('#sumTitle');
-  t.style.height = lerp(30, 18, c) + 'px'; t.style.transform = `scale(${lerp(1, .5, c)})`; t.style.color = `rgba(18,18,18,${lerp(1, .5, c)})`;
-  sumMore.style.height = (60*(1 - p)) + 'px'; sumMore.style.opacity = clamp(1 - p*2.2, 0, 1);
+  { const s0 = 14/26; t.style.height = lerp(lerp(18, 30, p), 18, c) + 'px'; t.style.transform = `scale(${lerp(lerp(s0, 1, p), .5, c)})`; t.style.color = `rgba(20,20,20,${lerp(lerp(.45, 1, p), .5, c)})`; }
+  sumMore.style.height = (84*(1 - p)) + 'px'; sumMore.style.opacity = clamp(1 - p*2.2, 0, 1);
   $('#sumTitle .colon').style.opacity = clamp(1 - p*3, 0, 1);
   xChipsWrap.style.height = ((69 - 9*c)*p) + 'px'; xChipsWrap.style.opacity = clamp(p*1.6 - .4, 0, 1);
   xChipsWrap.style.paddingTop = (lerp(9, 0, c)*p) + 'px';
@@ -1493,8 +1503,8 @@ function watchIdle(){
 }
 function updateSummary(){
   const n = newsLeft.length;
-  $('#sumNews').innerHTML = (n ? `${n} ${n===1?'новость':'новости'} района` : 'новостей нет') + ARR;
-  $('#sumPicks').innerHTML = '5+ подборок мест' + ARR + (n ? ',' : '');
+  $('#sumNews').textContent = n ? `${n} ${n===1?'новость':'новости'}` : 'нет новостей';
+  $('#sumPicks').textContent = '5+ мест';
 }
 function setCat(c, animate){
   if (c===cat && !animate) { renderExplore(); return; }
@@ -1531,6 +1541,7 @@ function chipComet(el){
   requestAnimationFrame(step);
 }
 function chipPop(el){
+  if (el.classList.contains('xc')){ clearTimeout(el._wash); el.classList.add('washing'); el._wash = setTimeout(() => el.classList.remove('washing'), 680); }
   if (el.classList.contains('xc') && !reduced) chipComet(el);
   el.classList.remove('pop'); el.querySelectorAll('.spark').forEach(s => s.remove());
   for (let i=0;i<6;i++){ const s = document.createElement('i'); s.className='spark'; s.style.setProperty('--a', (i*60 + 30*Math.random())+'deg'); s.style.setProperty('--d', (30 + 10*Math.random())+'px'); s.style.background = i%2 ? '#0075FA' : 'var(--lime2)'; el.appendChild(s); }
