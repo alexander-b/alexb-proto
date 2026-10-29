@@ -387,3 +387,15 @@ X9 = r'''
 .xc.washing,.xc.washing[aria-selected="true"]{background:#fff!important;box-shadow:none!important;transition:none}
 '''
 rep('@media (prefers-reduced-motion: reduce){', X9 + '\n@media (prefers-reduced-motion: reduce){')
+
+# ---------- round 10: side panel copy ----------
+i = s.index('<h1>BingoBongo · карта со слоями</h1>'); j = s.index('</ul>', i) + 5
+s = s[:i] + '''<h1>2GIS · New Vision</h1>
+    <p>Концепт главного экрана: карта, которая сама подсказывает, куда сходить. Лучше всего щупать на телефоне: открой эту же ссылку и добавь на экран «Домой».</p>
+    <ul>
+      <li><span class="k">1</span><span><b>Для вас</b>: потяни шторку вверх — откроются подборки, новости района и чипсы категорий</span></li>
+      <li><span class="k">2</span><span><b>Фильтры</b>: чипсы над шторкой показывают на карте только нужное — кофейни, твои места, АЗС, транспорт или аптеки</span></li>
+      <li><span class="k">3</span><span><b>Места</b>: тапни пин или карточку подборки, затем потяни карточку вверх — там стикеры и всё главное о месте</span></li>
+      <li><span class="k">4</span><span><b>Поиск</b> подсвечивается бегущей кометой, а маршруты домой и на работу — сразу под заголовком</span></li>
+    </ul>''' + s[j:]
+rep('<title>', '<title>') if False else None
